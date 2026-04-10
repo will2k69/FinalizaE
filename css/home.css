@@ -1,0 +1,67 @@
+#style-home{
+     background: #00042A;
+}
+
+/* nav */
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+    padding: 16px
+}
+
+.botao-entrar{
+    background-color: #ffffff;
+    padding: 14px 16px;
+    border-radius: 8px;
+    color:#000000;
+    width: 100px;
+    text-align: center;
+}
+
+/* sessão 1 */ 
+
+.sessao-1{ 
+
+    display: grid;
+    text-align: center;
+    color: #ffffff;
+    padding: 64px
+
+}
+
+.sessao-1 h1{
+
+    font-size: 64px;
+
+}
+
+.sessao-1 p{ 
+
+    font-size: 24px;
+
+}
+
+.sessao-1 a{ /*depois criar botão padrão*/
+
+    background-color: #ffffff;
+    display: flex;
+    padding: 16px 42px;
+    border-radius: 8px;
+    font-size: 18px;
+    color:#000000;
+    display: inline-block;
+}
+
+.sessao-1 a img{
+
+    width: 16px;
+    height: 16px;
+    position: relative;
+    top: 4px;
+    left: 16px;
+
+}
