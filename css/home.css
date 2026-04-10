@@ -22,6 +22,13 @@
     text-align: center;
 }
 
+.botao-entrar:hover{
+    
+    background-color: #5f6ffffa;
+    color: #ffffff;
+
+}
+
 /* sessão 1 */ 
 
 .sessao-1{ 
@@ -56,6 +63,13 @@
     display: inline-block;
 }
 
+.sessao-1 a:hover{
+    
+    background-color: #5f6ffffa;
+    color: #ffffff;
+
+}
+
 .sessao-1 a img{
 
     width: 16px;
@@ -64,4 +78,41 @@
     top: 4px;
     left: 16px;
 
+}
+
+/* animação scroll */
+
+.scroll-down {
+  width: 30px;
+  height: 50px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  position: relative;
+  margin: 50px auto;
+}
+
+.scroll-down span {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  animation: scrollDown 1.8s infinite;
+}
+
+@keyframes scrollDown {
+  0% {
+    opacity: 0;
+    top: 10px;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: 30px;
+  }
 }

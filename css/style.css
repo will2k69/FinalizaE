@@ -13,3 +13,33 @@ a{
     text-decoration: none;
     
 }
+
+/*estilização do scrollbar do site*/
+
+/* largura da barra */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* fundo */
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+/* parte que move */
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+/* hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #5465ffbd;
+}
+
+/*responsividade geral*/
+
+/*00 - nav*/
+
+
+
