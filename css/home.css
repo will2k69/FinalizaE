@@ -1,6 +1,10 @@
 #style-home{
-     background: #00042A;
-}
+background: linear-gradient(
+  135deg,
+  #020d3a 0%,
+  #0a2a9f 50%,
+  #031a5a 100%
+);}
 
 /* nav */
 
@@ -14,7 +18,7 @@
 }
 
 .botao-entrar{
-    background-color: #ffffff;
+    background-color: #f1f5ff;
     padding: 14px 16px;
     border-radius: 8px;
     color:#000000;
@@ -24,7 +28,7 @@
 
 .botao-entrar:hover{
     
-    background-color: #5f6ffffa;
+    background-color: #5f6fff;
     color: #ffffff;
 
 }
@@ -35,7 +39,7 @@
 
     display: grid;
     text-align: center;
-    color: #ffffff;
+    color: #f1f5ff;
     padding: 64px
 
 }
@@ -54,7 +58,7 @@
 
 .sessao-1 a{ /*depois criar botão padrão*/
 
-    background-color: #ffffff;
+    background-color: #f1f5ff;
     display: flex;
     padding: 16px 42px;
     border-radius: 8px;
@@ -115,4 +119,98 @@
     opacity: 0;
     top: 30px;
   }
+}
+
+/* Responsividade */
+
+@media (max-width: 1200px){
+
+.navbar{
+
+    max-width: 850px;
+}
+
+.sessao-1 h1{
+
+    font-size: 48px;
+
+}
+
+.sessao-1 p,.botao-entrar p{ 
+
+    font-size: 18px;
+
+}
+
+.sessao-1 a{ /*depois criar botão padrão*/
+
+    padding: 16px 42px;
+    font-size: 16px;
+}
+
+} 
+
+@media(max-width: 952px){
+
+.navbar{
+
+    max-width: 680px;
+}
+
+.botao-entrar{
+    padding: 12px 8px;
+}
+
+.sessao-1 p{ 
+
+    font-size: 14px;
+
+}
+
+.sessao-1{
+    gap: 10px;
+}
+
+}
+
+@media(max-width:775px){ 
+
+.navbar{
+
+    max-width: 500px;
+    justify-content: center;
+}
+
+.botao-entrar{
+    
+    display: none;
+
+}
+
+.sessao-1 p{ 
+
+    font-size: 12px;
+
+}
+
+.sessao-1 h1{
+
+    font-size: 42px
+
+}
+
+.sessao-1{
+    gap: 10px;
+    padding: 20px;
+}
+
+}
+
+@media (max-width:590px) {
+
+   
+
+}
+
+    
 }
