@@ -6,6 +6,8 @@ background: linear-gradient(
   #031a5a 100%
 );}
 
+
+
 /* nav */
 
 .navbar{
@@ -44,7 +46,7 @@ background: linear-gradient(
 
 }
 
-.sessao-1 h1{
+.sessao-1 h1,.sessao-2 h1{
 
     font-size: 64px;
 
@@ -119,6 +121,60 @@ background: linear-gradient(
     opacity: 0;
     top: 30px;
   }
+}
+
+/* sessao-2 */
+
+.sessao-2{
+
+    display: grid;
+    justify-content: center;
+    background-color: #d9d9d92f;
+    border-radius: 64px;
+    padding: 60px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.sessao-2 h1{
+
+    text-align: center;
+    color: #f1f5ff;
+
+
+}
+
+/* sessao-3*/
+
+.sessao-3{
+
+    padding: 72px;
+    display: grid;
+    gap:60px;
+    color: #f1f5ff
+
+}
+
+.sessao-3 h1{
+
+    text-align: center;
+    color: #f1f5ff;
+    font-size: 64px;
+
+}
+
+.sessao-3 .cards{
+
+    display: flex;
+    gap: 120px;
+}
+
+.sessao-3 .cards div{
+    background-color: #d9d9d92f;
+    padding: 42px;
+    border-radius: 16px;
 }
 
 /* Responsividade */
@@ -210,7 +266,4 @@ background: linear-gradient(
 
    
 
-}
-
-    
 }
