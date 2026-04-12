@@ -58,7 +58,7 @@ background: linear-gradient(
 
 }
 
-.sessao-1 a{ /*depois criar botão padrão*/
+.sessao-1 a{ 
 
     background-color: #f1f5ff;
     display: flex;
@@ -176,6 +176,70 @@ background: linear-gradient(
     padding: 42px;
     border-radius: 16px;
 }
+
+/* sessão 4 */
+
+.sessao-4{
+    text-align: center;
+    background-color:#d9d9d92f ;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right:auto;
+    padding: 60px;
+    border-radius: 24px;
+}
+
+.sessao-4 h1{
+    font-size: 48px;
+    color: #f1f5ff
+}
+
+.sessao-4 h3{
+    color: #f1f5ff9b
+
+}
+
+.sessao-4 a{ 
+
+    background-color: #f1f5ff;
+    display: flex;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 18px;
+    color:#000000;
+    display: inline-block;
+}
+
+.sessao-4 a:hover{
+    
+    background-color: #5f6ffffa;
+    color: #ffffff;
+
+}
+
+.sessao-4 a img{
+
+    width: 16px;
+    height: 16px;
+    position: relative;
+    top: 4px;
+    left: 12px;
+
+}
+
+/* footer */
+
+.footer{
+
+    text-align: center;
+    color:#020d3a;
+    background-color: #ffffff68;
+    margin-bottom:0px;
+    margin-top: 48px;
+    padding:10px;
+
+}
+
 
 /* Responsividade */
 
