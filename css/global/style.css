@@ -1,4 +1,18 @@
-@import url(./home.css); 
+
+/* PADRÃO DE ESTELIZAÇÃO */
+
+/* 
+  ID - snake_Case
+  Classes - snake-case 
+*/
+
+
+/* importação pages */
+
+@import url(../pages/index.css); 
+@import url(../pages/inicial.css);
+
+/* estilização para todo o site */
 
 body,h1{
 
@@ -37,9 +51,6 @@ a{
   background: #5465ffbd;
 }
 
-/*responsividade geral*/
-
-/*00 - nav*/
 
 
 

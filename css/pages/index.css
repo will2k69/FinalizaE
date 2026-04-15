@@ -1,4 +1,4 @@
-#style-home{
+#style_Home{
 background: linear-gradient(
   135deg,
   #020d3a 0%,
@@ -6,7 +6,7 @@ background: linear-gradient(
   #031a5a 100%
 );}
 
-
+/*buscar padronizar para o inglês essa sessão e sua correspondente HTML*/
 
 /* nav */
 
@@ -177,6 +177,7 @@ background: linear-gradient(
     border-radius: 16px;
 }
 
+
 /* sessão 4 */
 
 .sessao-4{
@@ -217,15 +218,7 @@ background: linear-gradient(
 
 }
 
-.sessao-4 a img{
 
-    width: 16px;
-    height: 16px;
-    position: relative;
-    top: 4px;
-    left: 12px;
-
-}
 
 /* footer */
 
@@ -241,7 +234,7 @@ background: linear-gradient(
 }
 
 
-/* Responsividade */
+/* Responsive Mobile */
 
 @media (max-width: 1200px){
 
