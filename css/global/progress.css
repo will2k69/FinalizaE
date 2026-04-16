@@ -1,0 +1,135 @@
+/* para todas barras de progresso: (comentário temporário, apagar depois que ajustar todas as telas)
+
+    1. atente-se a mudar o active das páginas selecionadas 
+    2. no momento não há persistência no momento
+    
+    */
+
+/* Nav */ 
+
+    nav .progress{
+      background: #02072a;
+      padding: 15px 20px 30px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .logo img {
+      width: 64px;
+    }
+
+    .logo-text {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    /* PROGRESS */
+    .progress-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 22px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #2b2f55;
+      border-radius: 10px;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 22px;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, #4c5cff, #7a86ff);
+      border-radius: 10px;
+      transition: width 0.5s ease-in-out, background 0.5s ease-in-out;
+    }
+
+    .progress-fill.complete {
+      background: linear-gradient(90deg, #4c5cff, #22c55e);
+    }
+
+    .step {
+      text-align: center;
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      cursor: pointer;
+    }
+
+    .circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #2b2f55;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      transition: 0.3s;
+    }
+
+    .circle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .step.active .circle,
+    .step.completed .circle {
+      background: #4c5cff;
+    }
+
+    /* FINAL VERDE */
+    .step[data-step="4"].active .circle,
+    .step[data-step="4"].completed .circle {
+      background: #22c55e;
+    }
+
+    .step.disabled {
+      opacity: 0.4;
+    }
+
+    .step span {
+      font-size: 12px;
+      color: #cfd3ff;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .progress-container {
+        overflow-x: auto;
+        gap: 20px;
+      }
+
+      .step {
+        min-width: 90px;
+        flex: none;
+      }
+    }
+
+    /* CONTEÚDO */
+    .container {
+      text-align: center;
+      padding: 40px 20px;
+    }
+

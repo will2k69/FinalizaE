@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Finalizaê</title>
+</head>
+
+<body id="tela_Principal">
+
+    <!-- Barra de navegação -->
+
+    <nav>
+
+      <div class="progress">
+
+      <!-- Sessão Logos -->
+
+      <div class="top-bar">
+
+        <div class="logo">
+          <a href="../index.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
+        </div>
+
+        <div class="logo-text">
+          <a href="../index.html"><img src="../img/logo.svg" alt="logo tipografico escrito Finalizaê"></a>
+        </div>
+
+      </div>
+
+      <!-- Barra Progresso -->
+      
+      <div class="progress-container">
+
+        <div class="progress-line"></div>
+        <div class="progress-fill" id="progress_Fill"></div>
+
+        <div class="step active" data-step="0">
+          <a href="#">
+          <div class="circle"><i data-lucide="home"></i></div>
+          <span>Início</span>
+          </a>
+
+        </div>
+
+        <div class="step" data-step="1">
+          <a href="#">
+          <div class="circle"><i data-lucide="upload"></i></div>
+          <span>Enviar Histórico</span>
+          </a>
+        </div>
+
+        <div class="step" data-step="2">
+          <a href="#">
+          <div class="circle"><i data-lucide="search"></i></div>
+          <span> Análise </span>
+          </a>
+        </div>
+
+        <div class="step" data-step="3">
+          <a href="#">
+          <div class="circle"><i data-lucide="edit"></i></div>
+          <span>Revisão</span>
+          </a>
+        </div>
+
+        <div class="step" data-step="4">
+          <a href="#">
+          <div class="circle"><i data-lucide="check-circle"></i></div>
+          <span>Resultado</span>
+          </a>
+        </div>
+
+      </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo -->
+    <section>
+
+        <div class="container">
+
+        <h1>Bem-vindo(a) ao arquiteto da sua jornada acadêmica!</h1>
+        <p class="subtitle">Organize seu semestre com precisão e sem burocracia.</p>
+
+        <select>
+        <option>Selecione seu curso</option>
+        <option>Ciência da Computação </option>
+        <option>Engenharia de Computação</option>
+        <option>Inteligência Artificial </option>
+        </select>
+
+        <p class="options-title">Selecione a opção que mais combina com o seu perfil</p>
+
+        <div class="cards">
+
+        <div class="card">
+            <div class="icon">📋</div>
+            <h3>Matrícula</h3>
+            <p>É sua primeira tentativa de matrícula nas matérias do período? Comece por aqui e planeje seu semestre inteiro do zero.</p>
+            <a href="#" class="btn">Começar →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🔄</div>
+            <h3>Rematrícula</h3>
+            <p>Sua primeira tentativa não deu certo? Não se preocupe, siga por aqui e te ajudaremos com isso.</p>
+            <a href="#" class="btn">Continuar →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🔍</div>
+            <h3>Explorar Planejamento</h3>
+            <p>Veio só por curiosidade? Veja a grade completa e as matérias que são pré-requisitos para outras.</p>
+            <a href="#" class="btn">Explorar →</a>
+        </div>
+
+        </div>
+
+    </div>
+
+
+    </section>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../javascript/features/progresso.js"></script>
+  <script src="../javascript/pages/tela_inicial.js"></script>
+
+</body>
