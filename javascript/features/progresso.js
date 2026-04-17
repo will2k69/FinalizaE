@@ -3,8 +3,22 @@
     const steps = document.querySelectorAll(".step");
     const progress_Fill = document.getElementById("progress_Fill");
 
-    // simulação
-    let currentStep = 0;
+    const stepPages = Object.freeze({
+      INICIAL : "tela_inicial.html",
+      HISTORICO : "tela_historico.html",
+    });
+
+    // mapear os índices da progress bar
+    const stepOrder = [
+      stepPages.INICIAL,
+      stepPages.HISTORICO,
+    ];
+
+    let currentStep = parseInt(sessionStorage.getItem("currentStep")) || 0;
+
+    function saveStep() {
+      sessionStorage.setItem("currentStep", currentStep);
+    }
 
     function updateUI() {
       steps.forEach((step, index) => {
@@ -31,18 +45,41 @@
       }
     }
 
-    // CONTROLE DE CLIQUE + BLOQUEIO
+    // verifica se dentro de "../pages" para ajustar caminhos relativos
+    function getPagePath(page) {
+      const path = window.location.pathname;
+      if (path.includes("/pages/")) {
+        return page;
+      }
+      return "pages/" + page;
+    }
+
+    // clique no logo/ícone reseta o progresso para step 0
+    document.querySelectorAll(".top-bar a").forEach((link) => {
+      link.addEventListener("click", () => {
+        sessionStorage.setItem("currentStep", 0);
+      });
+    });
+
+    // CONTROLE DE CLIQUE - só permite VOLTAR, não faz sentido avançar pela progress bar
     steps.forEach((step, index) => {
       const link = step.querySelector("a");
 
       link.addEventListener("click", (e) => {
-        if (index <= currentStep + 1) {
+        e.preventDefault();
+
+        if (index < currentStep) {
           currentStep = index;
+          saveStep();
           updateUI();
-        } else {
-          e.preventDefault(); // bloqueia pular etapas
+
+          // se existe uma página mapeada para esse step, navega
+          if (stepOrder[index]) {
+            window.location.href = getPagePath(stepOrder[index]);
+          }
         }
+        // bloqueia avançar pela barra
       });
-    }); 
+    });
 
     updateUI();
