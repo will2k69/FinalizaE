@@ -2,8 +2,15 @@ const uploadArea = document.getElementById("upload_Area");
 const fileInput = document.getElementById("file_Input");
 const fileName = document.getElementById("file_Name");
 
-// Clique na área de upload abre o seletor de arquivo
-uploadArea.addEventListener("click", () => {
+// volta reseta o progresso para step INICIAL
+// TODO: deve ser salvo o estado em que ficou a página para voltar exatamente lá
+document.querySelector(".back-link").addEventListener("click", () => {
+    sessionStorage.setItem("currentStep", stepOrder.indexOf(stepPages.INICIAL));
+});
+
+// Clique na área de upload abre o seletor de arquivo (ignora cliques no label/botão que já abrem nativamente)
+uploadArea.addEventListener("click", (e) => {
+    if (e.target.tagName === "LABEL" || e.target.closest("label")) return;
     fileInput.click();
 });
 
