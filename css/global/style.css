@@ -4,6 +4,7 @@
 /* 
   ID - snake_Case
   Classes - snake-case 
+
 */
 
 
@@ -13,6 +14,7 @@
 @import url(../pages/inicial.css);
 @import url(../pages/enfases.css);
 @import url(../pages/historico.css);
+@import url(../pages/historico_manual.css);
 
 /* estilização para todo o site */
 
