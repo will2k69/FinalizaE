@@ -1,3 +1,5 @@
 .vscode
 .python_extractor/.venv
 __pycache__
+.python_extractor/mypy_cache
+.python_extractor/ruff_cache
