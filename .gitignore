@@ -3,3 +3,4 @@
 __pycache__
 .python_extractor/mypy_cache
 .python_extractor/ruff_cache
+.python_extractor/app/__pycache__

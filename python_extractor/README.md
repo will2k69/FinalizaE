@@ -1,6 +1,8 @@
-# Extrator de Historico Academico (Python)
+# Extrator de Historico Academico
 
-Servico em Python para extrair as disciplinas do historico academico em PDF e gerar JSON com os campos:
+Servico em Python para extrair disciplinas de um historico academico em PDF e gerar JSON estruturado para a aplicacao FinalizaE.
+
+## Campos extraidos
 
 - ano_periodo_letivo
 - codigo_disciplina
@@ -10,16 +12,16 @@ Servico em Python para extrair as disciplinas do historico academico em PDF e ge
 - media
 - situacao
 
-## 1) Instalar dependencias
+## Setup
 
 ```bash
 cd python_extractor
 python -m venv .venv
-.venv\\Scripts\\activate
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## 2) Rodar a API
+## Executar a API
 
 ```bash
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
@@ -30,16 +32,37 @@ A rota de extracao usada pela tela de upload:
 
 - `POST /api/extrair-historico`
 
-Envie o arquivo no campo `file` (multipart/form-data).
+Health check:
 
-## 3) Extrair via linha de comando (opcional)
+- `GET /health`
+
+Envie o PDF no campo `file` usando `multipart/form-data`.
+
+## Executar via CLI
 
 ```bash
 python cli.py "C:/caminho_do_historico.pdf"
 ```
 
-Para definir o arquivo de saida:
+Para definir um arquivo de saida:
 
 ```bash
 python cli.py "C:/caminho/historico.pdf" --output "C:/caminho/saida.json"
+```
+
+## Padronizacao e Qualidade
+
+O modulo segue explicitamente:
+
+- PEP 20 para decisoes de simplicidade e clareza
+- PEP 8 para estilo e organizacao do codigo
+- PEP 257 para docstrings
+- PEP 484 para type hints e contratos explicitos
+
+Ferramentas configuradas:
+
+```bash
+pip install -r requirements-dev.txt
+ruff check .
+mypy app cli.py
 ```
