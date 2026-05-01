@@ -1,0 +1,394 @@
+:root {
+    --bg-color: #03071e;
+    --card-bg: #0a0e29;
+    --border-color: #1a1e3b;
+    --text-main: #ffffff;
+    --text-sec: #8e94b2;
+    --accent-blue: #2563eb;
+    --status-green: #10b981;
+    --status-red: #ef4444;
+    --status-blue: #3b82f6;
+    --error-bg: rgba(239, 68, 68, 0.05);
+
+    --fs-h1: 32px;
+    --fs-h2: 20px;
+    --fs-body-lg: 18px;
+    --fs-body: 16px;
+    --fs-small: 15px;
+}
+
+#revisao_Historico {
+    background-color: #02072a;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.container {
+    max-width: 1200px; 
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Header & Stats */
+.revisao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.header-info h1 { 
+    margin: 0 0 12px 0; 
+    font-size: var(--fs-h1); 
+    font-weight: 800;
+}
+
+.header-info p { 
+    color: var(--text-sec); 
+    font-size: var(--fs-body-lg); 
+    margin: 0; 
+    max-width: 650px; 
+}
+
+.stats-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    display: flex;
+    padding: 20px 30px;
+    gap: 30px;
+}
+
+.stat-item { display: flex; flex-direction: column; align-items: center; }
+
+.stat-label { 
+    font-size: var(--fs-small); 
+    color: var(--text-sec); 
+    font-weight: 700; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value { 
+    font-size: 26px; 
+    font-weight: 800; 
+}
+
+.stat-divider { width: 1px; background: var(--border-color); }
+
+/* Alerta */
+.alert-box {
+    background: var(--error-bg);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 35px;
+    font-size: var(--fs-body);
+    color: #e5e7eb;
+}
+
+.alert-box i { font-size: 20px; color: var(--status-blue); }
+
+/* Tabela */
+.table-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.revisao-grid {
+    display: grid;
+    grid-template-columns: 130px 1fr 110px 110px 150px 110px;
+    padding: 20px 25px;
+    align-items: center;
+}
+
+.table-header {
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-sec);
+    font-size: var(--fs-small);
+    font-weight: bold;
+    letter-spacing: 0.8px;
+}
+
+.row { 
+    border-bottom: 1px solid var(--border-color); 
+    font-size: var(--fs-body); 
+    min-height: 70px;
+}
+
+.row-error { 
+    background: rgba(239, 68, 68, 0.08); 
+    border-left: 5px solid var(--status-red); 
+}
+
+/* Status Pills */
+.status-pill {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: var(--fs-small); 
+    font-weight: 800;
+    text-align: center;
+    width: fit-content;
+}
+
+.aprovado { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.reprovado { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.cursando { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.indefinido { background: rgba(142, 148, 178, 0.1); color: #8e94b2; }
+
+/* Buttons */
+.btn-fix {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: var(--fs-small);
+    cursor: pointer;
+}
+
+.btn-add-manual {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--status-blue);
+    padding: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: var(--fs-body-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.actions { display: flex; gap: 12px; }
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-sec);
+    cursor: pointer;
+    font-size: 20px; 
+}
+
+.revisao-footer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-back { 
+    background: transparent; 
+    border: none; 
+    color: #3b82f6; 
+    cursor: pointer;
+    font-size: var(--fs-body);
+    font-weight: 600;
+}
+
+.btn-advance {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: var(--fs-body);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-advance:hover {
+    transform: translateY(-2px);
+    background: #2563eb;
+}
+
+.row input {
+    background: #161b33;
+    border: 1px solid var(--accent-blue);
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    width: 90%;
+    font-size: var(--fs-body);
+}
+
+.row .btn-save {
+    background: var(--status-green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: var(--fs-small);
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--accent-blue);
+    padding: 50px;
+    border-radius: 30px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+}
+
+.modal-content h2 {
+    font-size: var(--fs-h2);
+    margin-bottom: 15px;
+}
+
+.modal-icon {
+    font-size: 4rem;
+    color: var(--accent-blue);
+    margin-bottom: 25px;
+}
+
+.btn-modal-primary {
+    flex: 1;
+    background: var(--accent-blue);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: var(--fs-body);
+    cursor: pointer;
+}
+
+/* Helpers */
+.blue-text { color: var(--status-blue); }
+.error-text { 
+    color: var(--status-red); 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    font-weight: 600;
+}
+.bold { font-weight: 700; }
+.text-secondary { color: var(--text-sec); }
+
+/* Inputs específicos para o modo de edição na tabela */
+.row input {
+    background: #161b33;
+    border: 1px solid var(--accent-blue);
+    padding: 8px;
+    border-radius: 6px;
+    color: white;
+    width: 90%;
+    font-size: 0.85rem;
+}
+
+.row .btn-save {
+    background: var(--status-green);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Feedback visual quando a linha está em edição */
+.row-editing {
+    background: rgba(59, 130, 246, 0.1) !important;
+    border-left: 4px solid var(--accent-blue);
+}
+
+/* Destaque para campos com erro durante a edição */
+.input-error {
+    border: 2px solid var(--danger) !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Modal Overlay com Blur */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Card do Modal */
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--accent-blue);
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 50px rgba(37, 99, 235, 0.2);
+}
+
+.modal-icon {
+    font-size: 3rem;
+    color: var(--accent-blue);
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-modal-primary {
+    flex: 1;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-modal-secondary {
+    flex: 1;
+    background: #1a1e3b;
+    color: white;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.row .btn-cancel {
+    background: #334155;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.row .btn-cancel:hover {
+    background: #475569;
+}
+
+/* Container para agrupar os botões de Salvar e Cancelar na linha */
+.row .edit-actions {
+    display: flex;
+    gap: 2px;
+    justify-content: flex-end;
+}

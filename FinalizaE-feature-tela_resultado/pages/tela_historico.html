@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Finalizaê - Importar Histórico</title>
+</head>
+
+<body id="tela_Historico">
+    <nav>
+      <div class="progress">
+      <div class="top-bar">
+        <div class="logo">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
+        </div>
+        <div class="logo-text">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo.svg" alt="logo tipografico escrito Finalizaê"></a>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->      
+      <div class="progress-container">
+        <div class="progress-line"></div>
+        <div class="progress-fill" id="progress_Fill"></div>
+
+        <div class="step completed" data-step="0">
+          <a href="#">
+          <div class="circle"><i data-lucide="home"></i></div>
+          <span>Início</span>
+          </a>
+        </div>
+        <div class="step active" data-step="1">
+          <a href="#">
+          <div class="circle"><i data-lucide="upload"></i></div>
+          <span>Enviar Histórico</span>
+          </a>
+        </div>
+        <div class="step" data-step="2">
+          <a href="#">
+          <div class="circle"><i data-lucide="search"></i></div>
+          <span> Análise </span>
+          </a>
+        </div>
+        <div class="step" data-step="3">
+          <a href="#">
+          <div class="circle"><i data-lucide="edit"></i></div>
+          <span>Revisão</span>
+          </a>
+        </div>
+        <div class="step" data-step="4">
+          <a href="#">
+          <div class="circle"><i data-lucide="check-circle"></i></div>
+          <span>Resultado</span>
+          </a>
+        </div>
+      </div>
+        </div>
+    </nav>
+
+    <section>
+
+        <div class="historico-container">
+            <div class="historico-main">
+                <h1>Importar Histórico Acadêmico</h1>
+                <p class="historico-subtitle">Arraste o arquivo PDF do seu histórico oficial. Nossa extração é garantido 85% de precisão nos dados coletados.</p>
+
+                <!-- Upload -->
+                <div class="upload-area" id="upload_Area">
+                    <div class="upload-icon">
+                        <i data-lucide="upload-cloud"></i>
+                    </div>
+                    <h3>Upload Histórico Digital (PDF)</h3>
+                    <p>Clique para navegar ou arraste seu arquivo PDF aqui. Formato recomendado: Histórico Escolar Padrão.</p>
+                    <label class="upload-btn" for="file_Input">Selecionar Arquivo</label>
+                    <input type="file" id="file_Input" accept=".pdf" hidden>
+                    <p class="file-name" id="file_Name"></p>
+                </div>
+
+                <!-- Inserir manualmente -->
+                <div class="manual-box">
+                    <div class="manual-info">
+                        <i data-lucide="message-square"></i>
+                        <div>
+                            <h4>Não possui o PDF agora?</h4>
+                            <p>Você pode preencher as disciplinas de forma manual.</p>
+                        </div>
+                    </div>
+                    <a href="../pages/tela_historico_manual.html" class="manual-link">Inserir Manualmente</a>
+                </div>
+
+            </div>
+
+            <aside class="info-card">
+                <div class="info-header">
+                    <i data-lucide="triangle-alert"></i>
+                    <span>O QUE SERÁ EXTRAÍDO:</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">CÓDIGO & NOME</span>
+                    <strong>Cálculo I (ECOM004)</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">NOTA FINAL</span>
+                    <strong>Média: 8.5</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">STATUS</span>
+                    <strong>Aprovado / Não precisa se matricular na matéria novamente</strong>
+                </div>
+            </aside>
+
+        </div>
+
+    </section>
+
+    <!-- Rodapé de navegação -->
+    <footer class="historico-actions">
+        <a href="tela_inicial.html" class="back-link">← Voltar</a>
+        <a href="../pages/tela_revisao_historico.html" class="next-btn">Continuar para Revisão →</a>
+    </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../javascript/features/progresso.js"></script>
+  <script src="../javascript/pages/tela_historico.js"></script>
+
+</body>
+</html>

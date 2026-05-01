@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Finalizaê - Ênfases</title>
+</head>
+
+<body id="tela_Enfases">
+    <nav>
+      <div class="progress">
+      <div class="top-bar">
+        <div class="logo">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
+        </div>
+        <div class="logo-text">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo.svg" alt="logo tipografico escrito Finalizaê"></a>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->      
+      <div class="progress-container">
+        <div class="progress-line"></div>
+        <div class="progress-fill" id="progress_Fill"></div>
+
+        <div class="step completed" data-step="0">
+          <a href="#">
+          <div class="circle"><i data-lucide="home"></i></div>
+          <span>Início</span>
+          </a>
+        </div>
+        <div class="step" data-step="1">
+          <a href="#">
+          <div class="circle"><i data-lucide="upload"></i></div>
+          <span>Enviar Histórico</span>
+          </a>
+        </div>
+        <div class="step" data-step="2">
+          <a href="#">
+          <div class="circle"><i data-lucide="search"></i></div>
+          <span> Análise </span>
+          </a>
+        </div>
+        <div class="step" data-step="3">
+          <a href="#">
+          <div class="circle"><i data-lucide="edit"></i></div>
+          <span>Revisão</span>
+          </a>
+        </div>
+        <div class="step" data-step="4">
+          <a href="#">
+          <div class="circle"><i data-lucide="check-circle"></i></div>
+          <span>Resultado</span>
+          </a>
+        </div>
+      </div>
+        </div>
+    </nav>
+
+    <main class="enfases-container">
+        <!-- Sidebar Esquerda -->
+        <aside class="enfases-sidebar">
+            <h1>Defina sua Jornada</h1>
+            <p>Escolha sua especialização acadêmica e ajuste sua capacidade de carga horária para esse período.</p>
+        </aside>
+
+        <!-- Conteúdo Principal Direita -->
+        <section class="enfases-main-content">
+            
+            <!-- Seleção de Ênfases -->
+            <div class="section-group">
+                <div class="section-title">
+                    <i data-lucide="graduation-cap"></i>
+                    <h2>Seleção de Ênfase</h2>
+                </div>
+
+                <div class="enfases-grid">
+                    <!-- Card como Label para funcionalidade de clique -->
+                    <label class="enfase-card">
+                        <input type="radio" name="enfase" value="cv" checked>
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>Computação Visual</h3>
+                                <span class="radio-custom"></span>
+                            </div>
+                            <p>Foco em interpretar, processar e gerar imagens ou vídeos, unindo geometria e percepção visual.</p>
+                        </div>
+                    </label>
+
+                    <label class="enfase-card">
+                        <input type="radio" name="enfase" value="si">
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>Sistemas Inteligentes</h3>
+                                <span class="radio-custom"></span>
+                            </div>
+                            <p>Desenvolvimento de arquiteturas computacionais que utilizam probabilidade e redes neurais.</p>
+                        </div>
+                    </label>
+
+                    <label class="enfase-card">
+                        <input type="radio" name="enfase" value="sc">
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>Sistemas de Computação</h3>
+                                <span class="radio-custom"></span>
+                            </div>
+                            <p>Foco no projeto e otimização das camadas de hardware e software de baixo nível.</p>
+                        </div>
+                    </label>
+
+                    <label class="enfase-card">
+                        <input type="radio" name="enfase" value="is">
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>Sistemas de Informação</h3>
+                                <span class="radio-custom"></span>
+                            </div>
+                            <p>Interseção entre tecnologia, gestão de dados e processos organizacionais.</p>
+                        </div>
+                    </label>
+
+                    <label class="enfase-card full-width">
+                        <input type="radio" name="enfase" value="none">
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>Sem ênfase</h3>
+                                <span class="radio-custom"></span>
+                            </div>
+                            <p>Grade generalista focada na base sólida da computação e flexibilidade de eletivas.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Parâmetros de Planejamento -->
+            <div class="parametros-section">
+                <div class="section-title">
+                    <i data-lucide="settings-2"></i>
+                    <h2>Parâmetros de Planejamento</h2>
+                </div>
+                
+                <div class="parametros-box">
+                    <div class="params-grid">
+                        <!-- Slider Dinâmico -->
+                        <div class="slider-container">
+                            <div class="slider-header">
+                                <h4>Carga Horária Máxima</h4>
+                                <span class="badge" id="rangeValue">24h / sem</span>
+                            </div>
+                            <input type="range" min="12" max="40" value="24" class="slider" id="hoursSlider">
+                            <div class="slider-labels">
+                                <span>12h (Mínimo)</span>
+                                <span>40h (Intensivo)</span>
+                            </div>
+                        </div>
+
+                        <!-- Toggle de Prioridade -->
+                        <div class="priority-container">
+                            <h4>Priorização de Matrícula</h4>
+                            <div class="toggle-group">
+                                <input type="radio" name="prioridade" id="p-obrigatorias" checked>
+                                <label for="p-obrigatorias">Obrigatórias</label>
+                                
+                                <input type="radio" name="prioridade" id="p-eletivas">
+                                <label for="p-eletivas">Eletivas</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rodapé interno -->
+            <footer class="enfases-footer">
+                <a href="tela_inicial.html" class="back-link">← Voltar</a>
+                <button onclick="location.href='tela_historico.html'" class="next-btn">Próximo Passo ➔</button>
+            </footer>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+
+        const slider = document.getElementById('hoursSlider');
+        const badge = document.getElementById('rangeValue');
+        
+        slider.oninput = function() {
+            badge.innerHTML = this.value + 'h / sem';
+        }
+    </script>
+</body>
+</html>

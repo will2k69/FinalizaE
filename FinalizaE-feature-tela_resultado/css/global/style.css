@@ -1,0 +1,50 @@
+/* importação pages */
+
+@import url(../pages/index.css); 
+@import url(../pages/inicial.css);
+@import url(../pages/enfases.css);
+@import url(../pages/historico.css);
+@import url(../pages/historico_manual.css);
+
+/* estilização para todo o site */
+
+body,h1{
+
+    margin: 0;
+    padding:0;
+      font-family: "Poppins", sans-serif;
+
+
+}
+
+a{
+    text-decoration: none;
+    
+}
+
+/*estilização do scrollbar do site*/
+
+/* largura da barra */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* fundo */
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+/* parte que move */
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+/* hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #5465ffbd;
+}
+
+
+
+

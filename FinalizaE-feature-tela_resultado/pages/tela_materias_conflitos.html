@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/pages/materias_conflitos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- icons especiíficos para esta página -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Finalizaê - Matérias com Conflitos</title>
+</head>
+
+<body id="materiasConflitos">
+
+    <nav>
+      <div class="progress">
+      <div class="top-bar">
+        <div class="logo">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
+        </div>
+        <div class="logo-text">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo.svg" alt="logo tipografico escrito Finalizaê"></a>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->      
+      <div class="progress-container">
+        <div class="progress-line"></div>
+        <div class="progress-fill" id="progress_Fill"></div>
+
+        <div class="step completed" data-step="0">
+          <a href="#">
+          <div class="circle"><i data-lucide="home"></i></div>
+          <span>Início</span>
+          </a>
+        </div>
+        <div class="step completed" data-step="1">
+          <a href="#">
+          <div class="circle"><i data-lucide="upload"></i></div>
+          <span>Enviar Histórico</span>
+          </a>
+        </div>
+        <div class="step active" data-step="2">
+          <a href="#">
+          <div class="circle"><i data-lucide="search"></i></div>
+          <span> Análise </span>
+          </a>
+        </div>
+        <div class="step" data-step="3">
+          <a href="#">
+          <div class="circle"><i data-lucide="edit"></i></div>
+          <span>Revisão</span>
+          </a>
+        </div>
+        <div class="step" data-step="4">
+          <a href="#">
+          <div class="circle"><i data-lucide="check-circle"></i></div>
+          <span>Resultado</span>
+          </a>
+        </div>
+      </div>
+        </div>
+    </nav>
+
+    <datalist id="disciplinas-list">
+
+        <option value="COMP363">Cálculo Diferencial e Integral</option>
+        <option value="COMP359">Programação I</option>
+        <option value="COMP360">Estrutura de Dados</option>
+        <option value="ENG102">Física Experimental</option>
+        <option value="DIR001">Ética e Cidadania</option>
+    
+    </datalist>
+
+    <div class="container">
+        <header>
+            <h1>Matérias com Conflito de Horário ou Sem Vagas</h1>
+            <p>Informe o código da disciplina que você não poderá cursar neste semestre.</p>
+        </header>
+
+        <main>
+            <div class="table-container">
+                <div class="table-header">
+                    <span>CÓDIGO</span>
+                    <span>NOME DA DISCIPLINA</span>
+                    <span></span>
+                </div>
+                
+                <div id="rows-container"></div>
+
+                <button id="add-row" class="btn-add">
+                    <i class="fa-solid fa-plus"></i> Adicionar Nova Linha
+                </button>
+            </div>
+        </main>
+
+        <footer>
+            <button class="btn-back">← Voltar</button>
+            <a href="../pages/tela_revisao_historico.html" class="btn-continue">Continuar para Revisão <i class="fa-solid fa-arrow-right"></i></a>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../javascript/features/progresso.js"></script>
+    <script src="../javascript/pages/tela_materias_conflitos.js"></script>
+    
+</body>
