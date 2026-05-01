@@ -98,5 +98,18 @@ function setupAcoes() {
         a.download = "meu_plano_academico.json";
         a.click();
     });
+
+    // Handlers para botões de volta (se existirem)
+    const btnBack = document.querySelector('.btn-back');
+    if (btnBack) {
+        btnBack.addEventListener('click', () => {
+            const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matriula';
+            const paginaAnterior = tipoFluxo === 'rematriula' 
+                ? 'tela_enfases.html' 
+                : 'tela_enfases.html';
+            sessionStorage.setItem('currentStep', 3);
+            window.location.href = paginaAnterior;
+        });
+    }
 }
 

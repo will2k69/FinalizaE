@@ -96,4 +96,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addRowBtn.addEventListener('click', createRow);
     createRow(); // Inicia com uma linha vazia
+
+    // Evento para botão Continuar
+    const btnContinue = document.querySelector('.btn-continue');
+    if (btnContinue) {
+        btnContinue.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Coletar dados das linhas
+            const rows = rowsContainer.querySelectorAll('.row');
+            const disciplinas = [];
+
+            rows.forEach(row => {
+                const codigo = row.querySelector('.input-codigo').value;
+                const nome = row.querySelector('.input-nome').value;
+                const nota = row.querySelector('.input-nota').value;
+                const status = row.querySelector('.status').textContent;
+                const periodo = row.querySelector('input[placeholder="202X.X"]').value;
+
+                if (codigo && nome) {
+                    disciplinas.push({
+                        codigo,
+                        nome,
+                        nota: nota ? parseFloat(nota) : 0,
+                        status,
+                        periodo
+                    });
+                }
+            });
+
+            if (disciplinas.length === 0) {
+                alert('Por favor, adicione pelo menos uma disciplina antes de continuar.');
+                return;
+            }
+
+            // Armazenar histórico manual
+            sessionStorage.setItem('historicoManual', JSON.stringify({ disciplinas }));
+
+            // Avançar para step 2 (Revisão)
+            sessionStorage.setItem('currentStep', 2);
+            window.location.href = 'tela_revisao_historico.html';
+        });
+    }
 });

@@ -208,4 +208,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+    // Event listener para botão "Confirmar e Avançar"
+    const btnAdvance = document.querySelector('.btn-advance');
+    if (btnAdvance) {
+        btnAdvance.addEventListener('click', () => {
+            const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matriula';
+            
+            // Determinar próxima página baseado no fluxo
+            const proximaPagina = tipoFluxo === 'rematriula' 
+                ? 'tela_rematricula.html' 
+                : 'tela_enfases.html';
+            
+            // Próximo passo é Análise (step 3) em ambos os fluxos
+            const proximoStep = 3;
+            
+            sessionStorage.setItem('currentStep', proximoStep);
+            window.location.href = proximaPagina;
+        });
+    }
 });

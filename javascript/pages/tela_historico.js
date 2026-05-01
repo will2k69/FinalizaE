@@ -99,6 +99,12 @@ async function extrairHistorico() {
             "Extração concluída com sucesso. JSON baixado automaticamente.",
             "#22c55e"
         );
+
+        // Navegação automática após sucesso
+        setTimeout(() => {
+            sessionStorage.setItem("currentStep", 2); // Avança para step 2 (Revisão)
+            window.location.href = "tela_revisao_historico.html";
+        }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem
     } catch (error) {
         setStatus(error.message || "Erro inesperado durante a extração.", "#ef4444");
     } finally {
