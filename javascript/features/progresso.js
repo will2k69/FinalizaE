@@ -46,6 +46,12 @@
       ];
     }
 
+    function getPreviousPageFromCurrentStep() {
+      const stepOrder = getStepOrder();
+      const previousIndex = Math.max(0, currentStep - 1);
+      return stepOrder[previousIndex] || stepPages.INICIAL;
+    }
+
     function updateUI() {
       steps.forEach((step, index) => {
         step.classList.remove("active", "completed", "disabled");
@@ -88,6 +94,23 @@
         sessionStorage.removeItem("disciplinasComConflito");
       });
     });
+
+    const backHeaderButton = document.querySelector(".btn-back-header");
+    if (backHeaderButton) {
+      backHeaderButton.setAttribute("href", getPagePath(getPreviousPageFromCurrentStep()));
+
+      backHeaderButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const previousPage = getPreviousPageFromCurrentStep();
+
+        currentStep = Math.max(0, currentStep - 1);
+        saveStep();
+        updateUI();
+
+        window.location.href = getPagePath(previousPage);
+      });
+    }
 
     steps.forEach((step, index) => {
       const link = step.querySelector("a");
