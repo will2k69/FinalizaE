@@ -5,6 +5,42 @@
     
     */
 
+  .flex-btn-back{
+    display: flex;
+
+  }
+
+  .btn-back-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #295197;
+  color: #60a5fa;
+  padding: 10px 18px;
+  border-radius: 16px;
+  font-weight: 600;
+  width: 120px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.02rem;
+  position: relative;
+  left: 186px;
+  transition: all 0.3s ease;
+}
+
+.btn-back-header:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+}
+
+/* Garante que a barra de progresso ocupe o espaço restante corretamente */
+.progress-container {
+  flex: 1;
+  position: relative;
+  /* (Mantenha seus estilos anteriores para as etapas) */
+}
+
 /* Nav */ 
 
     nav .progress{
