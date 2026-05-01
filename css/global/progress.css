@@ -7,16 +7,17 @@
 
   .flex-btn-back{
     display: flex;
-
+    align-items: center;
+    gap: 18px;
   }
 
   .btn-back-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: transparent;
-  border: 1px solid #295197;
-  color: #60a5fa;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  border: 2px solid #93c5fd;
+  color: #ffffff;
   padding: 10px 18px;
   border-radius: 16px;
   font-weight: 600;
@@ -29,9 +30,31 @@
   transition: all 0.3s ease;
 }
 
+.btn-back-header i {
+  display: none;
+}
+
+.btn-back-header::before {
+  content: "←";
+  font-size: 1.1em;
+  line-height: 1;
+  font-weight: 700;
+}
+
 .btn-back-header:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.45);
+}
+
+.btn-back-header:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+}
+
+.btn-back-header:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 2px;
 }
 
 /* Garante que a barra de progresso ocupe o espaço restante corretamente */
@@ -152,6 +175,11 @@
 
     /* MOBILE */
     @media (max-width: 768px) {
+      .flex-btn-back {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
       .progress-container {
         overflow-x: auto;
         gap: 20px;
