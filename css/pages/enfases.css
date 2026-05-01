@@ -6,7 +6,7 @@
     --text-gray: #D9D9D9;
 
     margin: 0;
-    padding: 40px;
+    padding: 0;
     box-sizing: border-box;
     background-color: var(--bg-color);
     color: white;
@@ -16,9 +16,20 @@
 #Enfases *,
 #Enfases *::before,
 #Enfases *::after {
-    margin: 0;
-    padding: 0;
     box-sizing: inherit;
+}
+
+/* Mantém os textos com aparência consistente como no layout original */
+#Enfases h1,
+#Enfases h2,
+#Enfases h3,
+#Enfases h4,
+#Enfases p,
+#Enfases span,
+#Enfases label,
+#Enfases button {
+    margin: 0;
+    line-height: 1.35;
 }
 
 #Enfases .brand { 
@@ -48,8 +59,8 @@
 
 #Enfases .header-left { display: flex; align-items: center; gap: 30px; }
 
-#Enfases .logo img { height: 60px; display: block; }
-#Enfases .logo-text img { height: 40px; display: block; }
+#Enfases .logo img { width: 64px; display: block; }
+#Enfases .logo-text img { display: block; }
 
 #Enfases .section-header {
     display: flex;
@@ -64,6 +75,7 @@
     gap: 60px;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 40px;
 }
 
 #Enfases .emphasis-grid {
@@ -150,8 +162,27 @@
     margin-top: 30px;
 }
 
-#Enfases .slider-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
-#Enfases .badge { background: var(--blue-primary); padding: 4px 12px; border-radius: 9999px; font-size: 14px; }
+#Enfases .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+#Enfases .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 92px;
+    padding: 5px 12px;
+    background: var(--blue-primary);
+    border-radius: 10px;
+    font-size: 14px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
 
 #Enfases .slider {
     width: 100%;

@@ -4,21 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizaê - Ênfases</title>
+    <link rel="stylesheet" type="text/css" href="../css/global/progress.css">
     <link rel="stylesheet" href="../css/pages/enfases.css">
     <link href="https://fonts.googleapis.com/css2?family=Autour+One&family=Anek+Gujarati:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body id="Enfases">
 
-    <header class="main-header">
-        <div class="logo">
-          <a href="../pages/tela_inicial.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
+        <nav>
+            <div class="progress">
+            <div class="top-bar">
+                <div class="logo">
+                    <a href="../pages/tela_inicial.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
         </div>
 
         <div class="logo-text">
           <a href="../pages/tela_inicial.html"><img src="../img/logo.svg" alt="logo tipografico escrito Finalizaê"></a>
         </div>
-        
-    </header>
+
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-line"></div>
+                <div class="progress-fill" id="progress_Fill"></div>
+
+                <div class="step completed" data-step="0">
+                    <a href="#">
+                    <div class="circle"><i data-lucide="home"></i></div>
+                    <span>Início</span>
+                    </a>
+                </div>
+                <div class="step completed" data-step="1">
+                    <a href="#">
+                    <div class="circle"><i data-lucide="upload"></i></div>
+                    <span>Enviar Histórico</span>
+                    </a>
+                </div>
+                <div class="step completed" data-step="2">
+                    <a href="#">
+                    <div class="circle"><i data-lucide="edit"></i></div>
+                    <span>Revisão</span>
+                    </a>
+                </div>
+                <div class="step completed" data-step="3">
+                    <a href="#">
+                    <div class="circle"><i data-lucide="search"></i></div>
+                    <span>Análise</span>
+                    </a>
+                </div>
+                <div class="step active" data-step="4">
+                    <a href="#">
+                    <div class="circle"><i data-lucide="check-circle"></i></div>
+                    <span>Resultado</span>
+                    </a>
+                </div>
+            </div>
+            </div>
+        </nav>
 
     <main class="container">
         <aside class="sidebar">
@@ -138,6 +179,9 @@
             badge.innerHTML = this.value + 'h / sem';
         }
     </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../javascript/features/progresso.js"></script>
+    <script src="../javascript/pages/tela_enfases.js"></script>
     <script src="../javascript/features/scroll_to_top.js"></script>
 </body>
 </html>

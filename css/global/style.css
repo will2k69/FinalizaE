@@ -1,5 +1,6 @@
 /* importação pages */
 
+@import url(./progress.css);
 @import url(../pages/index.css); 
 @import url(../pages/inicial.css);
 @import url(../pages/enfases.css);
