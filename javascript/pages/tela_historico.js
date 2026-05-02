@@ -113,12 +113,6 @@ async function extrairHistorico() {
     }
 }
 
-// volta reseta o progresso para step INICIAL
-// TODO: deve ser salvo o estado em que ficou a página para voltar exatamente lá
-document.querySelector(".back-link").addEventListener("click", () => {
-    sessionStorage.setItem("currentStep", stepOrder.indexOf(stepPages.INICIAL));
-});
-
 // Clique na área de upload abre o seletor de arquivo (ignora cliques no label/botão que já abrem nativamente)
 uploadArea.addEventListener("click", (e) => {
     if (e.target.tagName === "LABEL" || e.target.closest("label") ||
