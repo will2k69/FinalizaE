@@ -10,7 +10,7 @@
     box-sizing: border-box;
     background-color: var(--bg-color);
     color: white;
-    font-family: 'Anek Gujarati', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 #Enfases *,
@@ -29,7 +29,7 @@
 #Enfases label,
 #Enfases button {
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.5;
 }
 
 #Enfases .brand { 
@@ -38,9 +38,9 @@
     font-weight: normal; 
 }
 
-#Enfases .title-32 { font-size: 32px; font-weight: bold; }
-#Enfases .title-25 { font-size: 25px; }
-#Enfases .text-20 { font-size: 20px; }
+#Enfases .title-32 { font-size: 32px; font-weight: 700; }
+#Enfases .title-25 { font-size: 24px; font-weight: 600; }
+#Enfases .text-20 { font-size: 18px; }
 #Enfases .text-16 { font-size: 16px; color: var(--text-gray); }
 #Enfases .text-14 { font-size: 14px; }
 #Enfases .hint { color: var(--text-gray); margin-top: 10px; font-style: italic; }
@@ -75,7 +75,7 @@
     gap: 60px;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px;
+    padding: 48px 40px;
 }
 
 #Enfases .emphasis-grid {
@@ -98,7 +98,7 @@
 
 #Enfases .card-content {
     background: var(--card-bg);
-    padding: 24px;
+    padding: 28px;
     border-radius: 16px;
     border: 2px solid transparent;
     transition: 0.3s;
@@ -150,7 +150,7 @@
 
 #Enfases .parameters-box {
     background: var(--card-bg);
-    padding: 30px;
+    padding: 32px;
     border-radius: 20px;
     margin-top: 40px;
 }
@@ -178,7 +178,7 @@
     padding: 5px 12px;
     background: var(--blue-primary);
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 15px;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
@@ -230,7 +230,7 @@
     cursor: pointer;
     border-radius: 9999px;
     transition: 0.3s;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 #Enfases .toggle-group input:checked + label {
@@ -263,7 +263,8 @@
     border: none;
     padding: 12px 30px;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 #Enfases .next-btn:hover { filter: brightness(1.1); }

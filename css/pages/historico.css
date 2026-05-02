@@ -28,7 +28,8 @@
 
 .historico-subtitle {
     color: #cfd3ff;
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1.6;
     margin-bottom: 40px;
     max-width: 600px;
 }
@@ -69,14 +70,15 @@
 }
 
 .upload-area h3 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 8px;
 }
 
 .upload-area p {
     color: #cfd3ff;
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 1.6;
     margin-bottom: 24px;
     max-width: 400px;
     margin-left: auto;
@@ -89,7 +91,7 @@
     color: #fff;
     padding: 12px 28px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     transition: 0.3s;
@@ -107,7 +109,7 @@
     color: #fff;
     padding: 12px 28px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     border: none;
     cursor: pointer;
@@ -127,13 +129,13 @@
 .file-name {
     margin-top: 16px;
     color: #22c55e;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
 }
 
 .extract-status {
     margin-top: 12px;
-    font-size: 13px;
+    font-size: 14px;
     color: #cfd3ff;
     min-height: 19px;
 }
@@ -172,19 +174,20 @@
 }
 
 .manual-info h4 {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     margin-bottom: 2px;
 }
 
 .manual-info p {
-    font-size: 13px;
+    font-size: 15px;
+    line-height: 1.5;
     color: #cfd3ff;
 }
 
 .manual-link {
     color: #4c5cff;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     white-space: nowrap;
     text-decoration: none;
@@ -213,7 +216,7 @@
     gap: 10px;
     margin-bottom: 24px;
     color: #4c9cff;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.5px;
 }

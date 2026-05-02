@@ -14,7 +14,7 @@
 #revisao_Historico {
     background-color: #02072a;
     color: var(--text-main);
-    font-family: 'Inter', sans-serif;
+  font-family: "Poppins", sans-serif;
     margin: 0;
 }
 
@@ -32,8 +32,8 @@
     margin-bottom: 30px;
 }
 
-  .header-info h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
-  .header-info p { color: var(--text-sec); margin: 0; max-width: 600px; }
+  .header-info h1 { margin: 0 0 12px 0; font-size: 2.1rem; }
+  .header-info p { color: var(--text-sec); margin: 0; max-width: 600px; font-size: 1rem; line-height: 1.6; }
 
   .stats-card {
     background: var(--card-bg);
@@ -45,7 +45,7 @@
 }
 
   .stat-item { display: flex; flex-direction: column; align-items: center; }
-  .stat-label { font-size: 0.65rem; color: var(--text-sec); font-weight: bold; }
+  .stat-label { font-size: 0.78rem; color: var(--text-sec); font-weight: 700; }
   .stat-value { font-size: 1.4rem; font-weight: 800; }
   .stat-divider { width: 1px; background: var(--border-color); }
 
@@ -59,7 +59,7 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 30px;
-    font-size: 0.9rem;
+    font-size: 0.98rem;
     color: #e5e7eb;
 }
 
@@ -83,19 +83,19 @@
   .table-header {
     border-bottom: 1px solid var(--border-color);
     color: var(--text-sec);
-    font-size: 0.75rem;
-    font-weight: bold;
+    font-size: 0.82rem;
+    font-weight: 700;
     letter-spacing: 0.5px;
 }
 
-  .row { border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+  .row { border-bottom: 1px solid var(--border-color); font-size: 0.98rem; }
  .row-error { background: rgba(239, 68, 68, 0.08); border-left: 4px solid var(--status-red); }
 
 /* Status Pills */
   .status-pill {
     padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     font-weight: 800;
     text-align: center;
     width: fit-content;
@@ -171,7 +171,7 @@
     border-radius: 6px;
     color: white;
     width: 90%;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
 .row .btn-save {
