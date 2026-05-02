@@ -1,7 +1,9 @@
-.vscode
-.python_extractor/.venv
-__pycache__
-.python_extractor/mypy_cache
-.python_extractor/ruff_cache
-.python_extractor/app/__pycache__
-.pyc
+.vscode/
+
+__pycache__/
+*.py[cod]
+
+python_extractor/.venv/
+python_extractor/.mypy_cache/
+python_extractor/.ruff_cache/
+python_extractor/app/__pycache__/
