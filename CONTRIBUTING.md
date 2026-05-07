@@ -13,17 +13,23 @@ Este documento define regras de trabalho para manter o projeto consistente, legi
 
 ### Frontend
 
-- `css/global`: estilos reutilizados em mais de uma tela.
-- `css/pages`: estilos especificos de paginas.
-- `javascript/features`: logica compartilhada entre fluxos.
-- `javascript/pages`: comportamento especifico de cada tela.
-- `pages`: telas HTML do fluxo principal.
+- `view/css/global`: estilos reutilizados em mais de uma tela.
+- `view/css/pages`: estilos especificos de paginas.
+- `view/javascript/features`: logica compartilhada entre fluxos.
+- `view/javascript/pages`: comportamento especifico de cada tela.
+- `view/pages`: telas HTML do fluxo principal.
 
 ### Python
 
-- `python_extractor/app/main.py`: entrada HTTP da API.
-- `python_extractor/app/extractor.py`: regras de extracao e normalizacao.
-- `python_extractor/cli.py`: interface de linha de comando.
+- `server/app/main.py`: bootstrap da API (FastAPI, middlewares e routers).
+- `server/app/api/routes`: endpoints HTTP.
+- `server/app/services`: orquestracao dos casos de uso.
+- `server/app/parsers`: parsing de fontes externas (PDF).
+- `server/app/model/schemas`: contratos de dados (Pydantic).
+- `server/app/model/domain`: regras de negocio puras (quando houver).
+- `server/app/model/entities`: entidades ORM (quando houver persistencia).
+- `server/app/model/repositories`: acesso a banco (quando houver persistencia).
+- `server/cli.py`: interface de linha de comando para extracao.
 
 ## Convencoes de Codigo
 
@@ -86,7 +92,7 @@ Exemplos:
 
 1. A mudanca esta limitada ao problema proposto.
 2. O codigo segue a organizacao de pastas do projeto.
-3. O modulo Python foi validado com `ruff check .` e `mypy app cli.py` quando aplicavel.
+3. O modulo Python foi validado a partir da pasta `server` com `ruff check .` e `mypy app cli.py` quando aplicavel.
 4. A documentacao foi atualizada se o comportamento mudou.
 5. Nao foram incluidas mudancas nao relacionadas.
 
