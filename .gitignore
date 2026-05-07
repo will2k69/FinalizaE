@@ -3,9 +3,9 @@
 __pycache__/
 *.py[cod]
 
-python_extractor/.venv/
-python_extractor/.mypy_cache/
-python_extractor/.ruff_cache/
-python_extractor/app/__pycache__/
+server/.venv/
+server/.mypy_cache/
+server/.ruff_cache/
+server/app/__pycache__/
 
 *.pyc
