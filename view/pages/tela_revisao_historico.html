@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../img/logo-visual.png">
+    <link rel="stylesheet" type="text/css" href="../css/global/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/pages/revisao_historico.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- icons especiíficos para esta página -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Finalizaê - Histórico Manual</title>
+</head>
+
+<body id="revisao_Historico">
+
+    <nav>
+      <div class="progress">
+      <div class="top-bar">
+        <div class="logo">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo-visual.png" alt="logo visual"></a>
+        </div>
+        <div class="logo-text">
+          <a href="../pages/tela_inicial.html"><img src="../img/logo.svg" alt="logo tipografico escrito Finalizaê"></a>
+        </div>
+      </div>
+
+      <div class="flex-btn-back">
+         <a href="../pages/tela_anterior.html" class="btn-back-header">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+      </a>
+      <!-- Progress Bar -->      
+      <div class="progress-container">
+        <div class="progress-line"></div>
+        <div class="progress-fill" id="progress_Fill"></div>
+
+        <div class="step completed" data-step="0">
+          <a href="#">
+          <div class="circle"><i data-lucide="home"></i></div>
+          <span>Início</span>
+          </a>
+        </div>
+        <div class="step completed" data-step="1">
+          <a href="#">
+          <div class="circle"><i data-lucide="upload"></i></div>
+          <span>Enviar Histórico</span>
+          </a>
+        </div>
+        <div class="step active" data-step="2">
+          <a href="#">
+                    <div class="circle"><i data-lucide="edit"></i></div>
+                    <span>Revisão</span>
+          </a>
+        </div>
+        <div class="step" data-step="3">
+          <a href="#">
+                    <div class="circle"><i data-lucide="search"></i></div>
+                    <span>Análise</span>
+          </a>
+        </div>
+        <div class="step" data-step="4">
+          <a href="#">
+          <div class="circle"><i data-lucide="check-circle"></i></div>
+          <span>Resultado</span>
+          </a>
+        </div>
+      </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <header class="revisao-header">
+            <div class="header-info">
+                <h1>Revisão de Histórico</h1>
+                <p>Valide as informações extraídas. Caso identifique inconsistências, utilize as opções de edição ou exclusão.</p>
+            </div>
+            <div class="stats-card">
+                <div class="stat-item">
+                    <span class="stat-label">DISCIPLINAS</span>
+                    <span class="stat-value">0</span> 
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-label">MÉDIA GLOBAL</span>
+                    <span class="stat-value blue-text">0.0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="alert-box error">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Detectamos registros com informações incompletas.</span>
+        </div>
+
+        <main>
+            <div class="table-container">
+                <div class="table-header revisao-grid">
+                    <span>CÓDIGO</span>
+                    <span>NOME DA DISCIPLINA</span>
+                    <span>PERÍODO</span>
+                    <span>NOTA</span>
+                    <span>STATUS</span>
+                    <span>AÇÕES</span>
+                </div>
+                
+                <div id="rows-container">
+                    <div class="row revisao-grid">
+                        <span class="text-secondary">ECOM006</span>
+                        <span class="bold">Introdução à Engenharia da Computação</span>
+                        <span class="text-secondary">2023.1</span>
+                        <span class="bold blue-text">9.5</span>
+                        <div class="status-pill aprovado">APROVADO</div>
+                        <div class="actions">
+                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="row revisao-grid row-error" data-error-type="nota">
+                        <span class="text-secondary">COMP363</span>
+                        <span class="bold">Cálculo Diferencial e Integral</span>
+                        <span class="text-secondary">2023.1</span>
+                        <span class="bold error-text"><span class="dot"></span> N/A</span>
+                        <div class="status-pill indefinido">INDEFINIDO</div>
+                        <button class="btn-fix">Corrigir</button>
+                    </div>
+
+                    <div class="row revisao-grid">
+                        <span class="text-secondary">COMP359</span>
+                        <span class="bold">Programação I</span>
+                        <span class="text-secondary">2023.2</span>
+                        <span class="bold blue-text">4.2</span>
+                        <div class="status-pill reprovado">REPROVADO</div>
+                        <div class="actions">
+                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="row revisao-grid">
+                        <span class="text-secondary">COMP361</span>
+                        <span class="bold">Computação, Sociedade e Ética</span>
+                        <span class="text-secondary">2024.1</span>
+                        <span class="text-secondary">—</span>
+                        <div class="status-pill cursando">MATRICULADO</div>
+                        <div class="actions">
+                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-add-manual">
+                    <i class="fa-solid fa-plus"></i> Adicionar Disciplina Manualmente
+                </button>
+            </div>
+        </main>
+
+        <footer class="revisao-footer">
+            <button class="btn-advance">Confirmar e Avançar →</button>
+        </footer>
+    </div>
+    
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h3 id="modal-title">Confirmação</h3>
+            <p id="modal-text">Mensagem do modal aqui...</p>
+            <div class="modal-buttons">
+                <button id="modal-btn-no" class="btn-modal-secondary">Não</button>
+                <button id="modal-btn-yes" class="btn-modal-primary">Sim</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../javascript/features/progresso.js"></script>
+    <script src="../javascript/pages/tela_revisao.js"></script>
+    <script src="../javascript/features/scroll_to_top.js"></script>
+</body>
+</html>

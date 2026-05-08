@@ -1,0 +1,324 @@
+@import url(../global/progress.css);
+
+#tela_Historico {
+    background: #050a2c;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CONTEÚDO */
+
+.historico-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    flex: 1;
+}
+
+.historico-main h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.historico-subtitle {
+    color: #cfd3ff;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 600px;
+}
+
+/* ÁREA DE UPLOAD */
+
+.upload-area {
+    border: 2px dashed #2b2f55;
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 24px;
+}
+
+.upload-area:hover,
+.upload-area.dragover {
+    border-color: #4c5cff;
+    background: rgba(76, 92, 255, 0.05);
+}
+
+.upload-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(76, 92, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.upload-icon svg {
+    width: 28px;
+    height: 28px;
+    color: #4c5cff;
+}
+
+.upload-area h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.upload-area p {
+    color: #cfd3ff;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.upload-btn {
+    display: inline-block;
+    background: #4c5cff;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.upload-btn:hover {
+    background: #6674ff;
+}
+
+.extract-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background: #15a34a;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.extract-btn:hover {
+    background: #16b454;
+}
+
+.extract-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.file-name {
+    margin-top: 16px;
+    color: #22c55e;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.extract-status {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #cfd3ff;
+    min-height: 19px;
+}
+
+/* UPLOAD COM ARQUIVO SELECIONADO */
+
+.upload-area.has-file {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.05);
+}
+
+/* BOX INSERIR MANUALMENTE */
+
+.manual-box {
+    background: #0f1535;
+    border: 1px solid #2b2f55;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.manual-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.manual-info svg {
+    width: 24px;
+    height: 24px;
+    color: #cfd3ff;
+    flex-shrink: 0;
+}
+
+.manual-info h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.manual-info p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #cfd3ff;
+}
+
+.manual-link {
+    color: #4c5cff;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.manual-link:hover {
+    color: #6674ff;
+}
+
+/* CARD LATERAL */
+
+.info-card {
+    background: #0f1535;
+    border: 1px solid #2b2f55;
+    border-radius: 16px;
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    color: #4c9cff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.info-header svg {
+    width: 18px;
+    height: 18px;
+}
+
+.info-item {
+    margin-bottom: 20px;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    display: block;
+    color: #8a8fb5;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.info-item strong {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* RODAPÉ DE AÇÕES */
+
+.historico-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.back-link {
+    color: #4c5cff;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-link:hover {
+    color: #6674ff;
+}
+
+.next-btn {
+    background: #4c5cff;
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.next-btn:hover {
+    background: #6674ff;
+}
+
+.next-btn:active {
+    transform: scale(0.98);
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 900px) {
+
+    .historico-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .info-card {
+        position: static;
+    }
+
+    .upload-area {
+        padding: 40px 20px;
+    }
+
+    .manual-box {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .manual-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .historico-actions {
+        padding: 20px;
+    }
+}

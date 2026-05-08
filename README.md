@@ -1,6 +1,6 @@
 # FinalizaE
 
-Sistema para analise de progresso academico e recomendacao de disciplinas com base no PPC de um curso. O projeto combina um frontend estatico em HTML, CSS e JavaScript com um servico Python responsavel por extrair disciplinas de historicos academicos em PDF.
+Sistema para analise de progresso academico e recomendacao de disciplinas com base no PPC de um curso. O projeto combina um frontend em HTML, CSS e JavaScript com um backend em Python (FastAPI).
 
 ## Objetivo
 
@@ -14,18 +14,23 @@ O fluxo principal do sistema conduz o aluno pelas telas de inicio, envio do hist
 
 ### Frontend
 
-- Landing page em `index.html`.
-- Fluxo principal a partir de `pages/tela_inicial.html`.
-- Estilos globais em `css/global`.
-- Estilos especificos de pagina em `css/pages`.
-- Scripts compartilhados em `javascript/features`.
-- Scripts especificos de tela em `javascript/pages`.
+- Pasta raiz: `view/`
+- Landing page em `view/index.html`.
+- Fluxo principal a partir de `view/pages/tela_inicial.html`.
+- Estilos globais em `view/css/global`.
+- Estilos especificos de pagina em `view/css/pages`.
+- Scripts compartilhados em `view/javascript/features`.
+- Scripts especificos de tela em `view/javascript/pages`.
 
-### Extrator Python
+### Backend (FastAPI)
 
-- API FastAPI em `python_extractor/app/main.py`.
-- Logica de extracao em `python_extractor/app/extractor.py`.
-- Execucao por linha de comando em `python_extractor/cli.py`.
+- Pasta raiz: `server/`
+- Bootstrap da API em `server/app/main.py`.
+- Endpoints em `server/app/api/routes`.
+- Servicos de aplicacao em `server/app/services`.
+- Parser de PDF em `server/app/parsers/pdf_parser.py`.
+- Modelos e contratos em `server/app/model`.
+- Execucao por linha de comando em `server/cli.py`.
 
 ## Como Executar
 
@@ -33,13 +38,13 @@ O fluxo principal do sistema conduz o aluno pelas telas de inicio, envio do hist
 
 Como o frontend e estatico, existem duas formas simples de rodar:
 
-1. Abrir `index.html` diretamente no navegador para visualizar a landing page.
+1. Abrir `view/index.html` diretamente no navegador para visualizar a landing page.
 2. Servir a pasta do projeto localmente com uma extensao de servidor estatico ou um servidor HTTP simples, para evitar problemas com caminhos relativos e integracao com a API.
 
-### Extrator Python
+### Backend
 
 ```bash
-cd python_extractor
+cd server
 python -m venv .venv
 .venv\\Scripts\\activate
 pip install -r requirements.txt
@@ -53,6 +58,35 @@ Rota principal:
 Health check:
 
 - `GET /health`
+
+### CLI de extracao (sem HTTP)
+
+Executa a extracao localmente, sem chamar endpoint da API:
+
+```bash
+cd server
+python cli.py "C:/caminho/historico.pdf"
+```
+
+Saida padrao:
+
+- O JSON e salvo na mesma pasta do PDF, com sufixo `_finalizae.json`.
+- Exemplo: `C:/docs/historico.pdf` -> `C:/docs/historico_finalizae.json`.
+
+Para definir caminho de saida:
+
+```bash
+python cli.py "C:/caminho/historico.pdf" --output "C:/caminho/saida.json"
+```
+
+### POST da API (com exportacao para arquivo)
+
+```bash
+curl -X POST "http://127.0.0.1:8000/api/extrair-historico" \
+	-H "accept: application/json" \
+	-F "file=@C:/caminho/historico.pdf;type=application/pdf" \
+	-o "C:/caminho/saida.json"
+```
 
 ## Qualidade de Codigo e PEPs Adotadas
 
@@ -80,7 +114,7 @@ No modulo Python foram configuradas ferramentas para checagem local:
 Instalacao:
 
 ```bash
-cd python_extractor
+cd server
 pip install -r requirements-dev.txt
 ```
 
@@ -93,8 +127,8 @@ mypy app cli.py
 
 ## Boas Praticas do Repositorio
 
-- Reutilize logica compartilhada em `javascript/features` antes de duplicar codigo em telas.
-- Mantenha scripts especificos de fluxo em `javascript/pages`.
+- Reutilize logica compartilhada em `view/javascript/features` antes de duplicar codigo em telas.
+- Mantenha scripts especificos de fluxo em `view/javascript/pages`.
 - Prefira mudancas pequenas e localizadas.
 - Atualize documentacao quando uma alteracao mudar fluxo, setup ou comportamento esperado.
 - No Python, priorize clareza sobre abstracoes desnecessarias.
@@ -103,23 +137,23 @@ As regras detalhadas de contribuicao estao em `CONTRIBUTING.md`.
 
 ## Fluxo de Uso
 
-1. O usuario acessa `index.html`.
-2. O fluxo principal segue para `pages/tela_inicial.html`.
+1. O usuario acessa `view/index.html`.
+2. O fluxo principal segue para `view/pages/tela_inicial.html`.
 3. O historico academico e enviado para o extrator.
 4. O extrator devolve as disciplinas identificadas em JSON.
 5. A interface permite revisao e geracao do resultado final do planejamento.
 
 ## Troubleshooting
 
-- Se a API nao iniciar, verifique se o ambiente virtual do diretorio `python_extractor` esta ativado.
+- Se a API nao iniciar, verifique se o ambiente virtual do diretorio `server` esta ativado.
 - Se a extracao falhar, valide se o PDF foi retirado diretamente do portal acadêmico (SIGAA).
-- Se o editor acusar imports Python nao resolvidos, aponte o interpretador para `python_extractor/.venv`.
+- Se o editor acusar imports Python nao resolvidos, aponte o interpretador para `server/.venv`.
 
 ## Contribuicao
 
 Antes de abrir PR:
 
-1. Rode as validacoes do modulo Python quando houver alteracao em `python_extractor`.
+1. Rode as validacoes do modulo Python quando houver alteracao em `server`.
 2. Revise se a mudanca respeita a organizacao atual de pastas.
 3. Atualize README ou guia de contribuicao se o fluxo do projeto mudar.
 

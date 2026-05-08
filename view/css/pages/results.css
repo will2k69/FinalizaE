@@ -1,0 +1,157 @@
+:root {
+    --bg-color: #030712;
+    --card-bg: #0f172a;
+    --card-inner: #1e293b;
+    --accent-blue: #1e40af;
+    --text-main: #f8fafc;
+    --text-sec: #94a3b8;
+    --yellow: #fbbf24;
+    --red: #ef4444;
+    --orange: #f97316;
+    --blue-light: #3b82f6;
+}
+
+#Results {
+    background-color: #02072a;
+    color: var(--text-main);
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+.container-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.page-header h1 { font-size: 2.25rem; margin-bottom: 12px; }
+.page-header p { color: var(--text-sec); max-width: 700px; line-height: 1.7; font-size: 1rem; }
+
+/* Timeline e Grupos */
+.semester-group { margin-top: 40px; }
+.semester-title { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+
+.badge-number {
+    background: var(--accent-blue);
+    width: 35px; height: 35px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; font-weight: bold;
+}
+
+.semester-title h3 { margin: 0; font-size: 1.2rem; }
+.semester-title p { margin: 5px 0 0; color: var(--text-sec); font-size: 1rem; }
+.highlight { color: var(--yellow); font-weight: bold; }
+.highlight-high { color: var(--text-main); opacity: 0.8; }
+
+/* Cards de Disciplina */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card-subject {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #33415555;
+    transition: transform 0.2s;
+}
+
+.card-subject.wide { grid-column: span 1; } /* Ajustável conforme necessidade */
+
+.card-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 15px;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-bottom: 15px;
+}
+
+.pendencia { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+.obrigatoria { background: rgba(249, 115, 22, 0.2); color: var(--orange); }
+.eletiva { background: rgba(148, 163, 184, 0.1); color: var(--text-sec); }
+
+.hours { color: var(--text-sec); font-weight: normal; opacity: 0.7; }
+
+.card-subject h4 { margin: 10px 0; font-size: 1.1rem; }
+
+.card-info {
+    background: var(--card-inner);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: var(--text-sec);
+    margin-top: 15px;
+}
+
+.card-info.warning i { color: var(--yellow); }
+.card-info i { color: var(--blue-light); margin-top: 3px; }
+
+/* Sidebar */
+.side-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid #33415555;
+}
+
+.side-card.highlight-border {
+    border: 1px solid var(--blue-light);
+    background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+}
+
+.side-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold; }
+.percent { color: var(--blue-light); }
+
+.progress-bar-bg { background: #1e293b; height: 8px; border-radius: 10px; overflow: hidden; }
+.progress-fill-results { background: var(--blue-light); height: 100%; border-radius: 10px; }
+.side-subtext { font-size: 0.9rem; color: var(--text-sec); margin-top: 10px; }
+
+.side-card h3 { font-size: 1.1rem; margin-top: 0; color: var(--blue-light); }
+.side-card p { font-size: 0.98rem; color: var(--text-sec); line-height: 1.6; margin-bottom: 20px; }
+
+.btn-primary-side, .btn-secondary-side {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    transition: 0.2s;
+}
+
+.btn-primary-side { background: var(--accent-blue); color: white; }
+.btn-secondary-side { background: transparent; border: 1px solid #334155; color: white; }
+.btn-primary-side:hover { background: #2563eb; }
+
+.side-label { font-size: 0.78rem; font-weight: 800; color: var(--text-sec); letter-spacing: 1px; }
+
+.summary-list { list-style: none; padding: 0; margin: 20px 0 0; }
+.summary-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: var(--text-sec);
+}
+
+.summary-list li span { color: white; font-weight: bold; }
+.green-text { color: #10b981 !important; }
+
+@media (max-width: 1000px) {
+    .container-dashboard { grid-template-columns: 1fr; }
+}
