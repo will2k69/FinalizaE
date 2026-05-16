@@ -22,7 +22,7 @@
       if (pageName === "tela_inicial.html") return 0;
       if (pageName === "tela_historico.html" || pageName === "tela_historico_manual.html") return 1;
       if (pageName === "tela_revisao_historico.html") return 2;
-      if (pageName === "tela_rematricula.html" || pageName === "tela_enfases.html") return 3;
+      if (pageName === "tela_materias_conflitos.html" || pageName === "tela_enfases.html") return 3;
       if (pageName === "tela_resultado.html") return 4;
 
       const saved = parseInt(sessionStorage.getItem("currentStep"), 10);

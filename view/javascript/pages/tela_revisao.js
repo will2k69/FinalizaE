@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Determinar próxima página baseado no fluxo
             const proximaPagina = tipoFluxo === 'rematriula' 
-                ? 'tela_rematricula.html' 
-                : 'tela_enfases.html';
+                ? 'tela_materias_conflitos.html' 
+                : 'tela_enfases.html'; 
             
             // Próximo passo é Análise (step 3) em ambos os fluxos
             const proximoStep = 3;

@@ -1,57 +1,57 @@
-/**
- * Script para gerenciar a tela de ênfases e parâmetros de planejamento
- */
-
 document.addEventListener('DOMContentLoaded', function() {
+    // Seletores
     const nextBtn = document.querySelector('.next-btn');
+    const backBtn = document.querySelector('.btn-back-header'); // Usando a classe que já existe no seu HTML
     const hoursSlider = document.getElementById('hoursSlider');
-    const enfaseInputs = document.querySelectorAll('input[name="enfase"]');
-    const priorityInputs = document.querySelectorAll('input[name="prioridade"]');
 
-    /**
-     * Captura a ênfase selecionada
-     */
-    function getSelectedEnfase() {
-        for (const input of enfaseInputs) {
-            if (input.checked) {
-                const label = input.closest('.card').querySelector('.title-25');
-                return label ? label.textContent.trim() : 'Sem ênfase';
+    // 1. FORÇAR O BOTÃO VOLTAR
+    if (backBtn) {
+        // Removemos o href via JS para garantir que o clique execute a função
+        backBtn.removeAttribute('href');
+        backBtn.style.cursor = 'pointer';
+
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Pegamos o fluxo e limpamos espaços ou letras maiúsculas
+            const fluxo = (sessionStorage.getItem('tipoFluxo') || '').toLowerCase().trim();
+            
+            // Se for rematrícula (tratando o erro de digitação 'rematriula' ou o correto)
+            if (fluxo.includes('remat')) {
+                window.location.href = 'tela_materias_conflitos.html';
+            } else {
+                window.location.href = 'tela_revisao_historico.html';
             }
-        }
-        return 'Sem ênfase';
+        });
     }
 
-    /**
-     * Captura a prioridade selecionada
-     */
-    function getSelectedPriority() {
-        for (const input of priorityInputs) {
-            if (input.checked) {
-                return input.id === 'p-obrigatorias' ? 'obrigatorias' : 'eletivas';
-            }
-        }
-        return 'obrigatorias';
+    // 2. LÓGICA DO PRÓXIMO PASSO
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            // Captura de dados (Ênfase)
+            const selectedEnfase = document.querySelector('input[name="enfase"]:checked')
+                ?.closest('.card').querySelector('.title-25')?.textContent.trim() || 'Sem ênfase';
+
+            // Captura de dados (Prioridade)
+            const prioridade = document.querySelector('input[name="prioridade"]:checked')?.id === 'p-obrigatorias' 
+                ? 'obrigatorias' 
+                : 'eletivas';
+
+            // Salva tudo
+            sessionStorage.setItem('selectedEnfase', selectedEnfase);
+            sessionStorage.setItem('cargaHoraria', hoursSlider.value);
+            sessionStorage.setItem('prioridade', prioridade);
+            sessionStorage.setItem('currentStep', 5);
+
+            window.location.href = 'tela_resultado.html';
+        });
     }
 
-    /**
-     * Handler para o botão "Próximo Passo"
-     */
-    nextBtn.addEventListener('click', function() {
-        // Coletar parâmetros selecionados
-        const enfase = getSelectedEnfase();
-        const cargaHoraria = parseInt(hoursSlider.value);
-        const prioridade = getSelectedPriority();
-
-        // Armazenar em sessionStorage
-        sessionStorage.setItem('selectedEnfase', enfase);
-        sessionStorage.setItem('cargaHoraria', cargaHoraria);
-        sessionStorage.setItem('prioridade', prioridade);
-
-        // Mantém o passo final alinhado com a barra (5 etapas)
-        const proximoStep = 4;
-
-        // Avançar para resultado
-        sessionStorage.setItem('currentStep', proximoStep);
-        window.location.href = 'tela_resultado.html';
-    });
+    // Listener do Slider (Badge)
+    if (hoursSlider) {
+        const badge = document.getElementById('rangeValue');
+        hoursSlider.addEventListener('input', function() {
+            if (badge) badge.innerHTML = this.value + 'h / sem';
+        });
+    }
 });
