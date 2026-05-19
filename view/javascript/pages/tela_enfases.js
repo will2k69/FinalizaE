@@ -1,12 +1,48 @@
+/**
+ * Script para gerenciar a tela de ênfases e parâmetros de planejamento
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // Seletores
+    // === 1. SELETORES DE ELEMENTOS ===
     const nextBtn = document.querySelector('.next-btn');
-    const backBtn = document.querySelector('.btn-back-header'); // Usando a classe que já existe no seu HTML
+    const backBtn = document.querySelector('.btn-back-header'); 
     const hoursSlider = document.getElementById('hoursSlider');
+    const rangeValue = document.getElementById('rangeValue'); // Badge de horas
+    const enfaseInputs = document.querySelectorAll('input[name="enfase"]');
 
-    // 1. FORÇAR O BOTÃO VOLTAR
+    // === 2. RESTAURAR ESTADO SALVO (Garante a persistência dos dados ao voltar/atualizar) ===
+    function restoreState() {
+        // Restaurar Ênfase
+        const savedEnfase = sessionStorage.getItem('selectedEnfase');
+        if (savedEnfase && enfaseInputs.length > 0) {
+            enfaseInputs.forEach(input => {
+                const label = input.closest('.card')?.querySelector('.title-25');
+                if (label && label.textContent.trim() === savedEnfase) {
+                    input.checked = true;
+                }
+            });
+        }
+
+        // Restaurar Carga Horária
+        const savedCarga = sessionStorage.getItem('cargaHoraria');
+        if (savedCarga && hoursSlider) {
+            hoursSlider.value = savedCarga;
+            if (rangeValue) rangeValue.innerHTML = savedCarga + 'h / sem';
+        }
+
+        // Restaurar Prioridade
+        const savedPriority = sessionStorage.getItem('prioridade');
+        if (savedPriority) {
+            const priorityInput = document.getElementById(`p-${savedPriority}`);
+            if (priorityInput) priorityInput.checked = true;
+        }
+    }
+
+    // Executa a restauração assim que a página carrega
+    restoreState();
+
+    // === 3. LOGICA DO BOTÃO VOLTAR (Navegação condicional baseada no fluxo) ===
     if (backBtn) {
-        // Removemos o href via JS para garantir que o clique execute a função
+        // Removemos o href via JS para garantir que o clique execute a função personalizada
         backBtn.removeAttribute('href');
         backBtn.style.cursor = 'pointer';
 
@@ -25,33 +61,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 2. LÓGICA DO PRÓXIMO PASSO
+    // === 4. LÓGICA DO PRÓXIMO PASSO (Salvar e Avançar) ===
     if (nextBtn) {
         nextBtn.addEventListener('click', function() {
-            // Captura de dados (Ênfase)
+            // Captura de dados (Ênfase) de forma segura
             const selectedEnfase = document.querySelector('input[name="enfase"]:checked')
-                ?.closest('.card').querySelector('.title-25')?.textContent.trim() || 'Sem ênfase';
+                ?.closest('.card')?.querySelector('.title-25')?.textContent.trim() || 'Sem ênfase';
 
             // Captura de dados (Prioridade)
             const prioridade = document.querySelector('input[name="prioridade"]:checked')?.id === 'p-obrigatorias' 
                 ? 'obrigatorias' 
                 : 'eletivas';
 
-            // Salva tudo
+            // Salva as escolhas atuais na sessão
             sessionStorage.setItem('selectedEnfase', selectedEnfase);
-            sessionStorage.setItem('cargaHoraria', hoursSlider.value);
+            if (hoursSlider) sessionStorage.setItem('cargaHoraria', hoursSlider.value);
             sessionStorage.setItem('prioridade', prioridade);
-            sessionStorage.setItem('currentStep', 5);
+            
+            // Define o passo atual (Passo 4 ou 5 dependendo da sua regra de negócio)
+            sessionStorage.setItem('currentStep', 4); 
 
+            // Redireciona para o resultado
             window.location.href = 'tela_resultado.html';
         });
     }
 
-    // Listener do Slider (Badge)
+    // === 5. ESCUTADOR DO SLIDER (Atualiza o Badge em tempo real) ===
     if (hoursSlider) {
-        const badge = document.getElementById('rangeValue');
         hoursSlider.addEventListener('input', function() {
-            if (badge) badge.innerHTML = this.value + 'h / sem';
+            if (rangeValue) rangeValue.innerHTML = this.value + 'h / sem';
         });
     }
 });
