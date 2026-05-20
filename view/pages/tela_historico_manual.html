@@ -69,26 +69,17 @@
         </div>
     </nav>
 
-    <datalist id="disciplinas-list">
-
-        <option value="COMP363">Cálculo Diferencial e Integral</option>
-        <option value="COMP359">Programação I</option>
-        <option value="COMP360">Estrutura de Dados</option>
-        <option value="ENG102">Física Experimental</option>
-        <option value="DIR001">Ética e Cidadania</option>
-    
-    </datalist>
-
     <div class="container">
         <header>
             <h1>Preenchimento Manual de Histórico</h1>
-            <p>Selecione o código para identificar a disciplina</p>
+        <p>Pesquise pelo código ou nome da disciplina e selecione uma opção da lista</p>
+        <p id="disciplinas-feedback" class="disciplinas-feedback" aria-live="polite"></p>
         </header>
 
         <main>
             <div class="table-container">
                 <div class="table-header">
-                    <span>CÓDIGO</span>
+                    <span>BUSCA</span>
                     <span>NOME DA DISCIPLINA</span>
                     <span>NOTA</span>
                     <span>SITUAÇÃO</span>
@@ -123,6 +114,7 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../javascript/features/progresso.js"></script>
+    <script src="../javascript/features/api_config.js"></script>
     <script src="../javascript/pages/tela_historico_manual.js"></script>
     <script src="../javascript/features/scroll_to_top.js"></script>
     

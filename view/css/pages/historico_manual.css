@@ -33,7 +33,7 @@
 
 .table-header {
     display: grid;
-    grid-template-columns: 140px 1fr 100px 140px 120px 40px;
+    grid-template-columns: 240px 1fr 100px 140px 120px 40px;
     gap: 16px;
     padding: 0 12px 16px;
     color: var(--text-secondary);
@@ -45,7 +45,7 @@
 
 .row {
     display: grid;
-    grid-template-columns: 140px 1fr 100px 140px 120px 40px;
+    grid-template-columns: 240px 1fr 100px 140px 120px 40px;
     gap: 16px;
     margin-bottom: 12px;
     align-items: center;
@@ -83,6 +83,96 @@
 #historicoManual input.filled-auto {
     color: var(--accent-blue);
     background: rgba(59, 130, 246, 0.05);
+}
+
+.disciplinas-feedback {
+    min-height: 24px;
+    margin: -12px 0 24px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.disciplinas-feedback.is-error {
+    color: #fca5a5;
+}
+
+.disciplinas-feedback.is-success {
+    color: #93c5fd;
+}
+
+.discipline-search {
+    position: relative;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 280px;
+    padding: 8px;
+    overflow-y: auto;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.search-dropdown[hidden] {
+    display: none;
+}
+
+.search-option,
+.search-empty {
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.search-option {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    border: 1px solid transparent;
+    background: rgba(30, 41, 59, 0.85);
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.search-option:hover,
+.search-option.is-active {
+    border-color: rgba(59, 130, 246, 0.8);
+    background: rgba(37, 99, 235, 0.18);
+}
+
+.search-option-code {
+    font-weight: 700;
+    color: #bfdbfe;
+}
+
+.search-option-name {
+    color: var(--text-primary);
+    font-size: 0.94rem;
+}
+
+.search-empty {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px dashed var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+}
+
+@media (max-width: 1100px) {
+    .table-header,
+    .row {
+        grid-template-columns: 220px 1fr 90px 130px 110px 40px;
+    }
 }
 
 .status {
