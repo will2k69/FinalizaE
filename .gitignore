@@ -1,11 +1,33 @@
-.vscode/
-
-__pycache__/
-*.py[cod]
-
 server/.venv/
 server/.mypy_cache/
 server/.ruff_cache/
 server/app/__pycache__/
 
+# Python
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+*.py[cod]
+
+.venv/
+venv/
+env/
+
+.pytest_cache/
+
+.mypy_cache/
+
+.ruff_cache/
+
+.coverage
+htmlcov/
+
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
