@@ -13,10 +13,15 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Executar a API
+## Executar as APIs
 
+Extrator
 ```bash
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+Batabase
+```bash
+DB_HOST=localhost DB_PORT=5432 DB_NAME=finalizae DB_USER=postgres DB_PASSWORD=SUA_PW uvicorn app.main:app --reload
 ```
 
 Endpoints disponiveis:
