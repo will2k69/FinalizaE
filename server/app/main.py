@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+from collections.abc import AsyncGenerator
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.historico import router as historico_router
+from app.api.routes.disciplinas import router as disciplinas_router
+from app.db.connection import close_pool
 
 """
 API HTTP do FinalizaE.
@@ -12,7 +17,15 @@ Author: José Willamys
 Created: 24-04-2026
 """
 
-app = FastAPI(title="FinalizaE API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """Gerencia o ciclo de vida da aplicação (startup / shutdown)."""
+    yield
+    await close_pool()
+
+
+app = FastAPI(title="FinalizaE API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +36,7 @@ app.add_middleware(
 )
 
 app.include_router(historico_router)
+app.include_router(disciplinas_router)
 
 
 @app.get("/health")
