@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../img/logo-visual.png">
+    <link rel="stylesheet" type="text/css" href="../css/global/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Finalizaê — Admin · Disciplinas</title>
+</head>
+
+<body id="tela_Admin">
+
+    <!-- ====== HEADER ====== -->
+    <header class="admin-header">
+        <div class="admin-header-inner">
+            <div class="admin-brand">
+                <a href="../index.html">
+                    <img src="../img/logo-visual.png" alt="logo visual" class="admin-logo-img">
+                </a>
+                <a href="../index.html">
+                    <img src="../img/logo.svg" alt="Finalizaê" class="admin-logo-text">
+                </a>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <a href="../index.html" class="admin-back-link">
+                <i class="fa-solid fa-arrow-left"></i> Voltar ao site
+            </a>
+        </div>
+    </header>
+
+    <!-- ====== CONTEÚDO PRINCIPAL ====== -->
+    <main class="admin-main">
+        <div class="admin-card">
+
+            <!-- Cabeçalho do card -->
+            <div class="admin-card-header">
+                <div>
+                    <h1 class="admin-title">Gerenciar Disciplinas</h1>
+                    <p class="admin-subtitle">Cadastre, edite e remova disciplinas do banco de dados.</p>
+                </div>
+                <button class="btn-primary" id="btnNova">
+                    <i class="fa-solid fa-plus"></i> Nova Disciplina
+                </button>
+            </div>
+
+            <!-- Mensagem de erro de conexão -->
+            <div class="admin-error" id="adminError" style="display:none">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="adminErrorMsg">Não foi possível conectar à API.</span>
+            </div>
+
+            <!-- Tabela -->
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>C.H.</th>
+                            <th>Tipo</th>
+                            <th>Turno</th>
+                            <th>Período</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaDisciplinas">
+                        <tr class="loading-row">
+                            <td colspan="7">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ====== MODAL CRIAR / EDITAR ====== -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+            <div class="modal-header">
+                <h2 id="modalTitulo">Nova Disciplina</h2>
+                <button class="modal-close" id="btnFecharModal" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formDisciplina" novalidate>
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="fCodigo">Código <span class="req">*</span></label>
+                        <input type="text" id="fCodigo" name="codigo" maxlength="20"
+                               placeholder="ex: CC0001" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fPeriodo">Período ideal <span class="req">*</span></label>
+                        <input type="number" id="fPeriodo" name="periodo_ideal" min="1" max="20"
+                               placeholder="ex: 3" required>
+                    </div>
+
+                    <div class="form-group form-group--full">
+                        <label for="fNome">Nome <span class="req">*</span></label>
+                        <input type="text" id="fNome" name="nome" maxlength="255"
+                               placeholder="ex: Cálculo I" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fCargaHoraria">Carga horária (h) <span class="req">*</span></label>
+                        <input type="number" id="fCargaHoraria" name="carga_horaria" min="1"
+                               placeholder="ex: 72" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fTipo">Tipo <span class="req">*</span></label>
+                        <select id="fTipo" name="tipo" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="obrigatoria">Obrigatória</option>
+                            <option value="eletiva">Eletiva</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fTurno">Turno <span class="req">*</span></label>
+                        <select id="fTurno" name="turno" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="M">M — Manhã</option>
+                            <option value="T">T — Tarde</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelar">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnSalvar">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== TOAST ====== -->
+    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+    <!-- Scripts -->
+    <script src="../javascript/features/api_config.js"></script>
+    <script src="../javascript/pages/tela_admin_disciplinas.js"></script>
+</body>
+</html>

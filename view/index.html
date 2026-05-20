@@ -104,5 +104,24 @@
     </footer>
 
     <script src="javascript/features/scroll_to_top.js"></script>
+    <script>
+        // Easter egg: 5 cliques na logo abre o painel admin
+        (function () {
+            let count = 0;
+            let timer;
+            const logo = document.querySelector('.logo img');
+            if (!logo) return;
+            logo.style.cursor = 'pointer';
+            logo.addEventListener('click', function () {
+                count++;
+                clearTimeout(timer);
+                timer = setTimeout(function () { count = 0; }, 3000);
+                if (count >= 5) {
+                    count = 0;
+                    window.location.href = 'pages/tela_admin_disciplinas.html';
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
