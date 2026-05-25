@@ -1,0 +1,24 @@
+databases:
+  - name: finalizae-db
+    databaseName: finalizae
+    user: finalizae_user
+    plan: free # Free tier: 1 GB storage, expires after 90 days
+    ipAllowList: [] # Allow connections from any IP
+
+services:
+  - type: web
+    name: finalizae-api
+    runtime: python
+    plan: free # Free tier: 512 MB RAM, spins down after 15 min inactivity
+    rootDir: server
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: finalizae-db
+          property: connectionString
+      - key: ALLOWED_ORIGINS
+        value: https://finaliza-e.vercel.app/
