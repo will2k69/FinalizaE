@@ -3,6 +3,8 @@ server/.mypy_cache/
 server/.ruff_cache/
 server/app/__pycache__/
 
+render.yaml
+
 # Python
 __pycache__/
 *.pyc
