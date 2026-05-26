@@ -5,7 +5,7 @@
  * TODO: refatorar e documentar melhor as funções.
  */
 
-const API_URL = `${API_BASE_URL}/api/disciplinas`;
+const API_URL = `${API_BASE_URL}/api/disciplinas/`;
 
 // --- Estado ---
 let disciplinas = [];

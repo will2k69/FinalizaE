@@ -8,7 +8,7 @@
  * 3. Calcula o status da disciplina com base na nota.
  * 4. Persiste o histórico montado em sessionStorage antes de avançar.
  */
-const API_URL = `${API_BASE_URL}/api/disciplinas`;
+const API_URL = `${API_BASE_URL}/api/disciplinas/`;
 const MAX_SUGGESTIONS = 8;
 
 let currentRowToUpdate = null;

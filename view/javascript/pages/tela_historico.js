@@ -4,7 +4,7 @@ const fileName = document.getElementById("file_Name");
 const extractBtn = document.getElementById("extract_Btn");
 const extractStatus = document.getElementById("extract_Status");
 
-const EXTRACT_API_URL = "http://127.0.0.1:8000/api/extrair-historico";
+const EXTRACT_API_URL = `${API_BASE_URL}/api/extrair-historico`;
 
 /**
  * Atualiza a mensagem de status exibida para o usuario na area de upload.
