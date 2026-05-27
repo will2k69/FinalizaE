@@ -116,7 +116,7 @@ async function criarDisciplina(payload) {
 }
 
 async function atualizarDisciplina(id, payload) {
-    const res = await fetch(`${API_URL}/${id}`, {
+    const res = await fetch(`${API_URL}${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -129,7 +129,7 @@ async function atualizarDisciplina(id, payload) {
 }
 
 async function excluirDisciplina(id) {
-    const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}${id}`, { method: 'DELETE' });
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.detail ?? `HTTP ${res.status}`);
