@@ -7,7 +7,8 @@ const listaDisciplinas = {
     "MAT101": "Geometria Analítica",
     "ADM202": "Gestão de Projetos",
     "ECOM006": "Introdução à Engenharia da Computação",
-    "COMP361": "Computação, Sociedade e Ética"
+    "COMP361": "Computação, Sociedade e Ética",
+    "COMP373": "Programação III" // Adicionado o código de exemplo que você enviou
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +16,172 @@ document.addEventListener('DOMContentLoaded', () => {
     const alertBox = document.querySelector('.alert-box');
     const btnAddManual = document.querySelector('.btn-add-manual');
 
+    // ==========================================
+    // INTEGRAÇÃO: Carregar e Renderizar o JSON
+    // ==========================================
+    carregarHistoricoDoSessionStorage();
+
+   function carregarHistoricoDoSessionStorage() {
+    // 1. Limpa as linhas estáticas do HTML original
+    rowsContainer.innerHTML = '';
+
+    const dadosRaw = sessionStorage.getItem("historicoExtraido");
+    if (!dadosRaw) {
+        console.warn("Nenhum dado de histórico encontrado no sessionStorage.");
+        updateInterface();
+        return;
+    }
+
+    try {
+        let materias = JSON.parse(dadosRaw);
+
+        // Garante o tratamento como Array
+        if (materias && !Array.isArray(materias)) {
+            if (Array.isArray(materias.disciplinas)) materias = materias.disciplinas;
+            else if (Array.isArray(materias.materias)) materias = materias.materias;
+            else if (Array.isArray(materias.historico)) materias = materias.historico;
+            else if (Array.isArray(materias.data)) materias = materias.data;
+        }
+
+        const listaMaterias = Array.isArray(materias) ? materias : [materias];
+
+        // Mapeador auxiliar para aceitar variações de chaves da API (com/sem acento, maiúsculas/minúsculas)
+        const extrairCampo = (obj, chavesPossiveis) => {
+            for (let chave of chavesPossiveis) {
+                if (obj[chave] !== undefined && obj[chave] !== null) return obj[chave];
+            }
+            return undefined;
+        };
+
+        listaMaterias.forEach(materia => {
+            if (!materia) return;
+
+            const row = document.createElement('div');
+            
+            // Extração tolerante a variações do seu Back-end
+            const codRaw = extrairCampo(materia, ['codigo_disciplina', 'codigo', 'código', 'CODIGO_DISCIPLINA']);
+            const codigo = codRaw ? String(codRaw).toUpperCase().trim() : "—";
+            
+            const nomeRaw = extrairCampo(materia, ['nome_disciplina', 'nome', 'NOME_DISCIPLINA']);
+            const nomeExibicao = listaDisciplinas[codigo] || nomeRaw || "Disciplina Desconhecida";
+            
+            const perRaw = extrairCampo(materia, ['ano_periodo_letivo', 'periodo', 'período', 'ANO_PERIODO_LETIVO']);
+            const periodo = perRaw ? String(perRaw).trim() : "—";
+            
+            const situacaoRaw = extrairCampo(materia, ['situacao', 'situação', 'SITUACAO', 'SITUAÇÃO', 'status', 'STATUS']);
+            const situacaoApi = situacaoRaw ? String(situacaoRaw).toUpperCase().trim() : "";
+            
+            const mediaRaw = extrairCampo(materia, ['media', 'média', 'MEDIA', 'MÉDIA', 'nota', 'NOTA']);
+            let mediaStr = mediaRaw !== undefined && mediaRaw !== null ? String(mediaRaw).trim() : "-";
+
+            let notaHtml = '';
+            let statusClass = 'indefinido';
+            let statusTxt = 'INDEFINIDO';
+            let acoesHtml = '';
+
+            // 1. TENTA IDENTIFICAR O STATUS TEXTUAL VINDO DA API
+            if (situacaoApi.includes("APROV") || situacaoApi.includes("DISP") || situacaoApi.includes("EQUIV")) {
+                statusClass = "aprovado";
+                statusTxt = "APROVADO";
+            } else if (situacaoApi.includes("REPROV")) {
+                statusClass = "reprovado";
+                statusTxt = "REPROVADO";
+            } else if (situacaoApi.includes("MATRIC") || situacaoApi.includes("CURS")) {
+                statusClass = "cursando";
+                statusTxt = "MATRICULADO";
+            } 
+            // PLANO B: Se a situação veio vazia, tenta deduzir pela nota numérica
+            else if (mediaStr !== "-" && mediaStr !== "" && mediaStr.toUpperCase() !== "N/A") {
+                const notaDeducao = parseFloat(mediaStr.replace(',', '.'));
+                if (!isNaN(notaDeducao)) {
+                    if (notaDeducao >= 7.0) {
+                        statusClass = "aprovado";
+                        statusTxt = "APROVADO";
+                    } else if (notaDeducao < 5.0) {
+                        statusClass = "reprovado";
+                        statusTxt = "REPROVADO";
+                    }
+                }
+            }
+
+            // 2. MONTA A RENDERIZAÇÃO VISUAL BASEADA NO STATUS FILTRADO
+            if (statusTxt === "MATRICULADO") {
+                notaHtml = `<span class="text-secondary">—</span>`;
+                acoesHtml = `
+                    <div class="actions">
+                        <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                    </div>`;
+            } 
+            // Se a nota for um traço/vazia
+            else if (mediaStr === "-" || mediaStr === "" || mediaStr.toUpperCase() === "N/A") {
+                if (statusTxt === "APROVADO") {
+                    notaHtml = `<span class="text-secondary">—</span>`; // Aprovado sem nota (Equivalência/Dispensa)
+                    acoesHtml = `
+                        <div class="actions">
+                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>`;
+                } else {
+                    // Erro real de leitura: Sem nota e sem situação válida
+                    row.className = 'row revisao-grid row-error';
+                    row.dataset.errorType = "nota";
+                    statusClass = "indefinido";
+                    statusTxt = "INDEFINIDO";
+                    notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
+                    acoesHtml = `<button class="btn-fix">Corrigir</button>`;
+                }
+            } 
+            // Se possuir nota numérica normal
+            else {
+                const notaNum = parseFloat(mediaStr.replace(',', '.'));
+                
+                if (isNaN(notaNum)) {
+                    row.className = 'row revisao-grid row-error';
+                    row.dataset.errorType = "nota";
+                    statusClass = "indefinido";
+                    statusTxt = "INDEFINIDO";
+                    notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
+                    acoesHtml = `<button class="btn-fix">Corrigir</button>`;
+                } else {
+                    notaHtml = `<span class="bold blue-text">${notaNum.toFixed(1)}</span>`;
+                    acoesHtml = `
+                        <div class="actions">
+                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>`;
+                }
+            }
+
+            // Define classe padrão de linha se não for uma linha de erro
+            if (!row.className) {
+                row.className = 'row revisao-grid';
+            }
+
+            // Injeta a estrutura respeitando as classes do CSS
+            row.innerHTML = `
+                <span class="text-secondary">${codigo}</span>
+                <span class="bold">${nomeExibicao}</span>
+                <span class="text-secondary">${periodo}</span>
+                ${notaHtml}
+                <div class="status-pill ${statusClass}">${statusTxt}</div>
+                ${acoesHtml}
+            `;
+
+            rowsContainer.appendChild(row);
+        });
+
+    } catch (e) {
+        console.error("Erro crítico ao renderizar o histórico:", e);
+    }
+
+    // Atualiza contadores e médias do cabeçalho
     updateInterface();
+}
+
+    // ==========================================
+    // FUNÇÕES DO SEU SCRIPT ORIGINAL (PRESERVADAS)
+    // ==========================================
 
     // Função para mostrar Modal (Canvas Interno)
     function showModal(title, text) {
@@ -33,12 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Adicionar Nova Linha
+    // Adicionar Nova Linha Manual
     btnAddManual.addEventListener('click', () => {
         const newRow = document.createElement('div');
         newRow.className = 'row revisao-grid row-error';
         newRow.dataset.errorType = "pendente";
-        newRow.dataset.isNew = "true"; // Marca como nova linha
+        newRow.dataset.isNew = "true"; 
         
         newRow.innerHTML = `
             <span><input type="text" class="edit-codigo" placeholder="CÓDIGO" list="disciplinas-list"></span>
@@ -56,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateInterface();
     });
 
-    // Cliques na Tabela
+    // Cliques na Tabela (Excluir, Corrigir/Editar, Salvar, Cancelar)
     rowsContainer.addEventListener('click', async (e) => {
         const btn = e.target.closest('button');
         if (!btn) return;
@@ -92,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function enterEditMode(row) {
         if (row.classList.contains('row-editing')) return;
 
-        // Salva o HTML original para o caso de cancelar
         row.dataset.originalHtml = row.innerHTML;
 
         const spans = row.querySelectorAll('span');
@@ -121,10 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cancelEdit(row) {
         if (row.dataset.isNew === "true") {
-            // Se for uma linha nova que nunca foi salva, remove ela
             row.remove();
         } else {
-            // Se for uma edição de linha existente, restaura o HTML original
             row.innerHTML = row.dataset.originalHtml;
             row.classList.remove('row-editing');
         }
@@ -209,21 +372,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event listener para botão "Confirmar e Avançar"
+    // Navegação para a próxima tela
     const btnAdvance = document.querySelector('.btn-advance');
     if (btnAdvance) {
         btnAdvance.addEventListener('click', () => {
-            const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matriula';
-            
-            // Determinar próxima página baseado no fluxo
+            const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matricula';
             const proximaPagina = tipoFluxo === 'rematriula' 
                 ? 'tela_materias_conflitos.html' 
                 : 'tela_enfases.html'; 
             
-            // Próximo passo é Análise (step 3) em ambos os fluxos
-            const proximoStep = 3;
-            
-            sessionStorage.setItem('currentStep', proximoStep);
+            sessionStorage.setItem('currentStep', 3);
             window.location.href = proximaPagina;
         });
     }
