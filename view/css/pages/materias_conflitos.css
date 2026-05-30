@@ -5,7 +5,7 @@
     --input-readonly: #0f172a;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
-    --accent-blue: #3b82f6;
+    --accent-blue: #4c5cff;
     --success: #10b981;
     --danger: #ef4444;
     --border-color: #334155;
@@ -17,26 +17,24 @@
     margin: 0;
 }
 
-/* Header */
-#materiasConflitos header h1 { 
-    font-weight: 800; 
-    letter-spacing: -0.025em; 
-    margin-bottom: 8px; 
+#materiasConflitos header h1 {
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
 }
 
-#materiasConflitos header p { 
-    color: var(--text-secondary); 
-    margin-bottom: 32px; 
+#materiasConflitos header p {
+    color: var(--text-secondary);
+    margin-bottom: 32px;
 }
 
-.container { 
-    width: 95%; 
-    max-width: 800px; 
+.container {
+    width: 95%;
+    max-width: 800px;
     margin: 0 auto;
     padding: 40px 0;
 }
 
-/* Tabela e Container */
 .table-container {
     background: var(--card-bg);
     border-radius: 16px;
@@ -45,7 +43,6 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* AJUSTE DO GRID: 3 Colunas (Código, Nome, Botão Deletar) */
 .table-header {
     display: grid;
     grid-template-columns: 180px 1fr 50px;
@@ -69,7 +66,6 @@
     border-radius: 12px;
 }
 
-/* Estilos de Input */
 #materiasConflitos input {
     background: var(--input-bg);
     border: 1px solid var(--border-color);
@@ -96,7 +92,6 @@
     cursor: default;
 }
 
-/* Botões */
 .btn-add {
     background: transparent;
     color: var(--accent-blue);
@@ -109,48 +104,104 @@
     width: 100%;
     transition: 0.3s;
 }
-.btn-add:hover { background: rgba(59, 130, 246, 0.1); }
 
-.btn-delete { 
-    color: #475569; 
-    border: none; 
-    background: none; 
-    cursor: pointer; 
-    font-size: 1.1rem; }
-.btn-delete:hover { color: var(--danger); }
-
-
-/* Footer de Navegação */
-footer { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-top: 40px; 
+.btn-add:hover {
+    background: rgba(59, 130, 246, 0.1);
 }
 
-.btn-back { 
-    background: none; 
-    border: none; 
-    color: #60a5fa; 
-    cursor: pointer; 
-    font-size: 1rem; 
+.btn-delete {
+    color: #475569;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
 }
 
-.btn-continue { 
-    background: var(--accent-blue); 
-    color: white; 
-    border: none; 
-    padding: 16px 32px; 
-    border-radius: 12px; 
-    font-weight: 700; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
+.btn-delete:hover {
+    color: var(--danger);
+}
+
+footer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.btn-continue {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     transition: 0.3s;
+    text-decoration: none;
 }
 
 .btn-continue:hover {
     background: #2563eb;
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--accent-blue);
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 50px rgba(37, 99, 235, 0.2);
+}
+
+.modal-icon {
+    font-size: 3rem;
+    color: var(--accent-blue);
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-modal-primary {
+    flex: 1;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-modal-secondary {
+    flex: 1;
+    background: #1a1e3b;
+    color: white;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
 }
