@@ -69,15 +69,18 @@
     background: #20274f;
     border-radius: 14px;
     padding: 12px;
+    height: 50px;
 }
 
 #tela_ExplorarPlanejamento .input-wrap {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     background: #6f7593;
     border-radius: 10px;
     padding: 0 12px;
+    height: 46px;
+    box-sizing: border-box;
 }
 
 #tela_ExplorarPlanejamento .input-wrap span {
@@ -88,7 +91,7 @@
 #tela_ExplorarPlanejamento input,
 #tela_ExplorarPlanejamento select {
     width: 100%;
-    min-height: 44px;
+    height: 46px;
     border: 0;
     outline: 0;
     border-radius: 10px;
@@ -97,6 +100,12 @@
     color: #f8f9ff;
     background: #6f7593;
     font-family: inherit;
+    box-sizing: border-box;
+}
+
+#tela_ExplorarPlanejamento .input-wrap input {
+    background: transparent;
+    padding-left: 4px;
 }
 
 #tela_ExplorarPlanejamento input::placeholder {
