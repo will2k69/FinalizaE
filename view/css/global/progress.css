@@ -1,17 +1,17 @@
 /* para todas barras de progresso: (comentário temporário, apagar depois que ajustar todas as telas)
 
-    1. atente-se a mudar o active das páginas selecionadas 
+    1. atente-se a mudar o active das páginas selecionadas
     2. no momento não há persistência no momento
-    
-    */
 
-  .flex-btn-back{
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
+*/
 
-  .btn-back-header {
+.flex-btn-back {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.btn-back-header {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -57,143 +57,162 @@
   outline-offset: 2px;
 }
 
-/* Garante que a barra de progresso ocupe o espaço restante corretamente */
-.progress-container {
-  flex: 1;
-  position: relative;
-  /* (Mantenha seus estilos anteriores para as etapas) */
+nav .progress {
+  background: #02072a;
+  padding: 15px 20px 45px;
 }
 
-/* Nav */ 
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
 
-    nav .progress{
-      background: #02072a;
-      padding: 15px 20px 30px;
-    }
+.logo img {
+  width: 64px;
+}
 
-    .top-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 25px;
-    }
+.logo-text {
+  font-weight: 600;
+  font-size: 18px;
+}
 
-    .logo img {
-      width: 64px;
-    }
+.progress-container {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
 
-    .logo-text {
-      font-weight: 600;
-      font-size: 18px;
-    }
+.progress-line {
+  position: absolute;
+  top: 22px;
+  left: 20px;
+  width: calc(100% - 40px);
+  height: 4px;
+  background: #2b2f55;
+  border-radius: 10px;
+  z-index: 1;
+}
 
-    /* PROGRESS */
-    .progress-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-    }
+.progress-fill {
+  position: absolute;
+  top: 22px;
+  left: 20px;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, #4c5cff, #7a86ff);
+  border-radius: 10px;
+  z-index: 1;
+  transition: width 0.5s ease-in-out, background 0.5s ease-in-out;
+}
 
-    .progress-line {
-      position: absolute;
-      top: 22px;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: #2b2f55;
-      border-radius: 10px;
-    }
+.progress-fill.complete {
+  background: linear-gradient(90deg, #4c5cff, #22c55e);
+}
 
-    .progress-fill {
-      position: absolute;
-      top: 22px;
-      left: 0;
-      height: 4px;
-      width: 0%;
-      background: linear-gradient(90deg, #4c5cff, #7a86ff);
-      border-radius: 10px;
-      transition: width 0.5s ease-in-out, background 0.5s ease-in-out;
-    }
+.step {
+  text-align: center;
+  flex: none;
+  width: 40px;
+  position: relative;
+  z-index: 2;
+}
 
-    .progress-fill.complete {
-      background: linear-gradient(90deg, #4c5cff, #22c55e);
-    }
+.step a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
 
-    .step {
-      text-align: center;
-      flex: 1;
-      position: relative;
-      z-index: 2;
-    }
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #2b2f55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: 0.3s;
+}
 
-    .step a {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      cursor: pointer;
-    }
+.circle svg {
+  width: 18px;
+  height: 18px;
+}
 
-    .circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #2b2f55;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 8px;
-      transition: 0.3s;
-    }
+.step.active .circle,
+.step.completed .circle {
+  background: #4c5cff;
+}
 
-    .circle svg {
-      width: 18px;
-      height: 18px;
-    }
+.step[data-step="4"].active .circle,
+.step[data-step="4"].completed .circle {
+  background: #22c55e;
+}
 
-    .step.active .circle,
-    .step.completed .circle {
-      background: #4c5cff;
-    }
+.step.disabled {
+  opacity: 0.4;
+}
 
-    /* FINAL VERDE */
-    .step[data-step="4"].active .circle,
-    .step[data-step="4"].completed .circle {
-      background: #22c55e;
-    }
+.step span {
+  font-size: 12px;
+  color: #cfd3ff;
+  display: block;
+  width: 130px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  white-space: nowrap;
+  text-align: center;
+}
 
-    .step.disabled {
-      opacity: 0.4;
-    }
+@media (max-width: 768px) {
+  .flex-btn-back {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .step span {
-      font-size: 12px;
-      color: #cfd3ff;
-    }
+  .btn-back-header {
+    left: 0;
+    margin-bottom: 15px;
+  }
 
-    /* MOBILE */
-    @media (max-width: 768px) {
-      .flex-btn-back {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+  .progress-container {
+    overflow-x: auto;
+    gap: 20px;
+    padding: 0 10px;
+    justify-content: flex-start;
+  }
 
-      .progress-container {
-        overflow-x: auto;
-        gap: 20px;
-      }
+  .progress-line,
+  .progress-fill {
+    display: none;
+  }
 
-      .step {
-        min-width: 90px;
-        flex: none;
-      }
-    }
+  .step {
+    min-width: 90px;
+    position: relative;
+  }
 
-    /* CONTEÚDO */
-    .container {
-      text-align: center;
-      padding: 40px 20px;
-    }
+  .step span {
+    position: static;
+    transform: none;
+    width: auto;
+    white-space: normal;
+  }
+}
 
+.container {
+  text-align: center;
+  padding: 40px 20px;
+}
