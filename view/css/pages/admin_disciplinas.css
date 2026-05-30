@@ -365,6 +365,19 @@
 #tela_Admin .toast.success { background: #1a8c5e; }
 #tela_Admin .toast.error   { background: #c0392b; }
 
+#tela_Admin .form-group input,
+#tela_Admin .form-group select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#tela_Admin .admin-welcome {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
 /* ---------- responsivo ---------- */
 @media (max-width: 600px) {
     #tela_Admin .admin-card-header { flex-direction: column; align-items: stretch; }
