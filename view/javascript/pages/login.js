@@ -39,10 +39,8 @@ loginForm.addEventListener("submit", async (e) => {
 
         const data = await res.json();
 
-        // Salva o token
         localStorage.setItem("admin_token", data.token);
 
-        // Salva o nome do usuário digitado
         localStorage.setItem("admin_usuario", usuario);
 
         window.location.href = "tela_admin_disciplinas.html";
