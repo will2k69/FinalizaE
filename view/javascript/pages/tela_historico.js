@@ -7,10 +7,7 @@ const extractStatus = document.getElementById("extract_Status");
 const EXTRACT_API_URL = `${API_BASE_URL}/api/extrair-historico`;
 
 /**
- * Atualiza a mensagem de status exibida para o usuario na area de upload.
- *
- * @param {string} message - Texto de feedback mostrado na interface.
- * @param {string} color - Cor CSS aplicada ao texto de status.
+ * Atualiza a mensagem de status exibida para o usuário.
  */
 function setStatus(message, color) {
     extractStatus.textContent = message;
@@ -18,7 +15,7 @@ function setStatus(message, color) {
 }
 
 /**
- * Habilita ou desabilita o botao de extracao com base na selecao de arquivo.
+ * Habilita ou desabilita o botão de extração conforme a seleção de arquivo.
  */
 function updateExtractButtonState() {
     const hasValidFile = fileInput.files.length > 0;
@@ -26,9 +23,7 @@ function updateExtractButtonState() {
 }
 
 /**
- * Atualiza o feedback visual da selecao de arquivo e sincroniza o estado do botao.
- *
- * @param {File | undefined | null} file - Arquivo selecionado pelo usuario.
+ * Atualiza o feedback visual da seleção de arquivo.
  */
 function updateFileSelectionFeedback(file) {
     if (!file || file.type !== "application/pdf") {
@@ -40,7 +35,7 @@ function updateFileSelectionFeedback(file) {
         return;
     }
 
-    fileName.textContent = "Arquivo selecionado: " + file.name;
+    fileName.textContent = `Arquivo selecionado: ${file.name}`;
     fileName.style.color = "#22c55e";
     uploadArea.classList.add("has-file");
     setStatus("Arquivo pronto para extração.", "#cfd3ff");
@@ -48,13 +43,7 @@ function updateFileSelectionFeedback(file) {
 }
 
 /**
- * Envia o PDF selecionado para a API, processa a resposta e exporta o JSON.
- *
- * Fluxo:
- * 1. Valida se existe arquivo selecionado.
- * 2. Envia o arquivo via multipart/form-data para o endpoint de extracao.
- * 3. Faz download automatico do JSON retornado.
- * 4. Salva os dados extraidos na sessionStorage para uso posterior.
+ * Envia o PDF para a API, salva o JSON retornado e redireciona para revisão.
  */
 async function extrairHistorico() {
     if (fileInput.files.length === 0) {
@@ -78,12 +67,21 @@ async function extrairHistorico() {
 
         if (!response.ok) {
             const errorPayload = await response.json().catch(() => ({}));
-            throw new Error(errorPayload.detail || "Falha ao extrair dados do histórico.");
+            throw new Error(
+                errorPayload.detail || "Falha ao extrair dados do histórico."
+            );
         }
 
         const result = await response.json();
-        const outputName = file.name.replace(/\.pdf$/i, "") + "_finalizae.json";
-        const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
+
+        const outputName =
+            file.name.replace(/\.pdf$/i, "") + "_finalizae.json";
+
+        const blob = new Blob(
+            [JSON.stringify(result, null, 2)],
+            { type: "application/json" }
+        );
+
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
 
@@ -92,39 +90,52 @@ async function extrairHistorico() {
         document.body.appendChild(link);
         link.click();
         link.remove();
+
         URL.revokeObjectURL(url);
 
-        sessionStorage.setItem("historicoExtraido", JSON.stringify(result));
+        sessionStorage.setItem(
+            "historicoExtraido",
+            JSON.stringify(result)
+        );
+
         setStatus(
             "Extração concluída com sucesso. JSON baixado automaticamente.",
             "#22c55e"
         );
 
-        // Navegação automática após sucesso
         setTimeout(() => {
-            sessionStorage.setItem("currentStep", 2); // Avança para step 2 (Revisão)
+            sessionStorage.setItem("currentStep", 2);
             window.location.href = "tela_revisao_historico.html";
-        }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem
+        }, 2000);
+
     } catch (error) {
-        setStatus(error.message || "Erro inesperado durante a extração.", "#ef4444");
+        setStatus(
+            error.message || "Erro inesperado durante a extração.",
+            "#ef4444"
+        );
     } finally {
         extractBtn.textContent = "Extrair e Exportar JSON";
         updateExtractButtonState();
     }
 }
 
-// Clique na área de upload abre o seletor de arquivo (ignora cliques no label/botão que já abrem nativamente)
 uploadArea.addEventListener("click", (e) => {
-    if (e.target.tagName === "LABEL" || e.target.closest("label") ||
-        e.target.tagName === "BUTTON" || e.target.closest("button"))
+    if (
+        e.target.tagName === "LABEL" ||
+        e.target.closest("label") ||
+        e.target.tagName === "BUTTON" ||
+        e.target.closest("button")
+    ) {
         return;
+    }
+
     fileInput.click();
 });
 
-// Exibe nome do arquivo selecionado
 fileInput.addEventListener("change", () => {
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
+
         if (file.type !== "application/pdf") {
             fileName.textContent = "Por favor, selecione um arquivo PDF.";
             fileName.style.color = "#ef4444";
@@ -133,12 +144,12 @@ fileInput.addEventListener("change", () => {
             updateExtractButtonState();
             return;
         }
+
         updateFileSelectionFeedback(file);
         extrairHistorico();
     }
 });
 
-// Drag and drop
 uploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
     uploadArea.classList.add("dragover");
@@ -153,6 +164,7 @@ uploadArea.addEventListener("drop", (e) => {
     uploadArea.classList.remove("dragover");
 
     const file = e.dataTransfer.files[0];
+
     if (file && file.type === "application/pdf") {
         fileInput.files = e.dataTransfer.files;
         updateFileSelectionFeedback(file);
@@ -166,4 +178,5 @@ uploadArea.addEventListener("drop", (e) => {
 });
 
 extractBtn.addEventListener("click", extrairHistorico);
+
 updateExtractButtonState();
