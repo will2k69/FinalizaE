@@ -14,28 +14,37 @@
 #revisao_Historico {
     background-color: #02072a;
     color: var(--text-main);
-  font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
     margin: 0;
 }
 
-  .container {
+.container {
     max-width: 1100px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
-/* Header & Stats */
-  .revisao-header {
+.revisao-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 30px;
 }
 
-  .header-info h1 { margin: 0 0 12px 0; font-size: 2.1rem; }
-  .header-info p { color: var(--text-sec); margin: 0; max-width: 600px; font-size: 1rem; line-height: 1.6; }
+.header-info h1 {
+    margin: 0 0 12px 0;
+    font-size: 2.1rem;
+}
 
-  .stats-card {
+.header-info p {
+    color: var(--text-sec);
+    margin: 0;
+    max-width: 600px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.stats-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -44,13 +53,29 @@
     gap: 20px;
 }
 
-  .stat-item { display: flex; flex-direction: column; align-items: center; }
-  .stat-label { font-size: 0.78rem; color: var(--text-sec); font-weight: 700; }
-  .stat-value { font-size: 1.4rem; font-weight: 800; }
-  .stat-divider { width: 1px; background: var(--border-color); }
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-/* Alerta */
-  .alert-box {
+.stat-label {
+    font-size: 0.78rem;
+    color: var(--text-sec);
+    font-weight: 700;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.stat-divider {
+    width: 1px;
+    background: var(--border-color);
+}
+
+.alert-box {
     background: var(--error-bg);
     border: 1px solid rgba(239, 68, 68, 0.2);
     border-radius: 10px;
@@ -63,24 +88,26 @@
     color: #e5e7eb;
 }
 
-  .alert-box i { color: var(--status-blue); }
+.alert-box i {
+    color: var(--status-blue);
+}
 
-/* Tabela */
-  .table-container {
+.table-container {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     overflow: hidden;
 }
 
-  .revisao-grid {
+.revisao-grid {
     display: grid;
-    grid-template-columns: 120px 1fr 100px 100px 140px 100px;
+    grid-template-columns: 140px 1fr 80px 70px 140px 180px;
     padding: 18px 25px;
     align-items: center;
+    gap: 20px;
 }
 
-  .table-header {
+.table-header {
     border-bottom: 1px solid var(--border-color);
     color: var(--text-sec);
     font-size: 0.82rem;
@@ -88,25 +115,46 @@
     letter-spacing: 0.5px;
 }
 
-  .row { border-bottom: 1px solid var(--border-color); font-size: 0.98rem; }
- .row-error { background: rgba(239, 68, 68, 0.08); border-left: 4px solid var(--status-red); }
+.row {
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.98rem;
+}
 
-/* Status Pills */
-  .status-pill {
+.row-error {
+    background: rgba(239, 68, 68, 0.08);
+    border-left: 4px solid var(--status-red);
+}
+
+.status-pill {
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.78rem;
     font-weight: 800;
     text-align: center;
     width: fit-content;
+    margin: 0 auto;
 }
 
-  .aprovado { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-.reprovado { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-  .cursando { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
- .indefinido { background: rgba(142, 148, 178, 0.1); color: #8e94b2; }
+.aprovado {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
 
-/* Buttons */
+.reprovado {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.cursando {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.indefinido {
+    background: rgba(142, 148, 178, 0.1);
+    color: #8e94b2;
+}
+
 .btn-fix {
     background: #ef4444;
     color: white;
@@ -131,7 +179,13 @@
     gap: 8px;
 }
 
-.actions { display: flex; gap: 10px; }
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
 .btn-icon {
     background: transparent;
     border: none;
@@ -145,9 +199,16 @@
     display: flex;
     justify-content: space-between;
 }
-.btn-back { background: transparent; border: none; color: #3b82f6; cursor: pointer; }
+
+.btn-back {
+    background: transparent;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+}
+
 .btn-advance {
-    background: #1e3a8a;
+    background: #3b82f6;
     color: white;
     border: none;
     padding: 12px 30px;
@@ -156,14 +217,32 @@
     cursor: pointer;
 }
 
-/* Helpers */
-.blue-text { color: var(--status-blue); }
-.error-text { color: var(--status-red); display: flex; align-items: center; gap: 5px; }
-.dot { width: 8px; height: 8px; background: var(--status-red); border-radius: 50%; }
-.bold { font-weight: 700; }
-.text-secondary { color: var(--text-sec); }
+.blue-text {
+    color: var(--status-blue);
+}
 
-/* Inputs específicos para o modo de edição na tabela */
+.error-text {
+    color: var(--status-red);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: var(--status-red);
+    border-radius: 50%;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.text-secondary {
+    color: var(--text-sec);
+}
+
 .row input {
     background: #161b33;
     border: 1px solid var(--accent-blue);
@@ -184,19 +263,16 @@
     font-weight: bold;
 }
 
-/* Feedback visual quando a linha está em edição */
 .row-editing {
     background: rgba(59, 130, 246, 0.1) !important;
     border-left: 4px solid var(--accent-blue);
 }
 
-/* Destaque para campos com erro durante a edição */
 .input-error {
     border: 2px solid var(--danger) !important;
     background: rgba(239, 68, 68, 0.1) !important;
 }
 
-/* Modal Overlay com Blur */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -205,13 +281,12 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(8px);
-    display: none; /* Escondido por padrão */
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 9999;
 }
 
-/* Card do Modal */
 .modal-content {
     background: var(--card-bg);
     border: 1px solid var(--accent-blue);
@@ -256,7 +331,6 @@
     cursor: pointer;
 }
 
-
 .row .btn-cancel {
     background: #334155;
     color: white;
@@ -272,9 +346,22 @@
     background: #475569;
 }
 
-/* Container para agrupar os botões de Salvar e Cancelar na linha */
 .row .edit-actions {
     display: flex;
-    gap: 2px;
+    align-items: center;
     justify-content: flex-end;
+    gap: 12px;
+    margin-left: 14px;
+}
+
+.row-editing {
+    grid-template-columns:
+        140px
+        1fr
+        85px
+        70px
+        140px
+        180px !important;
+        
+    column-gap: 18px;
 }
