@@ -5,7 +5,7 @@
  * TODO: refatorar e documentar melhor as funções.
  */
 
-const API_URL = `${API_BASE_URL}/api/disciplinas/`;
+const API_URL = `${API_BASE_URL}/api/disciplinas`;
 
 // --- Estado ---
 let disciplinas = [];
@@ -116,7 +116,7 @@ async function criarDisciplina(payload) {
 }
 
 async function atualizarDisciplina(id, payload) {
-    const res = await fetch(`${API_URL}${id}`, {
+    const res = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -129,7 +129,7 @@ async function atualizarDisciplina(id, payload) {
 }
 
 async function excluirDisciplina(id) {
-    const res = await fetch(`${API_URL}${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.detail ?? `HTTP ${res.status}`);
@@ -262,3 +262,9 @@ document.addEventListener('keydown', function(e) {
 
 // --- Inicialização ---
 carregarDisciplinas();
+
+const nomeAdmin = localStorage.getItem("admin_usuario");
+
+if (nomeAdmin) {
+    document.getElementById("adminNome").textContent = nomeAdmin;
+}
