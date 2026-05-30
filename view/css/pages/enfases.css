@@ -2,7 +2,7 @@
     --bg-color: #00042A;
     --card-bg: #2B2E4D;
     --card-hover: rgba(255, 255, 255, 0.1);
-    --blue-primary: #2778C4;
+    --blue-primary: #3b82f6;
     --text-gray: #D9D9D9;
 
     margin: 0;
@@ -19,7 +19,6 @@
     box-sizing: inherit;
 }
 
-/* Mantém os textos com aparência consistente como no layout original */
 #Enfases h1,
 #Enfases h2,
 #Enfases h3,
@@ -32,21 +31,50 @@
     line-height: 1.5;
 }
 
-#Enfases .brand { 
-    font-family: 'Autour One', cursive; 
-    font-size: 32px; 
-    font-weight: normal; 
+#Enfases .brand {
+    font-family: 'Autour One', cursive;
+    font-size: 32px;
+    font-weight: normal;
 }
 
-#Enfases .title-32 { font-size: 32px; font-weight: 700; }
-#Enfases .title-25 { font-size: 24px; font-weight: 600; }
-#Enfases .text-20 { font-size: 18px; }
-#Enfases .text-16 { font-size: 16px; color: var(--text-gray); }
-#Enfases .text-14 { font-size: 14px; }
-#Enfases .hint { color: var(--text-gray); margin-top: 10px; font-style: italic; }
+#Enfases .title-32 {
+    font-size: 32px;
+    font-weight: 700;
+}
 
-#Enfases .logo-img { width: 100px; height: 100px; }
-#Enfases .icon-img { width: 30px; height: 30px; }
+#Enfases .title-25 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+#Enfases .text-20 {
+    font-size: 18px;
+}
+
+#Enfases .text-16 {
+    font-size: 16px;
+    color: var(--text-gray);
+}
+
+#Enfases .text-14 {
+    font-size: 14px;
+}
+
+#Enfases .hint {
+    color: var(--text-gray);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+#Enfases .logo-img {
+    width: 100px;
+    height: 100px;
+}
+
+#Enfases .icon-img {
+    width: 30px;
+    height: 30px;
+}
 
 #Enfases .main-header {
     display: flex;
@@ -57,10 +85,20 @@
     margin-bottom: 50px;
 }
 
-#Enfases .header-left { display: flex; align-items: center; gap: 30px; }
+#Enfases .header-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
 
-#Enfases .logo img { width: 64px; display: block; }
-#Enfases .logo-text img { display: block; }
+#Enfases .logo img {
+    width: 64px;
+    display: block;
+}
+
+#Enfases .logo-text img {
+    display: block;
+}
 
 #Enfases .section-header {
     display: flex;
@@ -107,9 +145,11 @@
     flex-direction: column;
 }
 
-#Enfases .card:hover .card-content { background: var(--card-hover); }
+#Enfases .card:hover .card-content {
+    background: var(--card-hover);
+}
 
-#Enfases .card input:checked + .card-content {
+#Enfases .card input:checked+.card-content {
     border-color: var(--blue-primary);
     background: rgba(39, 120, 196, 0.15);
 }
@@ -132,11 +172,11 @@
     flex-shrink: 0;
 }
 
-#Enfases .card input:checked + .card-content .radio-custom {
+#Enfases .card input:checked+.card-content .radio-custom {
     border-color: var(--blue-primary);
 }
 
-#Enfases .card input:checked + .card-content .radio-custom::after {
+#Enfases .card input:checked+.card-content .radio-custom::after {
     content: '';
     width: 12px;
     height: 12px;
@@ -144,9 +184,18 @@
     border-radius: 50%;
 }
 
-#Enfases .full-width { margin-top: 20px; }
-#Enfases .center { text-align: center; }
-#Enfases .center .card-header { justify-content: center; gap: 15px; }
+#Enfases .full-width {
+    margin-top: 20px;
+}
+
+#Enfases .center {
+    text-align: center;
+}
+
+#Enfases .center .card-header {
+    justify-content: center;
+    gap: 15px;
+}
 
 #Enfases .parameters-box {
     background: var(--card-bg);
@@ -211,7 +260,12 @@
     border: none;
 }
 
-#Enfases .slider-labels { display: flex; justify-content: space-between; margin-top: 10px; color: #71717A; }
+#Enfases .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: #71717A;
+}
 
 #Enfases .toggle-group {
     background: #161B2D;
@@ -221,7 +275,9 @@
     margin-top: 15px;
 }
 
-#Enfases .toggle-group input { display: none; }
+#Enfases .toggle-group input {
+    display: none;
+}
 
 #Enfases .toggle-group label {
     flex: 1;
@@ -233,7 +289,7 @@
     font-size: 15px;
 }
 
-#Enfases .toggle-group input:checked + label {
+#Enfases .toggle-group input:checked+label {
     background: var(--blue-primary);
 }
 
@@ -244,7 +300,8 @@
     margin-top: 50px;
 }
 
-#Enfases .back-link, #Enfases .next-btn {
+#Enfases .back-link,
+#Enfases .next-btn {
     cursor: pointer;
     transition: 0.2s;
     font-family: inherit;
@@ -261,20 +318,31 @@
     background: var(--blue-primary);
     color: white;
     border: none;
-    padding: 12px 30px;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 600;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
 }
 
-#Enfases .next-btn:hover { filter: brightness(1.1); }
-#Enfases .next-btn:active { transform: scale(0.98); }
+#Enfases .next-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 15px rgba(39, 120, 196, 0.4);
+}
+
+#Enfases .next-btn:active {
+    transform: scale(0.98);
+}
 
 @media (max-width: 900px) {
     #Enfases .container {
         grid-template-columns: 1fr;
         gap: 30px;
     }
+
     #Enfases .params-grid {
         grid-template-columns: 1fr;
     }
