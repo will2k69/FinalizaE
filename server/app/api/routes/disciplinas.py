@@ -60,3 +60,4 @@ async def remover_disciplina(id_disciplina: int) -> Response:
     if not removed:
         raise HTTPException(status_code=404, detail="Disciplina não encontrada.")
     return Response(status_code=204)
+
