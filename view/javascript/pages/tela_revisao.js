@@ -1,4 +1,5 @@
-const listaDisciplinas = {
+// Dicionário local que será preenchido dinamicamente com os dados do banco
+let listaDisciplinas = {
     "COMP363": "Cálculo Diferencial e Integral",
     "COMP359": "Programação I",
     "COMP360": "Estrutura de Dados",
@@ -10,13 +11,61 @@ const listaDisciplinas = {
     "COMP361": "Computação, Sociedade e Ética"
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const rowsContainer = document.getElementById('rows-container');
     const alertBox = document.querySelector('.alert-box');
     const btnAddManual = document.querySelector('.btn-add-manual');
 
     // ==========================================
-    // INTEGRACAO: Carrega os dados vindos da API
+    // CONFIGURAÇÃO: Popula o Datalist e sincroniza com o Banco
+    // ==========================================
+    async function sincronizarEGerarBusca() {
+        // Cria ou limpa o datalist de sugestões no HTML para a busca funcionar nativamente
+        let datalist = document.getElementById('disciplinas-list');
+        if (!datalist) {
+            datalist = document.createElement('datalist');
+            datalist.id = 'disciplinas-list';
+            document.body.appendChild(datalist);
+        }
+        datalist.innerHTML = ''; 
+
+        try {
+            // Ajuste aqui o endereço exato do seu backend caso mude a porta
+            const response = await fetch('http://127.0.0.1:8000/api/disciplinas/');
+            if (response.ok) {
+                const disciplinasBanco = await response.json();
+                
+                disciplinasBanco.forEach(disc => {
+                    if (disc.codigo && disc.nome) {
+                        const chave = disc.codigo.toUpperCase().trim();
+                        listaDisciplinas[chave] = disc.nome;
+
+                        // Adiciona a matéria como uma opção de busca visual
+                        const option = document.createElement('option');
+                        option.value = chave;
+                        option.textContent = disc.nome;
+                        datalist.appendChild(option);
+                    }
+                });
+                console.log("Busca conectada ao Banco de Dados com sucesso.");
+            }
+        } catch (error) {
+            console.warn("Erro ao conectar ao banco. Usando dados locais de fallback.", error);
+            // Se o banco falhar, monta a busca com os dados locais padrões
+            Object.keys(listaDisciplinas).forEach(chave => {
+                const option = document.createElement('option');
+                option.value = chave;
+                option.textContent = listaDisciplinas[chave];
+                datalist.appendChild(option);
+            });
+        }
+    }
+
+    // Inicializa a busca com o banco de dados antes de tudo
+    await sincronizarEGerarBusca();
+
+    // ==========================================
+    // INTEGRACAO: Carrega os dados vindos da API do PDF
     // ==========================================
     const dadosRaw = sessionStorage.getItem("historicoExtraido");
     
@@ -36,17 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const periodo = materia.ano_periodo_letivo || '—';
                     const mediaVal = materia.media;
                     
-                    // Tenta ler o status de qualquer variação de chave
                     const situacaoRaw = String(materia.situacao || materia.situação || materia.status || '').toUpperCase().trim();
                     const numNota = parseFloat(String(mediaVal).replace(',', '.'));
                     
-                    // Padrão caso tudo falhe (Verde)
                     let statusCls = 'aprovado';
                     let statusTxt = 'APROVADO';
                     let notaHtml = '';
                     let acoesHtml = '';
 
-                    // 1. Força a cor com base no texto do PDF
                     if (situacaoRaw.includes('APROV')) {
                         statusCls = 'aprovado';
                         statusTxt = 'APROVADO';
@@ -57,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         statusCls = 'cursando';
                         statusTxt = 'MATRICULADO';
                     } 
-                    // 2. PLANO B: Se o texto falhou, decide a cor puramente pela Nota
                     else if (!isNaN(numNota)) {
                         if (numNota >= 7.0) {
                             statusCls = 'aprovado';
@@ -68,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    // Monta o layout das colunas
                     if (statusTxt === 'MATRICULADO') {
                         row.className = 'row revisao-grid';
                         notaHtml = `<span class="text-secondary">—</span>`;
@@ -111,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateInterface();
 
     // ==========================================
-    // SUAS FUNÇÕES ORIGINAIS (PRESERVADAS 100%)
+    // SUAS FUNÇÕES ORIGINAIS
     // ==========================================
 
     function showModal(title, text) {
@@ -175,10 +219,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputCod = row.querySelector('.edit-codigo');
         const inputNom = row.querySelector('.edit-nome');
         inputCod.addEventListener('input', (e) => {
-            const val = e.target.value.toUpperCase();
+            const val = e.target.value.toUpperCase().trim();
             if (listaDisciplinas[val]) {
                 inputNom.value = listaDisciplinas[val];
                 inputCod.classList.remove('input-error');
+            } else {
+                inputNom.value = ""; 
             }
         });
     }
@@ -225,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function saveRow(row) {
         const inputCod = row.querySelector('.edit-codigo');
         const inputNota = row.querySelector('.edit-nota');
-        const vCodigo = inputCod.value.toUpperCase();
+        const vCodigo = inputCod.value.toUpperCase().trim();
         const vNotaStr = inputNota.value;
         const vNotaNum = parseFloat(vNotaStr.replace(',', '.'));
 
