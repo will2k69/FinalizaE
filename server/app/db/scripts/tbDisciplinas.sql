@@ -24,20 +24,3 @@ CREATE TABLE IF NOT EXISTS disciplinas (
 CREATE INDEX IF NOT EXISTS idx_disciplinas_codigo ON disciplinas (codigo);
 CREATE INDEX IF NOT EXISTS idx_disciplinas_nome ON disciplinas (nome);
 
-/* integracao códigos disciplinas */ 
-
-async def buscar_nome_por_codigo(codigo: str) -> str | None:
-    """Busca o nome oficial de uma disciplina no banco de dados usando o código.
-    
-    Retorna o nome em string se encontrado, ou None caso não exista no banco.
-    """
-    pool = await get_pool()
-    
-    async with pool.acquire() as connection:
-        # Busca apenas a coluna 'nome' filtrando pelo 'codigo' único
-        query = "SELECT nome FROM disciplinas WHERE codigo = $1"
-        row = await connection.fetchrow(query, codigo.strip().upper())
-        
-        if row:
-            return row["nome"]
-        return None

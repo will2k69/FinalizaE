@@ -15,9 +15,105 @@ document.addEventListener('DOMContentLoaded', () => {
     const alertBox = document.querySelector('.alert-box');
     const btnAddManual = document.querySelector('.btn-add-manual');
 
+    // ==========================================
+    // INTEGRACAO: Carrega os dados vindos da API
+    // ==========================================
+    const dadosRaw = sessionStorage.getItem("historicoExtraido");
+    
+    if (dadosRaw) {
+        try {
+            const respostaApi = JSON.parse(dadosRaw);
+            const materias = respostaApi.disciplinas || [];
+
+            if (materias.length > 0) {
+                rowsContainer.innerHTML = ''; 
+
+                materias.forEach(materia => {
+                    const row = document.createElement('div');
+                    
+                    const codigo = (materia.codigo_disciplina || '—').toUpperCase().trim();
+                    const nome = materia.nome_disciplina || 'Disciplina Desconhecida';
+                    const periodo = materia.ano_periodo_letivo || '—';
+                    const mediaVal = materia.media;
+                    
+                    // Tenta ler o status de qualquer variação de chave
+                    const situacaoRaw = String(materia.situacao || materia.situação || materia.status || '').toUpperCase().trim();
+                    const numNota = parseFloat(String(mediaVal).replace(',', '.'));
+                    
+                    // Padrão caso tudo falhe (Verde)
+                    let statusCls = 'aprovado';
+                    let statusTxt = 'APROVADO';
+                    let notaHtml = '';
+                    let acoesHtml = '';
+
+                    // 1. Força a cor com base no texto do PDF
+                    if (situacaoRaw.includes('APROV')) {
+                        statusCls = 'aprovado';
+                        statusTxt = 'APROVADO';
+                    } else if (situacaoRaw.includes('REPROV')) {
+                        statusCls = 'reprovado';
+                        statusTxt = 'REPROVADO';
+                    } else if (situacaoRaw.includes('MATRIC') || situacaoRaw.includes('CURS') || mediaVal === '—') {
+                        statusCls = 'cursando';
+                        statusTxt = 'MATRICULADO';
+                    } 
+                    // 2. PLANO B: Se o texto falhou, decide a cor puramente pela Nota
+                    else if (!isNaN(numNota)) {
+                        if (numNota >= 7.0) {
+                            statusCls = 'aprovado';
+                            statusTxt = 'APROVADO';
+                        } else {
+                            statusCls = 'reprovado';
+                            statusTxt = 'REPROVADO';
+                        }
+                    }
+
+                    // Monta o layout das colunas
+                    if (statusTxt === 'MATRICULADO') {
+                        row.className = 'row revisao-grid';
+                        notaHtml = `<span class="text-secondary">—</span>`;
+                        acoesHtml = `
+                            <div class="actions">
+                                <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                                <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>`;
+                    } else if (mediaVal === '-' || mediaVal === '') {
+                        row.className = 'row revisao-grid row-error';
+                        row.dataset.errorType = "nota";
+                        notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
+                        acoesHtml = `<button class="btn-fix">Corrigir</button>`;
+                    } else {
+                        row.className = 'row revisao-grid';
+                        notaHtml = `<span class="bold blue-text">${isNaN(numNota) ? mediaVal : numNota.toFixed(1)}</span>`;
+                        acoesHtml = `
+                            <div class="actions">
+                                <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                                <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>`;
+                    }
+
+                    row.innerHTML = `
+                        <span class="text-secondary">${codigo}</span>
+                        <span class="bold">${nome}</span>
+                        <span class="text-secondary">${periodo}</span>
+                        ${notaHtml}
+                        <div class="status-pill ${statusCls}">${statusTxt}</div>
+                        ${acoesHtml}
+                    `;
+                    rowsContainer.appendChild(row);
+                });
+            }
+        } catch (e) {
+            console.error("Erro ao renderizar dados da API:", e);
+        }
+    }
+
     updateInterface();
 
-    // Função para mostrar Modal (Canvas Interno)
+    // ==========================================
+    // SUAS FUNÇÕES ORIGINAIS (PRESERVADAS 100%)
+    // ==========================================
+
     function showModal(title, text) {
         return new Promise((resolve) => {
             const modal = document.getElementById('custom-modal');
@@ -33,12 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Adicionar Nova Linha
     btnAddManual.addEventListener('click', () => {
         const newRow = document.createElement('div');
         newRow.className = 'row revisao-grid row-error';
         newRow.dataset.errorType = "pendente";
-        newRow.dataset.isNew = "true"; // Marca como nova linha
+        newRow.dataset.isNew = "true"; 
         
         newRow.innerHTML = `
             <span><input type="text" class="edit-codigo" placeholder="CÓDIGO" list="disciplinas-list"></span>
@@ -56,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateInterface();
     });
 
-    // Cliques na Tabela
     rowsContainer.addEventListener('click', async (e) => {
         const btn = e.target.closest('button');
         if (!btn) return;
@@ -92,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function enterEditMode(row) {
         if (row.classList.contains('row-editing')) return;
 
-        // Salva o HTML original para o caso de cancelar
         row.dataset.originalHtml = row.innerHTML;
 
         const spans = row.querySelectorAll('span');
@@ -121,10 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cancelEdit(row) {
         if (row.dataset.isNew === "true") {
-            // Se for uma linha nova que nunca foi salva, remove ela
             row.remove();
         } else {
-            // Se for uma edição de linha existente, restaura o HTML original
             row.innerHTML = row.dataset.originalHtml;
             row.classList.remove('row-editing');
         }
@@ -209,21 +300,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event listener para botão "Confirmar e Avançar"
     const btnAdvance = document.querySelector('.btn-advance');
     if (btnAdvance) {
         btnAdvance.addEventListener('click', () => {
             const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matriula';
-            
-            // Determinar próxima página baseado no fluxo
             const proximaPagina = tipoFluxo === 'rematriula' 
                 ? 'tela_materias_conflitos.html' 
                 : 'tela_enfases.html'; 
             
-            // Próximo passo é Análise (step 3) em ambos os fluxos
-            const proximoStep = 3;
-            
-            sessionStorage.setItem('currentStep', proximoStep);
+            sessionStorage.setItem('currentStep', 3);
             window.location.href = proximaPagina;
         });
     }

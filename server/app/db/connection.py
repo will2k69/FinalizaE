@@ -20,25 +20,34 @@ from asyncpg.pool import Pool
 
 _pool: Pool | None = None
 
-
 def _build_dsn() -> str:
-    """Constrói a DSN a partir das variáveis de ambiente."""
     url = os.getenv("DATABASE_URL")
     if url:
+        print("DATABASE_URL =", url)
         return url
+
     host = os.getenv("DB_HOST", "localhost")
     port = os.getenv("DB_PORT", "5432")
     name = os.getenv("DB_NAME", "finalizae")
     user = os.getenv("DB_USER", "postgres")
     password = os.getenv("DB_PASSWORD", "postgres")
-    return f"postgresql://{user}:{password}@{host}:{port}/{name}"
 
+    dsn = f"postgresql://{user}:{password}@{host}:{port}/{name}"
+    print("DSN =", dsn)
+    return dsn
 
 async def get_pool() -> Pool:
     """Retorna o pool de conexões, criando-o na primeira chamada (lazy init)."""
     global _pool
     if _pool is None:
-        _pool = await asyncpg.create_pool(_build_dsn())
+        _pool = await asyncpg.create_pool(
+            host="::1",
+            port=5432,
+            database=os.getenv("DB_NAME", "finalizae"),
+            user=os.getenv("DB_USER", "postgres"),
+            password=os.getenv("DB_PASSWORD", "BRLASOFT107"),
+            ssl=False,
+        )
     return _pool
 
 
@@ -48,3 +57,4 @@ async def close_pool() -> None:
     if _pool is not None:
         await _pool.close()
         _pool = None
+
