@@ -1,33 +1,154 @@
-const listaDisciplinas = {
-    "COMP363": "Cálculo Diferencial e Integral",
-    "COMP359": "Programação I",
-    "COMP360": "Estrutura de Dados",
-    "ENG102": "Física Experimental",
-    "DIR001": "Ética e Cidadania",
-    "MAT101": "Geometria Analítica",
-    "ADM202": "Gestão de Projetos",
-    "ECOM006": "Introdução à Engenharia da Computação",
-    "COMP361": "Computação, Sociedade e Ética",
-    "COMP373": "Programação III" // Adicionado o código de exemplo que você enviou
-};
-
+/**
+ * Gerencia a revisão manual do histórico antes da recomendação.
+ *
+ * Esta tela carrega o histórico extraído, valida códigos contra o catálogo,
+ * permite correções manuais e exporta apenas os dados revisados para a próxima etapa.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const rowsContainer = document.getElementById('rows-container');
     const alertBox = document.querySelector('.alert-box');
     const btnAddManual = document.querySelector('.btn-add-manual');
+    const alertCatalogo = document.getElementById('alert-catalogo');
+    const alertCatalogoTexto = document.getElementById('alert-catalogo-texto');
+    const API_BASE = typeof API_BASE_URL === 'string' ? API_BASE_URL : '';
+    const CATALOGO_API_URL = `${API_BASE}/api/recomendacoes/catalogo-codigos`;
+    let codigosCatalogo = new Set();
+    let nomesCatalogo = new Map();
+
+    function garantirDatalistCatalogo() {
+        let datalist = document.getElementById('disciplinas-list');
+        if (!datalist) {
+            datalist = document.createElement('datalist');
+            datalist.id = 'disciplinas-list';
+            document.body.appendChild(datalist);
+        }
+
+        datalist.innerHTML = '';
+        for (const codigo of codigosCatalogo) {
+            const option = document.createElement('option');
+            option.value = codigo;
+            datalist.appendChild(option);
+        }
+    }
 
     // ==========================================
     // INTEGRAÇÃO: Carregar e Renderizar o JSON
     // ==========================================
     carregarHistoricoDoSessionStorage();
+    carregarCatalogoCodigos();
 
-   function carregarHistoricoDoSessionStorage() {
+    // Busca os códigos válidos do backend para marcar disciplinas fora do catálogo atual.
+    async function carregarCatalogoCodigos() {
+        try {
+            const response = await fetch(CATALOGO_API_URL);
+            if (!response.ok) {
+                throw new Error('Falha ao carregar catálogo de disciplinas.');
+            }
+            const payload = await response.json();
+            const lista = Array.isArray(payload.codigos) ? payload.codigos : [];
+            codigosCatalogo = new Set(lista.map((c) => String(c).toUpperCase().trim()));
+            nomesCatalogo = new Map(lista.map((c) => [String(c).toUpperCase().trim(), String(c).toUpperCase().trim()]));
+            garantirDatalistCatalogo();
+            aplicarMarcacaoCatalogoNasLinhas();
+            atualizarAlertaCatalogo();
+        } catch (_) {
+            codigosCatalogo = new Set();
+            nomesCatalogo = new Map();
+            if (alertCatalogo && alertCatalogoTexto) {
+                alertCatalogo.style.display = 'flex';
+                alertCatalogoTexto.textContent = 'Não foi possível validar o catálogo de disciplinas da recomendação no momento.';
+            }
+        }
+    }
+
+    function aplicarMarcacaoCatalogoNasLinhas() {
+        if (!codigosCatalogo.size) {
+            return;
+        }
+
+        const rows = Array.from(document.querySelectorAll('#rows-container .row'));
+        rows.forEach((row) => {
+            if (row.classList.contains('row-editing')) {
+                return;
+            }
+
+            const codigo = (row.querySelector('span')?.textContent || '').trim().toUpperCase();
+            if (!codigo || codigo === '—') {
+                return;
+            }
+
+            const isValido = codigosCatalogo.has(codigo);
+            const erroAtual = row.dataset.errorType || '';
+
+            if (!isValido && erroAtual !== 'nota') {
+                row.classList.add('row-error');
+                row.dataset.errorType = 'codigo_catalogo';
+
+                const statusPill = row.querySelector('.status-pill');
+                if (statusPill) {
+                    statusPill.className = 'status-pill indefinido';
+                    statusPill.textContent = 'NÃO VALIDADO';
+                }
+
+                const actions = row.querySelector('.actions');
+                if (actions) {
+                    actions.outerHTML = '<button class="btn-fix">Corrigir</button>';
+                }
+                return;
+            }
+
+            if (isValido && erroAtual === 'codigo_catalogo') {
+                row.classList.remove('row-error');
+                delete row.dataset.errorType;
+
+                const btnFix = row.querySelector('.btn-fix');
+                if (btnFix) {
+                    btnFix.outerHTML = `
+                        <div class="actions">
+                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>`;
+                }
+            }
+        });
+    }
+
+    function listarCodigosTabela() {
+        const rows = Array.from(document.querySelectorAll('#rows-container .row'));
+        return rows
+            .map((row) => (row.querySelector('span')?.textContent || '').trim().toUpperCase())
+            .filter(Boolean);
+    }
+
+    function atualizarAlertaCatalogo() {
+        if (!alertCatalogo || !alertCatalogoTexto) {
+            return;
+        }
+
+        if (!codigosCatalogo.size) {
+            return;
+        }
+
+        const codigosHistorico = listarCodigosTabela();
+        const foraCatalogo = [...new Set(codigosHistorico.filter((codigo) => !codigosCatalogo.has(codigo)))].sort();
+
+        if (!foraCatalogo.length) {
+            alertCatalogo.style.display = 'none';
+            return;
+        }
+
+        alertCatalogo.style.display = 'flex';
+        alertCatalogoTexto.textContent = `Esses códigos não existem no catálogo atual da recomendação e serão ignorados: ${foraCatalogo.join(', ')}`;
+    }
+
+    // Renderiza o histórico salvo e tenta inferir status a partir da situação textual ou da nota.
+    function carregarHistoricoDoSessionStorage() {
     // 1. Limpa as linhas estáticas do HTML original
     rowsContainer.innerHTML = '';
 
-    const dadosRaw = sessionStorage.getItem("historicoExtraido");
+    const dadosRaw = sessionStorage.getItem("historicoExtraido") || sessionStorage.getItem("historicoRevisado");
     if (!dadosRaw) {
-        console.warn("Nenhum dado de histórico encontrado no sessionStorage.");
+        rowsContainer.innerHTML = `<div class="row revisao-grid"><span class="text-secondary">—</span><span class="bold">Nenhum histórico carregado</span><span class="text-secondary">—</span><span class="text-secondary">—</span><div class="status-pill indefinido">INDEFINIDO</div><div class="actions"></div></div>`;
         updateInterface();
         return;
     }
@@ -63,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const codigo = codRaw ? String(codRaw).toUpperCase().trim() : "—";
             
             const nomeRaw = extrairCampo(materia, ['nome_disciplina', 'nome', 'NOME_DISCIPLINA']);
-            const nomeExibicao = listaDisciplinas[codigo] || nomeRaw || "Disciplina Desconhecida";
+            const nomeExibicao = nomeRaw || nomesCatalogo.get(codigo) || "Disciplina sem nome";
             
             const perRaw = extrairCampo(materia, ['ano_periodo_letivo', 'periodo', 'período', 'ANO_PERIODO_LETIVO']);
             const periodo = perRaw ? String(perRaw).trim() : "—";
@@ -248,9 +369,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputNom = row.querySelector('.edit-nome');
         inputCod.addEventListener('input', (e) => {
             const val = e.target.value.toUpperCase();
-            if (listaDisciplinas[val]) {
-                inputNom.value = listaDisciplinas[val];
+            if (nomesCatalogo.has(val)) {
+                inputNom.value = nomesCatalogo.get(val) || val;
                 inputCod.classList.remove('input-error');
+                if (row.dataset.errorType === 'codigo_catalogo') {
+                    row.classList.remove('row-error');
+                    delete row.dataset.errorType;
+                }
             }
         });
     }
@@ -304,13 +429,14 @@ document.addEventListener('DOMContentLoaded', () => {
         inputCod.classList.remove('input-error');
         inputNota.classList.remove('input-error');
 
-        if (!listaDisciplinas[vCodigo]) {
+        if (codigosCatalogo.size && !codigosCatalogo.has(vCodigo)) {
             inputCod.classList.add('input-error');
-            row.dataset.errorType = "codigo";
+            row.dataset.errorType = "codigo_catalogo";
             row.classList.add('row-error');
             updateInterface();
             return;
         }
+
         if (vNotaStr === "") {
             inputNota.classList.add('input-error');
             row.dataset.errorType = "nota";
@@ -337,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         row.innerHTML = `
             <span class="text-secondary">${vCodigo}</span>
-            <span class="bold">${listaDisciplinas[vCodigo]}</span>
+            <span class="bold">${row.querySelector('.edit-nome').value || nomesCatalogo.get(vCodigo) || 'Disciplina sem nome'}</span>
             <span class="text-secondary">${row.querySelector('.edit-periodo').value || '—'}</span>
             <span class="bold blue-text">${vNotaNum.toFixed(1)}</span>
             <div class="status-pill ${statusCls}">${statusTxt}</div>
@@ -346,6 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
             </div>
         `;
+        aplicarMarcacaoCatalogoNasLinhas();
         updateInterface();
     }
 
@@ -365,21 +492,91 @@ document.addEventListener('DOMContentLoaded', () => {
             if (erroRow) {
                 alertBox.style.display = 'flex';
                 const type = erroRow.dataset.errorType;
-                alertBox.querySelector('span').innerHTML = type === "codigo" ? "Corrija o <span class='bold'>código da disciplina</span>." : (type === "nota" ? "Insira uma <span class='bold'>nota válida</span>." : "Detectamos registros com informações incompletas.");
+                if (type === 'codigo_catalogo') {
+                    alertBox.querySelector('span').innerHTML = "Corrija o <span class='bold'>código da disciplina</span> para um código válido do catálogo.";
+                } else if (type === 'codigo') {
+                    alertBox.querySelector('span').innerHTML = "Corrija o <span class='bold'>código da disciplina</span>.";
+                } else if (type === 'nota') {
+                    alertBox.querySelector('span').innerHTML = "Insira uma <span class='bold'>nota válida</span>.";
+                } else {
+                    alertBox.querySelector('span').innerHTML = "Detectamos registros com informações incompletas.";
+                }
             } else { 
                 alertBox.style.display = 'none'; 
             }
         }
+
+        aplicarMarcacaoCatalogoNasLinhas();
+        atualizarAlertaCatalogo();
+    }
+
+    // Gera a versão consolidada do histórico que será usada nas telas seguintes.
+    function exportarHistoricoRevisado() {
+        const rows = Array.from(document.querySelectorAll('#rows-container .row'));
+        return rows.map((row) => {
+            const colunas = row.querySelectorAll('span');
+            const codigo = (colunas[0]?.textContent || '').trim().toUpperCase();
+            const nome = (colunas[1]?.textContent || '').trim();
+            const periodo = (colunas[2]?.textContent || '').trim();
+            const notaTexto = (colunas[3]?.textContent || '').trim().replace(',', '.');
+            const status = (row.querySelector('.status-pill')?.textContent || '').trim().toUpperCase();
+
+            const notaNumero = Number.parseFloat(notaTexto);
+
+            return {
+                codigo_disciplina: codigo,
+                nome_disciplina: nome,
+                ano_periodo_letivo: periodo,
+                media: Number.isFinite(notaNumero) ? notaNumero : 0,
+                situacao: status,
+            };
+        }).filter((item) => item.codigo_disciplina);
     }
 
     // Navegação para a próxima tela
     const btnAdvance = document.querySelector('.btn-advance');
     if (btnAdvance) {
-        btnAdvance.addEventListener('click', () => {
+        btnAdvance.addEventListener('click', async () => {
+            const historicoRevisado = exportarHistoricoRevisado();
+            if (!historicoRevisado.length) {
+                window.alert('Nenhum dado de histórico foi carregado. Volte para a tela de envio e importe o histórico.');
+                return;
+            }
+
+            let historicoParaAvancar = historicoRevisado;
+            if (codigosCatalogo.size) {
+                const codigosHistorico = listarCodigosTabela();
+                const foraCatalogo = [...new Set(codigosHistorico.filter((codigo) => !codigosCatalogo.has(codigo)))];
+                if (foraCatalogo.length) {
+                    const confirmarIgnorar = await showModal(
+                        'Disciplinas fora do catálogo',
+                        `As disciplinas (${foraCatalogo.join(', ')}) não estão no catálogo atual e serão ignoradas na recomendação. Deseja continuar?`
+                    );
+
+                    if (!confirmarIgnorar) {
+                        return;
+                    }
+
+                    historicoParaAvancar = historicoRevisado.filter((item) => codigosCatalogo.has(String(item.codigo_disciplina).toUpperCase()));
+                    if (!historicoParaAvancar.length) {
+                        window.alert('Após ignorar as disciplinas fora do catálogo, não restou nenhuma disciplina válida para gerar recomendação.');
+                        return;
+                    }
+                }
+            }
+
+            sessionStorage.setItem(
+                'historicoRevisado',
+                JSON.stringify({
+                    total_disciplinas: historicoParaAvancar.length,
+                    disciplinas: historicoParaAvancar,
+                })
+            );
+
             const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matricula';
-            const proximaPagina = tipoFluxo === 'rematriula' 
-                ? 'tela_materias_conflitos.html' 
-                : 'tela_enfases.html'; 
+            const proximaPagina = tipoFluxo === 'rematricula'
+                ? 'tela_materias_conflitos.html'
+                : 'tela_enfases.html';
             
             sessionStorage.setItem('currentStep', 3);
             window.location.href = proximaPagina;

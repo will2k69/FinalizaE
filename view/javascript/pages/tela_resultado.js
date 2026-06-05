@@ -1,62 +1,86 @@
-// dados genéricos para simualação - no entanto pode vim de outra fonte
-const meuPlanoData = {
-    progresso: 72,
-    tempoRestante: "Mais 2 semestres para o diploma.",
-    resumo: {
-        creditos: 42,
-        meses: 12,
-        iraEst: "+0.4 est."
-    },
-    planejamento: [
-        {
-            semestre: "2024.2",
-            ordem: "01",
-            statusCarga: "360h - MODERADA",
-            tipoCarga: "highlight", // Amarelo
-            disciplinas: [
-                { nome: "Estrutura de Dados", horas: "72h", tipo: "pendencia", tag: "PENDÊNCIA ANTERIOR", info: "Não cursada no semestre anterior. Essencial para fluxo.", icon: "fa-triangle-exclamation" },
-                { nome: "Cálculo II", horas: "60h", tipo: "obrigatoria", tag: "OBRIGATÓRIA", info: "Início do ciclo de conclusão de curso.", icon: "fa-star" },
-                { nome: "Libras", horas: "72h", tipo: "eletiva", tag: "ELETIVA" }
-            ]
+/**
+ * Renderiza a tela final da recomendação a partir do JSON salvo em sessionStorage.
+ * Converte a resposta bruta da API em um view model simples para resumo, timeline e pendências.
+ */
+function classTagPorTipo(tipo) {
+    if (tipo === 'obrigatoria') return 'obrigatoria';
+    if (tipo === 'eletiva') return 'eletiva';
+    return 'pendencia';
+}
+
+function labelTipo(tipo, prioridadeEnfase) {
+    if (tipo === 'obrigatoria') return 'OBRIGATÓRIA';
+    if (prioridadeEnfase) return 'ELETIVA (ÊNFASE)';
+    return 'ELETIVA';
+}
+
+function indicePeriodo(periodo) {
+    const [ano, semestre] = periodo.split('.').map(Number);
+    if (!ano || !semestre) return 0;
+    return (ano * 2) + (semestre - 1);
+}
+
+// Consolida métricas e adapta a resposta da API ao formato consumido pela interface.
+function montarViewModel(resultado) {
+    const periodos = Array.isArray(resultado.periodos_planejados) ? resultado.periodos_planejados : [];
+    const pendencias = Array.isArray(resultado.pendencias) ? resultado.pendencias : [];
+
+    const cargaTotal = periodos.reduce((acc, p) => acc + (p.carga_horaria_total || 0), 0);
+    const totalDisciplinas = periodos.reduce((acc, p) => acc + (Array.isArray(p.disciplinas) ? p.disciplinas.length : 0), 0);
+    const periodoAtual = resultado.periodo_atual || '2026.1';
+    const prazo = resultado.prazo_conclusao || periodoAtual;
+
+    const span = Math.max(1, indicePeriodo(prazo) - indicePeriodo(periodoAtual));
+    const meses = span * 6;
+    const progresso = Math.max(0, Math.min(100, Math.round((totalDisciplinas / Math.max(1, totalDisciplinas + pendencias.length)) * 100)));
+
+    return {
+        progresso,
+        tempoRestante: `Planejamento até ${prazo}.`,
+        resumo: {
+            creditos: Math.round(cargaTotal / 18),
+            meses,
+            iraEst: pendencias.length === 0 ? 'Sem pendências críticas' : `${pendencias.length} pendência(s)`
         },
-        {
-            semestre: "2025.1",
-            ordem: "02",
-            statusCarga: "420h (Alta)",
-            tipoCarga: "highlight-high", // Branco/Cinza
-            disciplinas: [
-                { nome: "Projeto e Desenvolvimento de Sistemas", horas: "120h", tipo: "obrigatoria", tag: "OBRIGATÓRIA", info: "Início do ciclo de conclusão de curso.", icon: "fa-star" },
-                { nome: "Banco de Dados II", horas: "40h", tipo: "eletiva", tag: "ELETIVA" }
-            ]
-        }
-    ]
-};
+        planejamento: periodos.map((p, index) => ({
+            semestre: p.periodo,
+            ordem: String(index + 1).padStart(2, '0'),
+            statusCarga: `${p.carga_horaria_total}h`,
+            tipoCarga: p.carga_horaria_total >= 420 ? 'highlight-high' : 'highlight',
+            disciplinas: (p.disciplinas || []).map((d) => ({
+                nome: `${d.codigo} - ${d.nome}`,
+                horas: `${d.carga_horaria}h`,
+                tipo: classTagPorTipo(d.tipo),
+                tag: labelTipo(d.tipo, d.prioridade_enfase),
+                info: (d.prerequisitos_pendentes && d.prerequisitos_pendentes.length > 0)
+                    ? `Pré-requisitos pendentes: ${d.prerequisitos_pendentes.join(', ')}`
+                    : '',
+                icon: 'fa-circle-info',
+            }))
+        })),
+        pendencias,
+        bruto: resultado,
+    };
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-    renderizarDashboard(meuPlanoData);
-    setupAcoes();
-});
-
-// FUNÇÃO DE RENDERIZAÇÃO GENÉRICA
+// Monta visualmente o resumo da recomendação, os semestres planejados e as pendências.
 function renderizarDashboard(data) {
-    // Atualiza Sidebar
     document.getElementById('display-percent').innerText = `${data.progresso}%`;
     document.getElementById('display-tempo-restante').innerText = data.tempoRestante;
     document.getElementById('resumo-creditos').innerText = data.resumo.creditos;
     document.getElementById('resumo-tempo').innerText = `${data.resumo.meses} meses`;
     document.getElementById('resumo-ira').innerText = data.resumo.iraEst;
-    
+
     const progressBar = document.getElementById('progress-fill-results');
-    setTimeout(() => progressBar.style.width = `${data.progresso}%`, 300);
+    setTimeout(() => { progressBar.style.width = `${data.progresso}%`; }, 300);
 
-    // Renderiza Semestres e Cards
     const container = document.getElementById('timeline-container');
-    container.innerHTML = ''; 
+    container.innerHTML = '';
 
-    data.planejamento.forEach(sem => {
+    data.planejamento.forEach((sem) => {
         const semesterDiv = document.createElement('div');
         semesterDiv.className = 'semester-group';
-        
+
         semesterDiv.innerHTML = `
             <div class="semester-title">
                 <span class="badge-number">${sem.ordem}</span>
@@ -66,7 +90,7 @@ function renderizarDashboard(data) {
                 </div>
             </div>
             <div class="cards-grid">
-                ${sem.disciplinas.map(disc => `
+                ${sem.disciplinas.map((disc) => `
                     <div class="card-subject">
                         <div class="card-tag ${disc.tipo}">
                             ${disc.tag} <span class="hours">${disc.horas}</span>
@@ -84,32 +108,72 @@ function renderizarDashboard(data) {
         `;
         container.appendChild(semesterDiv);
     });
+
+    if (data.pendencias.length > 0) {
+        const pendencias = document.createElement('div');
+        pendencias.className = 'semester-group';
+        pendencias.innerHTML = `
+            <div class="semester-title">
+                <span class="badge-number">!</span>
+                <div>
+                    <h3>Pendências até o prazo</h3>
+                    <p>Disciplinas não alocadas automaticamente</p>
+                </div>
+            </div>
+            <div class="cards-grid">
+                ${data.pendencias.map((p) => `
+                    <div class="card-subject">
+                        <div class="card-tag pendencia">
+                            PENDÊNCIA
+                        </div>
+                        <h4>${p.codigo} - ${p.nome}</h4>
+                        <div class="card-info warning">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>${p.motivo}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(pendencias);
+    }
 }
 
-// CONFIGURAÇÃO DE BOTÕES
-function setupAcoes() {
+function setupAcoes(dadosBrutos) {
     document.getElementById('btn-pdf').addEventListener('click', () => window.print());
-    
+
     document.getElementById('btn-json').addEventListener('click', () => {
-        const blob = new Blob([JSON.stringify(meuPlanoData, null, 2)], {type: "application/json"});
+        const blob = new Blob([JSON.stringify(dadosBrutos, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = "meu_plano_academico.json";
+        a.download = 'recomendacao_finalizae.json';
         a.click();
+        URL.revokeObjectURL(url);
     });
-
-    // Handlers para botões de volta (se existirem)
-    const btnBack = document.querySelector('.btn-back');
-    if (btnBack) {
-        btnBack.addEventListener('click', () => {
-            const tipoFluxo = sessionStorage.getItem('tipoFluxo') || 'matriula';
-            const paginaAnterior = tipoFluxo === 'rematriula' 
-                ? 'tela_enfases.html' 
-                : 'tela_enfases.html';
-            sessionStorage.setItem('currentStep', 3);
-            window.location.href = paginaAnterior;
-        });
-    }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const raw = sessionStorage.getItem('recomendacaoResultado');
+    if (!raw) {
+        document.getElementById('timeline-container').innerHTML =
+            '<p style="color: var(--text-sec);">Nenhuma recomendação encontrada. Volte para a tela de ênfases e gere novamente.</p>';
+        setupAcoes({});
+        return;
+    }
+
+    let resultado;
+    try {
+        resultado = JSON.parse(raw);
+    } catch (_) {
+        document.getElementById('timeline-container').innerHTML =
+            '<p style="color: var(--text-sec);">Falha ao ler resultado da recomendação.</p>';
+        setupAcoes({});
+        return;
+    }
+
+    const viewModel = montarViewModel(resultado);
+    renderizarDashboard(viewModel);
+    setupAcoes(resultado);
+});
 
