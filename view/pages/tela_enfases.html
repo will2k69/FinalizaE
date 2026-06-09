@@ -57,13 +57,13 @@
                             <span>Revisão</span>
                         </a>
                     </div>
-                    <div class="step completed" data-step="3">
+                    <div class="step active" data-step="3">
                         <a href="#">
                             <div class="circle"><i data-lucide="search"></i></div>
                             <span>Análise</span>
                         </a>
                     </div>
-                    <div class="step active" data-step="4">
+                    <div class="step" data-step="4">
                         <a href="#">
                             <div class="circle"><i data-lucide="check-circle"></i></div>
                             <span>Resultado</span>
@@ -160,14 +160,14 @@
                     <div class="slider-container">
                         <div class="slider-header">
                             <h4 class="text-20">Carga Horária Máxima</h4>
-                            <span class="badge" id="rangeValue">24h / sem</span>
+                            <span class="badge" id="rangeValue">420h / período</span>
                         </div>
-                        <input type="range" min="12" max="40" value="24" class="slider" id="hoursSlider">
+                        <input type="range" min="72" max="576" value="420" class="slider" id="hoursSlider">
                         <div class="slider-labels">
-                            <span class="text-14">12h (Mínimo)</span>
-                            <span class="text-14">40h (Intensivo)</span>
+                            <span class="text-14" id="sliderMinLabel">72h (Mínimo)</span>
+                            <span class="text-14">576h (Máximo)</span>
                         </div>
-                        <p class="text-14 hint">Dica: Recomendamos 20-24h para manter o equilíbrio acadêmico-social.</p>
+                        <p class="text-14 hint">O mínimo é calculado automaticamente para viabilizar conclusão até o prazo informado.</p>
                     </div>
 
                     <div class="priority-container">
@@ -179,8 +179,19 @@
                             <input type="radio" name="prioridade" id="p-eletivas">
                             <label for="p-eletivas">Eletivas</label>
                         </div>
-                        <p class="text-14 hint">Define se o algoritmo deve preencher sua grade primeiro com o núcleo
-                            comum ou com suas preferências de ênfase.</p>
+                        <p class="text-14 hint">Define se o algoritmo deve preencher sua grade primeiro com o núcleo comum ou com suas preferências de ênfase.</p>
+                    </div>
+
+                    <div class="priority-container">
+                        <h4 class="text-16">Período Atual e Prazo</h4>
+                        <div style="display: grid; gap: 10px;">
+                            <label class="text-14" for="periodoAtualInput">Período atual (AAAA.S)</label>
+                            <input id="periodoAtualInput" type="text" placeholder="Ex.: 2026.1" class="text-16" style="padding: 10px 12px; border-radius: 10px; border: 1px solid #374151; background: #0f172a; color: #e5e7eb;">
+
+                            <label class="text-14" for="prazoConclusaoInput">Prazo máximo de conclusão (AAAA.S)</label>
+                            <input id="prazoConclusaoInput" type="text" placeholder="Ex.: 2028.1" class="text-16" style="padding: 10px 12px; border-radius: 10px; border: 1px solid #374151; background: #0f172a; color: #e5e7eb;">
+                        </div>
+                        <p class="text-14 hint">Use formato AAAA.S, onde S pode ser 1 ou 2.</p>
                     </div>
                 </div>
             </section>
@@ -193,15 +204,9 @@
         </section>
     </main>
 
-    <script>
-        const slider = document.getElementById('hoursSlider');
-        const badge = document.getElementById('rangeValue');
-        slider.oninput = function () {
-            badge.innerHTML = this.value + 'h / sem';
-        }
-    </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../javascript/features/progresso.js"></script>
+    <script src="../javascript/features/api_config.js"></script>
     <script src="../javascript/pages/tela_enfases.js"></script>
     <script src="../javascript/features/scroll_to_top.js"></script>
 </body>

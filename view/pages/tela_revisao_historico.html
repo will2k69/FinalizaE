@@ -93,6 +93,11 @@
             <span>Detectamos registros com informações incompletas.</span>
         </div>
 
+        <div id="alert-catalogo" class="alert-box error" style="display: none; margin-top: 10px;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span id="alert-catalogo-texto">Alguns códigos não existem no catálogo atual da recomendação.</span>
+        </div>
+
         <main>
             <div class="table-container">
                 <div class="table-header revisao-grid">
@@ -104,52 +109,7 @@
                     <span>AÇÕES</span>
                 </div>
                 
-                <div id="rows-container">
-                    <div class="row revisao-grid">
-                        <span class="text-secondary">ECOM006</span>
-                        <span class="bold">Introdução à Engenharia da Computação</span>
-                        <span class="text-secondary">2023.1</span>
-                        <span class="bold blue-text">9.5</span>
-                        <div class="status-pill aprovado">APROVADO</div>
-                        <div class="actions">
-                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
-                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="row revisao-grid row-error" data-error-type="nota">
-                        <span class="text-secondary">COMP363</span>
-                        <span class="bold">Cálculo Diferencial e Integral</span>
-                        <span class="text-secondary">2023.1</span>
-                        <span class="bold error-text"><span class="dot"></span> N/A</span>
-                        <div class="status-pill indefinido">INDEFINIDO</div>
-                        <button class="btn-fix">Corrigir</button>
-                    </div>
-
-                    <div class="row revisao-grid">
-                        <span class="text-secondary">COMP359</span>
-                        <span class="bold">Programação I</span>
-                        <span class="text-secondary">2023.2</span>
-                        <span class="bold blue-text">4.2</span>
-                        <div class="status-pill reprovado">REPROVADO</div>
-                        <div class="actions">
-                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
-                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="row revisao-grid">
-                        <span class="text-secondary">COMP361</span>
-                        <span class="bold">Computação, Sociedade e Ética</span>
-                        <span class="text-secondary">2024.1</span>
-                        <span class="text-secondary">—</span>
-                        <div class="status-pill cursando">MATRICULADO</div>
-                        <div class="actions">
-                            <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
-                            <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
-                        </div>
-                    </div>
-                </div>
+                <div id="rows-container"></div>
 
                 <button class="btn-add-manual">
                     <i class="fa-solid fa-plus"></i> Adicionar Disciplina Manualmente
@@ -176,6 +136,7 @@
     
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../javascript/features/progresso.js"></script>
+    <script src="../javascript/features/api_config.js"></script>
     <script src="../javascript/pages/tela_revisao.js"></script>
     <script src="../javascript/features/scroll_to_top.js"></script>
 </body>

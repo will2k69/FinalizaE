@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.historico import router as historico_router
 from app.api.routes.disciplinas import router as disciplinas_router
+from app.api.routes.recomendacoes import router as recomendacoes_router
 from app.db.connection import close_pool
 
 """
@@ -41,6 +42,7 @@ app.add_middleware(
 
 app.include_router(historico_router)
 app.include_router(disciplinas_router)
+app.include_router(recomendacoes_router)
 
 
 @app.get("/health")
