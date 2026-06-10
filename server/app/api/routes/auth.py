@@ -23,7 +23,15 @@ async def login(data: LoginData):
         data.email,
     )
 
-    if usuario is None or not bcrypt.checkpw(data.senha.encode(), usuario["senha_hash"].encode()):
+    if usuario is None:
+        raise HTTPException(status_code=401, detail="Credenciais inválidas.")
+
+    try:
+        senha_valida = bcrypt.checkpw(data.senha.encode("utf-8"), usuario["senha_hash"].encode("utf-8"))
+    except ValueError:
+        senha_valida = False
+
+    if not senha_valida:
         raise HTTPException(status_code=401, detail="Credenciais inválidas.")
 
     await pool.execute(
