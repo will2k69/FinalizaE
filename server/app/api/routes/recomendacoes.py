@@ -11,8 +11,8 @@ router = APIRouter(prefix="/api/recomendacoes", tags=["recomendacoes"])
 
 @router.get("/catalogo-codigos")
 async def listar_catalogo_codigos() -> dict[str, list[str]]:
-    """Retorna os códigos do catálogo hardcoded para validação do histórico."""
-    return {"codigos": list_codigos_catalogo()}
+    """Retorna os códigos do catálogo de disciplinas para validação do histórico."""
+    return {"codigos": await list_codigos_catalogo()}
 
 
 @router.post("/carga-minima")
