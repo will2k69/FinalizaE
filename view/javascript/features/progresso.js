@@ -25,14 +25,12 @@ if (steps.length && progress_Fill) {
   const tipoFluxo = sessionStorage.getItem("tipoFluxo") || "matricula";
   const currentPage = window.location.pathname.split("/").pop() || "";
 
-  // Salva o histórico de navegação para a tela de revisão
   if (currentPage === "tela_historico_manual.html") {
     sessionStorage.setItem("origemRevisao", "manual");
   } else if (currentPage === "tela_historico.html") {
     sessionStorage.setItem("origemRevisao", "upload");
   }
 
-  // Retorna o índice correto baseado nas bolinhas existentes no HTML (0 a 4)
   function getStepFromCurrentPage(pageName) {
     if (pageName === "tela_inicial.html") return 0;
     if (pageName === "tela_historico.html" || pageName === "tela_historico_manual.html") return 1;
@@ -61,7 +59,6 @@ if (steps.length && progress_Fill) {
     ];
   }
 
-  // Define qual é a página anterior de forma inteligente
   function getPreviousPageFromCurrentStep() {
     if (currentPage === "tela_historico_manual.html") {
       return stepPages.HISTORICO;
@@ -90,7 +87,7 @@ if (steps.length && progress_Fill) {
   const guideInstructions = {
     0: {
       title: "Bem-vindo ao Finalizâe! 🚀",
-      description: "Estamos felizes de você começar a sua jornada rumo à sua formação. Esta é a página inicial escolha seu curso e a opção de matrícula para iniciar sua jornada de formação",
+      description: "Estamos felizes de você começar a sua jornada rumo à sua formação. Esta é a página inicial onde você vai escolher a opção que mais faz sentido para você.",
       icon: "👋"
     },
     1: {
@@ -101,7 +98,7 @@ if (steps.length && progress_Fill) {
       },
       default: {
         title: "Envio de Histórico",
-        description: "Faça o upload do seu arquivo de histórico retirado do SIGAA em formato PDF para que o sistema processe seus dados.",
+        description: "Faça o upload do seu arquivo de histórico escolar em formato PDF para que o sistema processe seus dados.",
         icon: "📁"
       }
     },
@@ -118,7 +115,7 @@ if (steps.length && progress_Fill) {
       },
       default: {
         title: "Seleção de Ênfases",
-        description: "não vi necessidade, é autoexplicativo toda a tela",
+        description: "Escolha as ênfases e trilhas do seu interesse para ver o percentual de compatibilidade do seu currículo.",
         icon: "📊"
       }
     },
@@ -131,7 +128,6 @@ if (steps.length && progress_Fill) {
 
   let typingTimer = null;
 
-  // Função que simula o efeito de máquina de escrever
   function typeWriterEffect(element, text, speed = 20) {
     if (typingTimer) clearTimeout(typingTimer);
     
@@ -149,7 +145,6 @@ if (steps.length && progress_Fill) {
     type();
   }
 
-  // Atualiza dinamicamente o card de guia baseado na tela e step
   function updateGuideCard(step, pageName) {
     const titleEl = document.getElementById("guide_title");
     const descEl = document.getElementById("guide_description");
@@ -160,7 +155,6 @@ if (steps.length && progress_Fill) {
 
     let currentInstruction = guideInstructions[step];
 
-    // Tratamento de sub-páginas específicas
     if (step === 1) {
       currentInstruction = pageName === "tela_historico_manual.html" ? guideInstructions[1].manual : guideInstructions[1].default;
     } else if (step === 3) {
@@ -170,11 +164,8 @@ if (steps.length && progress_Fill) {
     if (currentInstruction) {
       titleEl.textContent = currentInstruction.title;
       if (iconEl) iconEl.textContent = currentInstruction.icon;
-
-      // Executa o efeito de digitação no texto descritivo
       typeWriterEffect(descEl, currentInstruction.description);
 
-      // Animação de transição do container
       cardEl.classList.add("updated");
       setTimeout(() => cardEl.classList.remove("updated"), 300);
     }
@@ -184,7 +175,17 @@ if (steps.length && progress_Fill) {
   // 4. ATUALIZAÇÃO DA INTERFACE (UI)
   // ==========================================================================
   function updateUI() {
-    // Atualiza classes das bolinhas (Steps)
+    // Controla a visibilidade do botão Voltar da barra
+    const stepBackContainer = document.getElementById("step_back_container");
+    if (stepBackContainer) {
+      if (currentStep === 0) {
+        stepBackContainer.style.display = "none";
+      } else {
+        stepBackContainer.style.display = "block";
+      }
+    }
+
+    // Atualiza classes das bolinhas normais
     steps.forEach((step, index) => {
       step.classList.remove("active", "completed", "disabled");
 
@@ -193,13 +194,13 @@ if (steps.length && progress_Fill) {
       } else if (index === currentStep) {
         step.classList.add("active");
       } else if (index === currentStep + 1) {
-        // Próxima liberada, sem classe restritiva
+        // Próxima liberada
       } else {
         step.classList.add("disabled");
       }
     });
 
-    // Atualiza o preenchimento da linha de progresso
+    // Linha de progresso
     if (currentStep === 0) {
       progress_Fill.style.width = "0%";
     } else {
@@ -222,22 +223,48 @@ if (steps.length && progress_Fill) {
       }
     }
 
-    // Cor verde final se chegar no último passo
     if (currentStep === steps.length - 1) {
       progress_Fill.classList.add("complete");
     } else {
       progress_Fill.classList.remove("complete");
     }
 
-    // DISPARA A ATUALIZAÇÃO DO CARD DO GUIA COM EFEITO DE TEXTO
     updateGuideCard(currentStep, currentPage);
   }
 
   // ==========================================================================
-  // 5. EVENT LISTENERS (CLIQUES E EVENTOS)
+  // 5. EVENT LISTENERS (CLIQUES)
   // ==========================================================================
   
-  // Limpeza de fluxo ao clicar na logo/home
+  // Função executada ao clicar em qualquer botão de voltar (Header ou Barra)
+  function handleBackAction(e) {
+    e.preventDefault();
+    const previousPage = getPreviousPageFromCurrentStep();
+    
+    if (currentPage !== "tela_historico_manual.html" && previousPage !== stepPages.HISTORICO_MANUAL) {
+      currentStep = Math.max(0, currentStep - 1);
+      saveStep();
+      updateUI();
+    }
+    
+    window.location.href = getPagePath(previousPage);
+  }
+
+  // Atribui o link e evento ao NOVO botão voltar da barra de progresso
+  const btnBackBar = document.getElementById("btn_back_bar");
+  if (btnBackBar) {
+    btnBackBar.setAttribute("href", getPagePath(getPreviousPageFromCurrentStep()));
+    btnBackBar.addEventListener("click", handleBackAction);
+  }
+
+  // Mantém suporte ao botão voltar antigo do header caso ele exista na tela
+  const backHeaderButton = document.querySelector(".btn-back-header");
+  if (backHeaderButton) {
+    backHeaderButton.setAttribute("href", getPagePath(getPreviousPageFromCurrentStep()));
+    backHeaderButton.addEventListener("click", handleBackAction);
+  }
+
+  // Cliques nas logos/home limpam sessão
   document.querySelectorAll(".top-bar a").forEach((link) => {
     link.addEventListener("click", () => {
       sessionStorage.setItem("currentStep", 0);
@@ -249,26 +276,7 @@ if (steps.length && progress_Fill) {
     });
   });
 
-  // Controle do Botão Voltar do Header
-  const backHeaderButton = document.querySelector(".btn-back-header");
-  if (backHeaderButton) {
-    backHeaderButton.setAttribute("href", getPagePath(getPreviousPageFromCurrentStep()));
-
-    backHeaderButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      const previousPage = getPreviousPageFromCurrentStep();
-      
-      if (currentPage !== "tela_historico_manual.html" && previousPage !== stepPages.HISTORICO_MANUAL) {
-        currentStep = Math.max(0, currentStep - 1);
-        saveStep();
-        updateUI();
-      }
-      
-      window.location.href = getPagePath(previousPage);
-    });
-  }
-
-  // Clique nas bolinhas do progresso (Apenas passos anteriores)
+  // Cliques nas bolinhas normais
   steps.forEach((step, index) => {
     const link = step.querySelector("a");
     if (!link) return;
@@ -290,7 +298,6 @@ if (steps.length && progress_Fill) {
     });
   });
 
-  // Executa ao carregar e monitora redimensionamento da tela
   updateUI();
   window.addEventListener("resize", updateUI);
 }

@@ -322,3 +322,57 @@
         padding: 20px;
     }
 }
+
+/*teste botão voltar*/
+
+/* BOTÃO VOLTAR INTEGRADO NA BARRA */
+.step-back-bar {
+  text-align: center;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+  display: none; /* Começa escondido (na tela inicial) */
+}
+
+/* Deixando a bolinha de voltar destacada com gradiente */
+.step-back-bar .circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Azul destacado */
+  border: 2px solid #93c5fd; /* Borda externa clara para brilhar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transition: 0.3s;
+}
+
+.step-back-bar .circle span {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.step-back-bar span {
+  font-size: 12px;
+  color: #93c5fd; /* Texto azul claro */
+  font-weight: 600;
+}
+
+/* Efeito de Hover na bolinha de voltar */
+.step-back-bar a:hover .circle {
+  transform: scale(1.08);
+  filter: brightness(1.15);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+}
+
+/* Ajuste mobile para manter o alinhamento */
+@media (max-width: 768px) {
+  .step-back-bar {
+    min-width: 90px;
+    flex: none;
+  }
+}
