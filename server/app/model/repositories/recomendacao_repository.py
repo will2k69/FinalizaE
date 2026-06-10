@@ -64,6 +64,12 @@ FROM disciplinas
 ORDER BY codigo
 """
 
+_SQL_CATALOGO = """
+SELECT codigo, nome
+FROM disciplinas
+ORDER BY codigo
+"""
+
 
 async def list_disciplinas_com_relacoes() -> list[DisciplinaDados]:
     pool = await get_pool()
@@ -92,3 +98,17 @@ async def list_codigos_catalogo() -> list[str]:
     async with pool.acquire() as conn:
         rows = await conn.fetch(_SQL_CODIGOS)
     return [str(r["codigo"]) for r in rows]
+
+
+async def list_catalogo_disciplinas() -> list[dict[str, str]]:
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(_SQL_CATALOGO)
+
+    return [
+        {
+            "codigo": str(r["codigo"]).upper().strip(),
+            "nome": str(r["nome"]).strip(),
+        }
+        for r in rows
+    ]

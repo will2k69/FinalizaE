@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException
 
-from app.model.repositories.recomendacao_repository import list_codigos_catalogo
+from app.model.repositories.recomendacao_repository import (
+    list_catalogo_disciplinas,
+    list_codigos_catalogo,
+)
 from app.model.schemas.recomendacao import RecomendacaoRequest, RecomendacaoResponse
 from app.services.recomendacao_service import calcular_carga_minima_viavel, gerar_recomendacao
 
@@ -13,6 +16,12 @@ router = APIRouter(prefix="/api/recomendacoes", tags=["recomendacoes"])
 async def listar_catalogo_codigos() -> dict[str, list[str]]:
     """Retorna os códigos do catálogo de disciplinas para validação do histórico."""
     return {"codigos": await list_codigos_catalogo()}
+
+
+@router.get("/catalogo")
+async def listar_catalogo() -> dict[str, list[dict[str, str]]]:
+    """Retorna o catálogo de disciplinas (código e nome)."""
+    return {"disciplinas": await list_catalogo_disciplinas()}
 
 
 @router.post("/carga-minima")

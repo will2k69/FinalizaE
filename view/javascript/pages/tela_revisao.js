@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const alertCatalogo = document.getElementById('alert-catalogo');
     const alertCatalogoTexto = document.getElementById('alert-catalogo-texto');
     const API_BASE = typeof API_BASE_URL === 'string' ? API_BASE_URL : '';
-    const CATALOGO_API_URL = `${API_BASE}/api/recomendacoes/catalogo-codigos`;
+    const CATALOGO_API_URL = `${API_BASE}/api/recomendacoes/catalogo`;
     let codigosCatalogo = new Set();
     let nomesCatalogo = new Map();
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarHistoricoDoSessionStorage();
     carregarCatalogoCodigos();
 
-    // Busca os códigos válidos do backend para marcar disciplinas fora do catálogo atual.
+    // Busca o catálogo (código + nome) do backend para validar e padronizar nomes.
     async function carregarCatalogoCodigos() {
         try {
             const response = await fetch(CATALOGO_API_URL);
@@ -45,11 +45,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Falha ao carregar catálogo de disciplinas.');
             }
             const payload = await response.json();
-            const lista = Array.isArray(payload.codigos) ? payload.codigos : [];
-            codigosCatalogo = new Set(lista.map((c) => String(c).toUpperCase().trim()));
-            nomesCatalogo = new Map(lista.map((c) => [String(c).toUpperCase().trim(), String(c).toUpperCase().trim()]));
+            const lista = Array.isArray(payload.disciplinas) ? payload.disciplinas : [];
+            codigosCatalogo = new Set(
+                lista
+                    .map((d) => String(d?.codigo || '').toUpperCase().trim())
+                    .filter(Boolean)
+            );
+            nomesCatalogo = new Map(
+                lista
+                    .map((d) => {
+                        const codigo = String(d?.codigo || '').toUpperCase().trim();
+                        const nome = String(d?.nome || '').trim();
+                        return [codigo, nome || codigo];
+                    })
+                    .filter(([codigo]) => Boolean(codigo))
+            );
             garantirDatalistCatalogo();
             aplicarMarcacaoCatalogoNasLinhas();
+            aplicarNomesCatalogoNasLinhas();
             atualizarAlertaCatalogo();
         } catch (_) {
             codigosCatalogo = new Set();
@@ -59,6 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 alertCatalogoTexto.textContent = 'Não foi possível validar o catálogo de disciplinas da recomendação no momento.';
             }
         }
+    }
+
+    function aplicarNomesCatalogoNasLinhas() {
+        if (!nomesCatalogo.size) {
+            return;
+        }
+
+        const rows = Array.from(document.querySelectorAll('#rows-container .row'));
+        rows.forEach((row) => {
+            if (row.classList.contains('row-editing')) {
+                return;
+            }
+
+            const spans = row.querySelectorAll('span');
+            if (!spans || spans.length < 2) {
+                return;
+            }
+
+            const codigo = (spans[0]?.textContent || '').trim().toUpperCase();
+            if (!codigo || codigo === '—') {
+                return;
+            }
+
+            const nomeOficial = nomesCatalogo.get(codigo);
+            if (!nomeOficial) {
+                return;
+            }
+
+            spans[1].textContent = nomeOficial;
+        });
     }
 
     function aplicarMarcacaoCatalogoNasLinhas() {
@@ -179,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const row = document.createElement('div');
             
-            // Extração tolerante a variações do seu Back-end
+            // Extração tolerante a variações do Back-end
             const codRaw = extrairCampo(materia, ['codigo_disciplina', 'codigo', 'código', 'CODIGO_DISCIPLINA']);
             const codigo = codRaw ? String(codRaw).toUpperCase().trim() : "—";
             
@@ -201,16 +244,38 @@ document.addEventListener('DOMContentLoaded', () => {
             let acoesHtml = '';
 
             // 1. TENTA IDENTIFICAR O STATUS TEXTUAL VINDO DA API
-            if (situacaoApi.includes("APROV") || situacaoApi.includes("DISP") || situacaoApi.includes("EQUIV")) {
+            const gruposStatus = {
+                aprovado: [
+                    "APRM",   // Aprovado por média final
+                    "APR",    // Aprovado por média
+                    "CUMP",   // Cumpriu
+                    "DISP",   // Dispensado
+                    "TRANS",  // Transferido
+                    "INCORP"  // Incorporado
+                ],
+                reprovado: [
+                    "REPMF",  // Reprovado por média e falta
+                    "REPF",   // Reprovado por falta
+                    "REP"     // Reprovado por média
+                ],
+                cursando: [
+                    "MATR",   // Matriculado
+                    "REC"     // Em recuperação
+                ]
+            };
+
+            if (gruposStatus.aprovado.some(sigla => situacaoApi.includes(sigla))) {
                 statusClass = "aprovado";
                 statusTxt = "APROVADO";
-            } else if (situacaoApi.includes("REPROV")) {
+            }
+            else if (gruposStatus.reprovado.some(sigla => situacaoApi.includes(sigla))) {
                 statusClass = "reprovado";
                 statusTxt = "REPROVADO";
-            } else if (situacaoApi.includes("MATRIC") || situacaoApi.includes("CURS")) {
+            }
+            else if (gruposStatus.cursando.some(sigla => situacaoApi.includes(sigla))) {
                 statusClass = "cursando";
                 statusTxt = "MATRICULADO";
-            } 
+            }
             // PLANO B: Se a situação veio vazia, tenta deduzir pela nota numérica
             else if (mediaStr !== "-" && mediaStr !== "" && mediaStr.toUpperCase() !== "N/A") {
                 const notaDeducao = parseFloat(mediaStr.replace(',', '.'));
