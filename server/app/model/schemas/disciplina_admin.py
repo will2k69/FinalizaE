@@ -16,7 +16,7 @@ class DisciplinaBase(BaseModel):
     nome: str = Field(..., max_length=255)
     carga_horaria: int = Field(..., gt=0, description="Em horas (ex: 60, 72)")
     tipo: TipoDisciplina
-    turno: str = Field(..., pattern="^[MT]$", description="M=Manhã | T=Tarde")
+    turno: str = Field(..., pattern="^[MTN]$", description="M=Manhã | T=Tarde | N=Noturno")
     periodo_ideal: int = Field(..., ge=1, description="Semestre recomendado (1, 2, 3...)")
 
 
