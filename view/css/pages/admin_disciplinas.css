@@ -357,6 +357,12 @@
     z-index: 2000;
 }
 
+#tela_Admin .admin-boas-vindas {
+    color: #c5cdff;
+    font-size: 14px;
+    font-weight: 400;
+}
+
 #tela_Admin .toast.show {
     opacity: 1;
     transform: translateY(0);

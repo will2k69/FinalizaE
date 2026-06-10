@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link class="brand-favicon" rel="icon" type="image/png" href="../img/logo-visual.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Finalizaê — Autenticação</title>
+
+    <style>
+        /* ====== CONFIGURAÇÃO GERAL DA TELA ====== */
+        #tela_Login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #0f172a; /* Slate 900 */
+            padding: 20px;
+            color: #f1f5f9;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* ====== CARD PRINCIPAL DE LOGIN ====== */
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: rgba(30, 41, 59, 0.7); /* Slate 800 translúcido elegante */
+            backdrop-filter: blur(8px); /* Efeito de vidro sofisticado */
+            border: 1px solid rgba(71, 85, 105, 0.4); /* Borda sutil de isolamento */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ====== BRANDING / LOGO ====== */
+        .login-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .login-logo img {
+            height: 42px;
+        }
+        .login-logo .logo-text {
+            height: 26px;
+        }
+
+        /* ====== TEXTOS DO CARD ====== */
+        .admin-title {
+            color: #ffffff !important;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+        }
+        .admin-subtitle {
+            color: #94a3b8 !important; /* Slate 400 */
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* ====== CAMPOS DE FORMULÁRIO ====== */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group label {
+            color: #cbd5e1; /* Slate 300 */
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: left;
+        }
+        .form-group label .req {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        /* Estilização universal para os inputs escuros */
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: #0f172a; /* Fundo escuro interno */
+            border: 1px solid #334155; /* Borda Slate 700 */
+            border-radius: 8px;
+            color: #f8fafc;
+            font-size: 0.925rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Efeito Glow ao focar no campo */
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .form-group input::placeholder {
+            color: #475569;
+        }
+
+        /* Alinhamento do ícone de olho da senha */
+        .password-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        #togglePassword {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #64748b;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+        #togglePassword:hover {
+            color: #94a3b8;
+        }
+
+        /* ====== BOTÃO DE SUBMIT ====== */
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #2563eb; /* Azul Royal Moderno */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .btn-primary:active {
+            transform: scale(0.98); /* Clique físico */
+        }
+
+        /* ====== ALERTAS DE ERRO ====== */
+        .admin-error {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            padding: 12px;
+            border-radius: 8px;
+            color: #f87171;
+            font-size: 0.875rem;
+        }
+
+        /* ====== RODAPÉ ====== */
+        .form-footer {
+            margin-top: 28px;
+            text-align: center;
+        }
+        .form-footer a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s ease-in-out;
+        }
+        .form-footer a:hover {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+
+<body id="tela_Login">
+
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="../img/logo-visual.png" alt="Logo">
+            <img src="../img/logo.svg" alt="Finalizaê" class="logo-text">
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-card-header" style="margin-bottom: 24px; text-align: center;">
+                <h1 class="admin-title">Acessar o Sistema</h1>
+                <p class="admin-subtitle">Insira suas credenciais para continuar.</p>
+            </div>
+
+            <div class="admin-error" id="loginError" style="display:none; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="loginErrorMsg">Usuário ou senha incorretos.</span>
+            </div>
+
+            <form id="formLogin" novalidate>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <div class="form-group">
+                        <label for="fIdentity">E-mail de autenticação <span class="req">*</span></label>
+                        <input type="text" id="fIdentity" name="identity" 
+                               placeholder="ex: admin@finalizae.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fSenha">Senha <span class="req">*</span></label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="fSenha" name="password" 
+                                   placeholder="••••••••" required style="padding-right: 42px;">
+                            <i class="fa-regular fa-eye-slash" id="togglePassword"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="btnEntrar" style="margin-top: 8px;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                    </button>
+                    
+                </div>
+            </form>
+
+            <div class="form-footer">
+                <a href="../index.html"><i class="fa-solid fa-arrow-left"></i> Voltar à página inicial</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+    <script src="../javascript/features/api_config.js"></script>
+    <script src="../javascript/features/login.js"></script>
+</body>
+</html>
