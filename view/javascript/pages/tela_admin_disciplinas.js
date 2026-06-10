@@ -84,6 +84,16 @@ function escHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
+// --- Boas-vindas ---
+const usuario = JSON.parse(sessionStorage.getItem('usuario_logado') || '{}');
+if (usuario?.nome) {
+    const brand = document.querySelector('.admin-brand');
+    const bvMsg = document.createElement('span');
+    bvMsg.className = 'admin-boas-vindas';
+    bvMsg.textContent = `Bem-vindo(a), ${usuario.nome}!`;
+    brand.appendChild(bvMsg);
+}
+
 // --- Chamadas à API ---
 
 async function carregarDisciplinas() {
