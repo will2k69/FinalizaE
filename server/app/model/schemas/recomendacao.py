@@ -65,6 +65,7 @@ class DisciplinaRecomendadaOut(BaseModel):
     nome: str
     carga_horaria: int
     tipo: str
+    turno: str
     periodo_ideal: int
     prioridade_enfase: bool
     prerequisitos_pendentes: list[str] = Field(default_factory=list)

@@ -175,6 +175,17 @@ def _corequisitos_ok(disciplina: DisciplinaDados, aprovadas: set[str], alocadas_
     return True
 
 
+def _turno_compativel(disciplina: DisciplinaDados, turno_periodo: str | None) -> bool:
+    """Valida compatibilidade de turno no período planejado.
+
+    Regra atual: o período mantém um único turno base; disciplinas com turno
+    diferente não são alocadas no mesmo semestre simulado.
+    """
+    if turno_periodo is None:
+        return True
+    return disciplina.turno == turno_periodo
+
+
 def _disciplinas_pendentes(
     disciplinas: list[DisciplinaDados],
     aprovadas: set[str],
@@ -294,6 +305,7 @@ async def gerar_recomendacao(
 
     for periodo in periodos:
         ch_total = 0
+        turno_periodo: str | None = None
         alocadas: list[DisciplinaRecomendadaOut] = []
         alocadas_codigos: set[str] = set()
 
@@ -314,6 +326,10 @@ async def gerar_recomendacao(
             for disciplina in candidatas:
                 if disciplina.codigo in alocadas_codigos:
                     continue
+                
+                # TODO: validar se terá regra de turno (desabilitada temporariamente para permitir mais flexibilidade).
+                # if not _turno_compativel(disciplina, turno_periodo):
+                #     continue
 
                 if ch_total + disciplina.carga_horaria > payload.carga_horaria_max_por_periodo:
                     continue
@@ -331,12 +347,15 @@ async def gerar_recomendacao(
                         nome=disciplina.nome,
                         carga_horaria=disciplina.carga_horaria,
                         tipo=disciplina.tipo,
+                        turno=disciplina.turno,
                         periodo_ideal=disciplina.periodo_ideal,
                         prioridade_enfase=_is_enfase_alvo(disciplina, payload.enfase.value),
                         prerequisitos_pendentes=[],
                     )
                 )
                 alocadas_codigos.add(disciplina.codigo)
+                if turno_periodo is None:
+                    turno_periodo = disciplina.turno
                 ch_total += disciplina.carga_horaria
                 progresso = True
 
