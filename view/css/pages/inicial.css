@@ -250,3 +250,78 @@
         display: flex;
       }
     }
+
+    /*teste*/
+
+    /* CARD INFORMATIVO (GUIA) */
+.guide-card {
+  background: #090e3a; /* Um azul levemente mais claro que o fundo do nav */
+  border: 1px solid #2b2f55;
+  border-radius: 16px;
+  padding: 18px 24px;
+  max-width: 900px; /* Alinhado com a largura máxima da sua barra */
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  text-align: left; /* Garante leitura fluida do texto */
+}
+
+.guide-icon {
+  background: rgba(76, 92, 255, 0.15);
+  border: 1px solid #4c5cff;
+  font-size: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.guide-content {
+  flex: 1;
+}
+
+.guide-content h3 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.guide-content p {
+  margin: 0;
+  font-size: 13px;
+  color: #cfd3ff;
+  line-height: 1.5;
+}
+
+/* Animação simples para quando o texto mudar */
+.guide-card.updated {
+  transform: scale(1.01);
+}
+
+/* Adiciona a barrinha de digitação no final do parágrafo */
+#guide_description::after {
+  content: "|";
+  margin-left: 2px;
+  color: #4c5cff;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Ajuste Mobile */
+@media (max-width: 768px) {
+  .guide-card {
+    margin: 15px 20px;
+    padding: 14px 18px;
+  }
+}

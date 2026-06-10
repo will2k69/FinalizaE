@@ -1,3 +1,6 @@
+// ==========================================================================
+// 1. INICIALIZAÇÃO DE ÍCONES (LUCIDE)
+// ==========================================================================
 if (typeof lucide !== "undefined") {
   lucide.createIcons();
 }
@@ -7,19 +10,22 @@ const progress_Fill = document.getElementById("progress_Fill");
 
 if (steps.length && progress_Fill) {
 
+  // ==========================================================================
+  // 2. CONFIGURAÇÕES E MAPEAMENTO DE PÁGINAS
+  // ==========================================================================
   const stepPages = Object.freeze({
     INICIAL: "tela_inicial.html",
     HISTORICO: "tela_historico.html",
-    HISTORICO_MANUAL: "tela_historico_manual.html", // Adicionado para consistência
+    HISTORICO_MANUAL: "tela_historico_manual.html",
     REVISAO: "tela_revisao_historico.html",
     ANALISE: "tela_enfases.html",
     RESULTADO: "tela_resultado.html",
   });
 
-  const tipoFluxo = sessionStorage.getItem("tipoFluxo") || "matriula";
+  const tipoFluxo = sessionStorage.getItem("tipoFluxo") || "matricula";
   const currentPage = window.location.pathname.split("/").pop() || "";
 
-  // Se estamos na tela manual, salvamos que a revisão deve voltar para ela
+  // Salva o histórico de navegação para a tela de revisão
   if (currentPage === "tela_historico_manual.html") {
     sessionStorage.setItem("origemRevisao", "manual");
   } else if (currentPage === "tela_historico.html") {
@@ -57,12 +63,10 @@ if (steps.length && progress_Fill) {
 
   // Define qual é a página anterior de forma inteligente
   function getPreviousPageFromCurrentStep() {
-    // Caso 1: Se estou na tela manual, a anterior obrigatoriamente é a tela de upload de histórico
     if (currentPage === "tela_historico_manual.html") {
       return stepPages.HISTORICO;
     }
     
-    // Caso 2: Se estou na tela de revisão e vim da manual, a anterior deve ser a manual
     if (currentPage === "tela_revisao_historico.html" && sessionStorage.getItem("origemRevisao") === "manual") {
       return stepPages.HISTORICO_MANUAL;
     }
@@ -72,7 +76,115 @@ if (steps.length && progress_Fill) {
     return stepOrder[previousIndex] || stepPages.INICIAL;
   }
 
+  function getPagePath(page) {
+    const path = window.location.pathname;
+    if (path.includes("/pages/")) {
+      return page;
+    }
+    return "pages/" + page;
+  }
+
+  // ==========================================================================
+  // 3. TEXTOS DO GUIA INFORMATIVO E EFEITO DE DIGITAÇÃO
+  // ==========================================================================
+  const guideInstructions = {
+    0: {
+      title: "Bem-vindo ao Finalizâe! 🚀",
+      description: "Estamos felizes de você começar a sua jornada rumo à sua formação. Esta é a página inicial escolha seu curso e a opção de matrícula para iniciar sua jornada de formação",
+      icon: "👋"
+    },
+    1: {
+      manual: {
+        title: "Preenchimento do Histórico",
+        description: "Insira manualmente as disciplinas que você já cursou e suas respectivas menções/notas nos campos indicados.",
+        icon: "✍️"
+      },
+      default: {
+        title: "Envio de Histórico",
+        description: "Faça o upload do seu arquivo de histórico retirado do SIGAA em formato PDF para que o sistema processe seus dados.",
+        icon: "📁"
+      }
+    },
+    2: {
+      title: "Revisão dos Dados",
+      description: "Confira se todas as matérias extraídas e notas estão corretas. Caso note erros, você pode editar antes de prosseguir.",
+      icon: "🔍"
+    },
+    3: {
+      conflitos: {
+        title: "Análise de Conflitos",
+        description: "Atenção! Verifique as matérias com conflito de horários ou pendências detectadas antes de fechar sua grade.",
+        icon: "⚠️"
+      },
+      default: {
+        title: "Seleção de Ênfases",
+        description: "não vi necessidade, é autoexplicativo toda a tela",
+        icon: "📊"
+      }
+    },
+    4: {
+      title: "Resultado da Análise",
+      description: "Tudo pronto! Veja abaixo as recomendações de matrícula personalizadas para o seu próximo semestre.",
+      icon: "🎉"
+    }
+  };
+
+  let typingTimer = null;
+
+  // Função que simula o efeito de máquina de escrever
+  function typeWriterEffect(element, text, speed = 20) {
+    if (typingTimer) clearTimeout(typingTimer);
+    
+    element.textContent = "";
+    let index = 0;
+
+    function type() {
+      if (index < text.length) {
+        element.textContent += text.charAt(index);
+        index++;
+        typingTimer = setTimeout(type, speed);
+      }
+    }
+    
+    type();
+  }
+
+  // Atualiza dinamicamente o card de guia baseado na tela e step
+  function updateGuideCard(step, pageName) {
+    const titleEl = document.getElementById("guide_title");
+    const descEl = document.getElementById("guide_description");
+    const iconEl = document.getElementById("guide_icon_text");
+    const cardEl = document.getElementById("guide_card");
+
+    if (!titleEl || !descEl || !cardEl) return;
+
+    let currentInstruction = guideInstructions[step];
+
+    // Tratamento de sub-páginas específicas
+    if (step === 1) {
+      currentInstruction = pageName === "tela_historico_manual.html" ? guideInstructions[1].manual : guideInstructions[1].default;
+    } else if (step === 3) {
+      currentInstruction = pageName === "tela_materias_conflitos.html" ? guideInstructions[3].conflitos : guideInstructions[3].default;
+    }
+
+    if (currentInstruction) {
+      titleEl.textContent = currentInstruction.title;
+      if (iconEl) iconEl.textContent = currentInstruction.icon;
+
+      // Executa o efeito de digitação no texto descritivo
+      typeWriterEffect(descEl, currentInstruction.description);
+
+      // Animação de transição do container
+      cardEl.classList.add("updated");
+      setTimeout(() => cardEl.classList.remove("updated"), 300);
+    }
+  }
+
+  // ==========================================================================
+  // 4. ATUALIZAÇÃO DA INTERFACE (UI)
+  // ==========================================================================
   function updateUI() {
+    // Atualiza classes das bolinhas (Steps)
     steps.forEach((step, index) => {
       step.classList.remove("active", "completed", "disabled");
 
@@ -81,12 +193,13 @@ if (steps.length && progress_Fill) {
       } else if (index === currentStep) {
         step.classList.add("active");
       } else if (index === currentStep + 1) {
-        // Próxima liberada
+        // Próxima liberada, sem classe restritiva
       } else {
         step.classList.add("disabled");
       }
     });
 
+    // Atualiza o preenchimento da linha de progresso
     if (currentStep === 0) {
       progress_Fill.style.width = "0%";
     } else {
@@ -109,21 +222,22 @@ if (steps.length && progress_Fill) {
       }
     }
 
+    // Cor verde final se chegar no último passo
     if (currentStep === steps.length - 1) {
       progress_Fill.classList.add("complete");
     } else {
       progress_Fill.classList.remove("complete");
     }
+
+    // DISPARA A ATUALIZAÇÃO DO CARD DO GUIA COM EFEITO DE TEXTO
+    updateGuideCard(currentStep, currentPage);
   }
 
-  function getPagePath(page) {
-    const path = window.location.pathname;
-    if (path.includes("/pages/")) {
-      return page;
-    }
-    return "pages/" + page;
-  }
-
+  // ==========================================================================
+  // 5. EVENT LISTENERS (CLIQUES E EVENTOS)
+  // ==========================================================================
+  
+  // Limpeza de fluxo ao clicar na logo/home
   document.querySelectorAll(".top-bar a").forEach((link) => {
     link.addEventListener("click", () => {
       sessionStorage.setItem("currentStep", 0);
@@ -131,13 +245,11 @@ if (steps.length && progress_Fill) {
       sessionStorage.removeItem("historicoExtraido");
       sessionStorage.removeItem("historicoManual");
       sessionStorage.removeItem("disciplinasComConflito");
-      sessionStorage.removeItem("origemRevisao"); // Limpa ao voltar pro início
+      sessionStorage.removeItem("origemRevisao");
     });
   });
 
-  // ==========================================================================
-  // CONTROLE DO BOTÃO VOLTAR REVISADO
-  // ==========================================================================
+  // Controle do Botão Voltar do Header
   const backHeaderButton = document.querySelector(".btn-back-header");
   if (backHeaderButton) {
     backHeaderButton.setAttribute("href", getPagePath(getPreviousPageFromCurrentStep()));
@@ -146,7 +258,6 @@ if (steps.length && progress_Fill) {
       e.preventDefault();
       const previousPage = getPreviousPageFromCurrentStep();
       
-      // Só diminui o passo do progresso geral se não estiver mudando entre sub-telas do mesmo Step
       if (currentPage !== "tela_historico_manual.html" && previousPage !== stepPages.HISTORICO_MANUAL) {
         currentStep = Math.max(0, currentStep - 1);
         saveStep();
@@ -157,6 +268,7 @@ if (steps.length && progress_Fill) {
     });
   }
 
+  // Clique nas bolinhas do progresso (Apenas passos anteriores)
   steps.forEach((step, index) => {
     const link = step.querySelector("a");
     if (!link) return;
@@ -169,7 +281,6 @@ if (steps.length && progress_Fill) {
         updateUI();
         const stepOrder = getStepOrder();
         
-        // Se clicar na bolinha "Enviar Histórico" vindo da Revisão, decide para onde vai com base na origem
         if (index === 1 && sessionStorage.getItem("origemRevisao") === "manual") {
           window.location.href = getPagePath(stepPages.HISTORICO_MANUAL);
         } else if (stepOrder[index]) {
@@ -179,6 +290,7 @@ if (steps.length && progress_Fill) {
     });
   });
 
+  // Executa ao carregar e monitora redimensionamento da tela
   updateUI();
   window.addEventListener("resize", updateUI);
 }
