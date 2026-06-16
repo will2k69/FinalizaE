@@ -297,7 +297,11 @@
     margin-bottom: 24px;
 }
 
-#tela_Admin .form-group { display: flex; flex-direction: column; gap: 6px; }
+#tela_Admin .form-group input,
+#tela_Admin .form-group select {
+    width: 100%;
+    box-sizing: border-box;
+}
 #tela_Admin .form-group--full { grid-column: 1 / -1; }
 
 #tela_Admin .form-group label {
