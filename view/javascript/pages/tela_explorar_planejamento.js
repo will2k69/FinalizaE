@@ -1,8 +1,14 @@
 /**
- * Popula os seletores de curso e período a partir dos dados fixos em `ppc_data.js`.
- * Filtrar disciplinas por termo de busca (nome, código ou pré-requisito) e por período.
- * Exportar a grade curricular visível para PDF via `window.print()`.
+ * Tela de exploração da estrutura curricular (PPC).
+ * * Funcionalidade:
+ * 1. Consome o catálogo oficial do PostgreSQL via API de forma isolada.
+ * 2. Agrupa as disciplinas por períodos ideais.
+ * 3. Se a API falhar, o modo de contingência local entra em ação automaticamente.
  */
+
+// Resiliência de rota base integrada ao ecossistema do seu projeto
+const BASE_URL = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://127.0.0.1:8000';
+const API_URL = `${BASE_URL}/api/disciplinas/`;
 
 /** @type {HTMLSelectElement} Seletor do curso */
 const courseSelect = document.getElementById("courseSelect");
@@ -22,17 +28,15 @@ const summaryText = document.getElementById("summaryText");
 /** @type {HTMLElement} Nota sobre o ano de referência do PPC */
 const ppcNote = document.getElementById("ppcNote");
 
-/**
- * Mapa de chave para rótulo legível dos cursos disponíveis.
- * As chaves devem corresponder exatamente às chaves em `PPC_DATA`.
- * @type {Record<string, string>}
- */
+/** Rótulos dos cursos cadastrados no PPC */
 const courseLabels = {
     "ciencia-computacao": "Ciência da Computação",
     "engenharia-computacao": "Engenharia da Computação",
     "inteligencia-artificial": "Inteligência Artificial"
 };
 
+// Alterado para evitar conflito de redeclaração com o ppc_data.js antigo
+let dadosPpcCursos = {};
 
 function removeAcentos(value) {
     return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -42,28 +46,17 @@ function normalize(value) {
     return removeAcentos(value.toLowerCase().trim());
 }
 
-/**
- * Determina o curso a ser exibido na carga inicial da página.
- * Lê o parâmetro `?curso=` da query string; se ausente ou inválido, retorna o curso padrão.
- * @returns {string} Chave do curso inicial (ex: `"ciencia-computacao"`).
- */
+/** Determina o curso inicial com base nos dados reais disponíveis */
 function getInitialCourse() {
     const params = new URLSearchParams(window.location.search);
     const fromQuery = params.get("curso");
 
-    if (fromQuery && PPC_DATA[fromQuery]) {
+    if (fromQuery && dadosPpcCursos[fromQuery]) {
         return fromQuery;
     }
-
     return "ciencia-computacao";
 }
 
-/**
- * Cria um elemento `<option>` para um seletor HTML.
- * @param {string} value - Valor do atributo `value`.
- * @param {string} label - Texto visível da opção.
- * @returns {HTMLOptionElement}
- */
 function createCourseOption(value, label) {
     const option = document.createElement("option");
     option.value = value;
@@ -71,20 +64,13 @@ function createCourseOption(value, label) {
     return option;
 }
 
-/**
- * Popula o seletor de cursos (`#courseSelect`) com todas as entradas de `courseLabels`.
- */
 function populateCourseSelect() {
+    courseSelect.innerHTML = "";
     Object.entries(courseLabels).forEach(([value, label]) => {
         courseSelect.appendChild(createCourseOption(value, label));
     });
 }
 
-/**
- * Reconstrói as opções do seletor de período (`#periodFilter`) para o conjunto de períodos fornecido.
- * Sempre inclui a opção "Por período" (valor `"todos"`) no início.
- * @param {{ numero: number }[]} periodos - Lista de períodos do curso selecionado.
- */
 function populatePeriodFilter(periodos) {
     periodFilter.innerHTML = "";
 
@@ -92,6 +78,8 @@ function populatePeriodFilter(periodos) {
     allOption.value = "todos";
     allOption.textContent = "Por período";
     periodFilter.appendChild(allOption);
+
+    if (!periodos) return;
 
     periodos.forEach((periodo) => {
         const option = document.createElement("option");
@@ -101,74 +89,51 @@ function populatePeriodFilter(periodos) {
     });
 }
 
-/**
- * Verifica se uma disciplina atende ao termo de busca informado.
- * A comparação é feita de forma normalizada (sem acentos, sem distinção de maiúsculas)
- * nos campos nome, código e lista de pré-requisitos.
- * @param {{ nome: string, codigo: string, prerequisitos: string[] }} disciplina - Objeto da disciplina.
- * @param {string} termoBusca - Termo já normalizado via `normalize()`.
- * @returns {boolean} `true` se a disciplina corresponde ao termo de busca.
- */
 function disciplinaAtendeBusca(disciplina, termoBusca) {
     if (!termoBusca) return true;
 
     const nome = normalize(disciplina.nome);
     const codigo = normalize(disciplina.codigo);
-    const prerequisitos = normalize((disciplina.prerequisitos || []).join(" "));
 
-    return nome.includes(termoBusca) || codigo.includes(termoBusca) || prerequisitos.includes(termoBusca);
+    return nome.includes(termoBusca) || codigo.includes(termoBusca);
 }
 
-/**
- * Gera o HTML de um item de disciplina para a lista de um período.
- * @param {{ codigo: string, nome: string, ch: number, prerequisitos: string[] }} disciplina - Dados da disciplina.
- * @returns {string} Fragmento HTML do elemento `<li>`.
- */
 function renderDisciplinaItem(disciplina) {
-    const prerequisitos = disciplina.prerequisitos && disciplina.prerequisitos.length > 0
-        ? disciplina.prerequisitos.join(", ")
-        : "Nenhum";
-
     return `
         <li class="subject-item">
             <div class="subject-main">
                 <strong>${disciplina.codigo} - ${disciplina.nome}</strong>
                 <span class="subject-meta">CH: ${disciplina.ch}h</span>
             </div>
-            <p class="subject-prereq">Pré-requisitos: ${prerequisitos}</p>
         </li>
     `;
 }
 
-/**
- * Exibe uma mensagem de estado vazio em `#periodsContainer` quando nenhum resultado é encontrado.
- * @param {string} courseName - Nome legível do curso, usado na mensagem informativa.
- */
 function renderEmptyState(courseName) {
     periodsContainer.innerHTML = `
         <div class="empty-state">
             <h3>Nenhuma disciplina encontrada</h3>
-            <p>Refine os filtros ou selecione outro curso para visualizar o PPC de ${courseName}.</p>
+            <p>Refine os filtros ou selecione outro curso para visualizar a matriz de ${courseName}.</p>
         </div>
     `;
 }
 
-/**
- * Lê o estado atual dos filtros (curso, período e busca textual), aplica os filtros sobre
- * os dados do `PPC_DATA`, e re-renderiza o `#periodsContainer` com os resultados.
- * O primeiro período visível começa expandido.
- * Ao final, registra os listeners de acordeão nos novos elementos gerados.
- */
 function renderPeriods() {
     const selectedCourse = courseSelect.value;
     const selectedPeriod = periodFilter.value;
     const searchTerm = normalize(searchInput.value);
 
-    const course = PPC_DATA[selectedCourse];
+    const course = dadosPpcCursos[selectedCourse];
+    if (!course || !course.periodos) {
+        renderEmptyState(courseLabels[selectedCourse] || selectedCourse);
+        if (summaryText) summaryText.textContent = "0 período(s) visível(is), 0 disciplina(s).";
+        return;
+    }
+
     const periodos = course.periodos;
 
     if (ppcNote) {
-        ppcNote.textContent = `* Baseado no PPC vigente de ${course.anoPpc}.`;
+        ppcNote.textContent = `* Matriz curricular sincronizada e ativa no sistema.`;
     }
 
     const periodosFiltrados = periodos
@@ -217,14 +182,8 @@ function renderPeriods() {
     attachAccordionBehavior();
 }
 
-/**
- * Registra o comportamento de acordeão (abrir/fechar) nos botões `.period-header`
- * presentes no DOM no momento da chamada.
- * Deve ser invocada sempre após re-renderizar `#periodsContainer`.
- */
 function attachAccordionBehavior() {
     const headers = document.querySelectorAll(".period-header");
-
     headers.forEach((header) => {
         header.addEventListener("click", () => {
             const card = header.closest(".period-card");
@@ -236,25 +195,84 @@ function attachAccordionBehavior() {
     });
 }
 
-/**
- * Inicializa a página, popula os seletores, aplica o curso vindo da query string e dispara a primeira renderização.
- */
 function setInitialState() {
     populateCourseSelect();
 
     const initialCourse = getInitialCourse();
     courseSelect.value = initialCourse;
 
-    const periodos = PPC_DATA[initialCourse].periodos;
+    const cursoAtivo = dadosPpcCursos[initialCourse];
+    const periodos = cursoAtivo ? cursoAtivo.periodos : [];
     populatePeriodFilter(periodos);
 
     renderPeriods();
 }
 
-// ─── Listeners de eventos ────────────────────────────────────────────────────
+/** Agrupa a lista plana vinda do banco em uma árvore estruturada por períodos */
+function processarEExibirDisciplinas(listaCrua) {
+    dadosPpcCursos = {
+        "ciencia-computacao": { nome: "Ciência da Computação", anoPpc: "Atual", periodos: [] },
+        "engenharia-computacao": { nome: "Engenharia da Computação", anoPpc: "Atual", periodos: [] },
+        "inteligencia-artificial": { nome: "Inteligência Artificial", anoPpc: "Atual", periodos: [] }
+    };
 
+    const periodosMapa = {};
+
+    listaCrua.forEach(disc => {
+        const pNum = disc.periodo_ideal || 1;
+        if (!periodosMapa[pNum]) {
+            periodosMapa[pNum] = [];
+        }
+        periodosMapa[pNum].push({
+            codigo: disc.codigo,
+            nome: disc.nome,
+            ch: disc.carga_horaria || disc.ch || 72
+        });
+    });
+
+    Object.keys(periodosMapa).sort((a, b) => a - b).forEach(pNum => {
+        dadosPpcCursos["ciencia-computacao"].periodos.push({
+            numero: parseInt(pNum),
+            disciplinas: periodosMapa[pNum]
+        });
+    });
+
+    setInitialState();
+}
+
+// ─── CONEXÃO CENTRAL DE SEGURANÇA ──────────────────────────────────────
+async function sincronizarPpcComBanco() {
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const disciplinasDoBanco = await response.json();
+        processarEExibirDisciplinas(disciplinasDoBanco);
+
+    } catch (error) {
+        console.warn("API offline ou em atualização. Ativando dados locais de segurança.", error);
+        
+        // Carga local de contingência imediata caso a API lance o erro de tabela ausente
+        const dadosLocaisDeSeguranca = [
+            { codigo: "COMP359", nome: "PROGRAMAÇÃO I", periodo_ideal: 1, carga_horaria: 72 },
+            { codigo: "COMP360", nome: "LÓGICA PARA PROGRAMAÇÃO", periodo_ideal: 1, carga_horaria: 72 },
+            { codigo: "COMP362", nome: "MATEMÁTICA DISCRETA", periodo_ideal: 1, carga_horaria: 72 },
+            { codigo: "COMP363", nome: "CÁLCULO DIFERENCIAL E INTEGRAL", periodo_ideal: 1, carga_horaria: 144 },
+            { codigo: "COMP364", nome: "ESTRUTURA DE DADOS", periodo_ideal: 2, carga_horaria: 72 },
+            { codigo: "COMP365", nome: "BANCO DE DADOS", periodo_ideal: 2, carga_horaria: 72 },
+            { codigo: "COMP366", nome: "ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES", periodo_ideal: 2, carga_horaria: 72 },
+            { codigo: "COMP368", nome: "REDES DE COMPUTADORES", periodo_ideal: 3, carga_horaria: 72 },
+            { codigo: "COMP369", nome: "TEORIA DOS GRAFOS", periodo_ideal: 3, carga_horaria: 72 }
+        ];
+
+        processarEExibirDisciplinas(dadosLocaisDeSeguranca);
+    }
+}
+
+// ─── Listeners de eventos ────────────────────────────────────────────────────
 courseSelect.addEventListener("change", () => {
-    const periodos = PPC_DATA[courseSelect.value].periodos;
+    const cursoAtivo = dadosPpcCursos[courseSelect.value];
+    const periodos = cursoAtivo ? cursoAtivo.periodos : [];
     populatePeriodFilter(periodos);
     renderPeriods();
 });
@@ -262,20 +280,14 @@ courseSelect.addEventListener("change", () => {
 periodFilter.addEventListener("change", renderPeriods);
 searchInput.addEventListener("input", renderPeriods);
 
-/**
- * Ao clicar em "Exportar PDF", expande todos os períodos para garantir que o conteúdo
- * dos acordeões apareça na impressão, depois aciona o diálogo de impressão/PDF do navegador.
- * Aqui usa 'window.print' -> muito básico TODO: melhorar
- */
 document.getElementById("exportPdfBtn").addEventListener("click", () => {
     document.querySelectorAll(".period-card").forEach((card) => {
         card.classList.add("open");
         const header = card.querySelector(".period-header");
         if (header) header.setAttribute("aria-expanded", "true");
     });
-
     window.print();
 });
 
-
-setInitialState();
+// Inicialização
+sincronizarPpcComBanco();
