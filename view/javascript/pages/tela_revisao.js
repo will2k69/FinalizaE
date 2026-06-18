@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const codigo of codigosCatalogo) {
             const option = document.createElement('option');
             option.value = codigo;
+            option.label = nomesCatalogo.get(codigo) || codigo;
             datalist.appendChild(option);
         }
     }
@@ -186,166 +187,166 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Renderiza o histórico salvo e tenta inferir status a partir da situação textual ou da nota.
     function carregarHistoricoDoSessionStorage() {
-    // 1. Limpa as linhas estáticas do HTML original
-    rowsContainer.innerHTML = '';
+        // 1. Limpa as linhas estáticas do HTML original
+        rowsContainer.innerHTML = '';
 
-    const dadosRaw = sessionStorage.getItem("historicoExtraido") || sessionStorage.getItem("historicoRevisado");
-    if (!dadosRaw) {
-        rowsContainer.innerHTML = `<div class="row revisao-grid"><span class="text-secondary">—</span><span class="bold">Nenhum histórico carregado</span><span class="text-secondary">—</span><span class="text-secondary">—</span><div class="status-pill indefinido">INDEFINIDO</div><div class="actions"></div></div>`;
-        updateInterface();
-        return;
-    }
-
-    try {
-        let materias = JSON.parse(dadosRaw);
-
-        // Garante o tratamento como Array
-        if (materias && !Array.isArray(materias)) {
-            if (Array.isArray(materias.disciplinas)) materias = materias.disciplinas;
-            else if (Array.isArray(materias.materias)) materias = materias.materias;
-            else if (Array.isArray(materias.historico)) materias = materias.historico;
-            else if (Array.isArray(materias.data)) materias = materias.data;
+        const dadosRaw = sessionStorage.getItem("historicoExtraido") || sessionStorage.getItem("historicoRevisado");
+        if (!dadosRaw) {
+            rowsContainer.innerHTML = `<div class="row revisao-grid"><span class="text-secondary">—</span><span class="bold">Nenhum histórico carregado</span><span class="text-secondary">—</span><span class="text-secondary">—</span><div class="status-pill indefinido">INDEFINIDO</div><div class="actions"></div></div>`;
+            updateInterface();
+            return;
         }
 
-        const listaMaterias = Array.isArray(materias) ? materias : [materias];
+        try {
+            let materias = JSON.parse(dadosRaw);
 
-        // Mapeador auxiliar para aceitar variações de chaves da API (com/sem acento, maiúsculas/minúsculas)
-        const extrairCampo = (obj, chavesPossiveis) => {
-            for (let chave of chavesPossiveis) {
-                if (obj[chave] !== undefined && obj[chave] !== null) return obj[chave];
+            // Garante o tratamento como Array
+            if (materias && !Array.isArray(materias)) {
+                if (Array.isArray(materias.disciplinas)) materias = materias.disciplinas;
+                else if (Array.isArray(materias.materias)) materias = materias.materias;
+                else if (Array.isArray(materias.historico)) materias = materias.historico;
+                else if (Array.isArray(materias.data)) materias = materias.data;
             }
-            return undefined;
-        };
 
-        listaMaterias.forEach(materia => {
-            if (!materia) return;
+            const listaMaterias = Array.isArray(materias) ? materias : [materias];
 
-            const row = document.createElement('div');
-            
-            // Extração tolerante a variações do Back-end
-            const codRaw = extrairCampo(materia, ['codigo_disciplina', 'codigo', 'código', 'CODIGO_DISCIPLINA']);
-            const codigo = codRaw ? String(codRaw).toUpperCase().trim() : "—";
-            
-            const nomeRaw = extrairCampo(materia, ['nome_disciplina', 'nome', 'NOME_DISCIPLINA']);
-            const nomeExibicao = nomeRaw || nomesCatalogo.get(codigo) || "Disciplina sem nome";
-            
-            const perRaw = extrairCampo(materia, ['ano_periodo_letivo', 'periodo', 'período', 'ANO_PERIODO_LETIVO']);
-            const periodo = perRaw ? String(perRaw).trim() : "—";
-            
-            const situacaoRaw = extrairCampo(materia, ['situacao', 'situação', 'SITUACAO', 'SITUAÇÃO', 'status', 'STATUS']);
-            const situacaoApi = situacaoRaw ? String(situacaoRaw).toUpperCase().trim() : "";
-            
-            const mediaRaw = extrairCampo(materia, ['media', 'média', 'MEDIA', 'MÉDIA', 'nota', 'NOTA']);
-            let mediaStr = mediaRaw !== undefined && mediaRaw !== null ? String(mediaRaw).trim() : "-";
-
-            let notaHtml = '';
-            let statusClass = 'indefinido';
-            let statusTxt = 'INDEFINIDO';
-            let acoesHtml = '';
-
-            // 1. TENTA IDENTIFICAR O STATUS TEXTUAL VINDO DA API
-            const gruposStatus = {
-                aprovado: [
-                    "APRM",   // Aprovado por média final
-                    "APR",    // Aprovado por média
-                    "CUMP",   // Cumpriu
-                    "DISP",   // Dispensado
-                    "TRANS",  // Transferido
-                    "INCORP"  // Incorporado
-                ],
-                reprovado: [
-                    "REPMF",  // Reprovado por média e falta
-                    "REPF",   // Reprovado por falta
-                    "REP"     // Reprovado por média
-                ],
-                cursando: [
-                    "MATR",   // Matriculado
-                    "REC"     // Em recuperação
-                ]
+            // Mapeador auxiliar para aceitar variações de chaves da API (com/sem acento, maiúsculas/minúsculas)
+            const extrairCampo = (obj, chavesPossiveis) => {
+                for (let chave of chavesPossiveis) {
+                    if (obj[chave] !== undefined && obj[chave] !== null) return obj[chave];
+                }
+                return undefined;
             };
 
-            if (gruposStatus.aprovado.some(sigla => situacaoApi.includes(sigla))) {
-                statusClass = "aprovado";
-                statusTxt = "APROVADO";
-            }
-            else if (gruposStatus.reprovado.some(sigla => situacaoApi.includes(sigla))) {
-                statusClass = "reprovado";
-                statusTxt = "REPROVADO";
-            }
-            else if (gruposStatus.cursando.some(sigla => situacaoApi.includes(sigla))) {
-                statusClass = "cursando";
-                statusTxt = "MATRICULADO";
-            }
-            // PLANO B: Se a situação veio vazia, tenta deduzir pela nota numérica
-            else if (mediaStr !== "-" && mediaStr !== "" && mediaStr.toUpperCase() !== "N/A") {
-                const notaDeducao = parseFloat(mediaStr.replace(',', '.'));
-                if (!isNaN(notaDeducao)) {
-                    if (notaDeducao >= 7.0) {
-                        statusClass = "aprovado";
-                        statusTxt = "APROVADO";
-                    } else if (notaDeducao < 5.0) {
-                        statusClass = "reprovado";
-                        statusTxt = "REPROVADO";
+            listaMaterias.forEach(materia => {
+                if (!materia) return;
+
+                const row = document.createElement('div');
+
+                // Extração tolerante a variações do Back-end
+                const codRaw = extrairCampo(materia, ['codigo_disciplina', 'codigo', 'código', 'CODIGO_DISCIPLINA']);
+                const codigo = codRaw ? String(codRaw).toUpperCase().trim() : "—";
+
+                const nomeRaw = extrairCampo(materia, ['nome_disciplina', 'nome', 'NOME_DISCIPLINA']);
+                const nomeExibicao = nomeRaw || nomesCatalogo.get(codigo) || "Disciplina sem nome";
+
+                const perRaw = extrairCampo(materia, ['ano_periodo_letivo', 'periodo', 'período', 'ANO_PERIODO_LETIVO']);
+                const periodo = perRaw ? String(perRaw).trim() : "—";
+
+                const situacaoRaw = extrairCampo(materia, ['situacao', 'situação', 'SITUACAO', 'SITUAÇÃO', 'status', 'STATUS']);
+                const situacaoApi = situacaoRaw ? String(situacaoRaw).toUpperCase().trim() : "";
+
+                const mediaRaw = extrairCampo(materia, ['media', 'média', 'MEDIA', 'MÉDIA', 'nota', 'NOTA']);
+                let mediaStr = mediaRaw !== undefined && mediaRaw !== null ? String(mediaRaw).trim() : "-";
+
+                let notaHtml = '';
+                let statusClass = 'indefinido';
+                let statusTxt = 'INDEFINIDO';
+                let acoesHtml = '';
+
+                // 1. TENTA IDENTIFICAR O STATUS TEXTUAL VINDO DA API
+                const gruposStatus = {
+                    aprovado: [
+                        "APRM",   // Aprovado por média final
+                        "APR",    // Aprovado por média
+                        "CUMP",   // Cumpriu
+                        "DISP",   // Dispensado
+                        "TRANS",  // Transferido
+                        "INCORP"  // Incorporado
+                    ],
+                    reprovado: [
+                        "REPMF",  // Reprovado por média e falta
+                        "REPF",   // Reprovado por falta
+                        "REP"     // Reprovado por média
+                    ],
+                    cursando: [
+                        "MATR",   // Matriculado
+                        "REC"     // Em recuperação
+                    ]
+                };
+
+                if (gruposStatus.aprovado.some(sigla => situacaoApi.includes(sigla))) {
+                    statusClass = "aprovado";
+                    statusTxt = "APROVADO";
+                }
+                else if (gruposStatus.reprovado.some(sigla => situacaoApi.includes(sigla))) {
+                    statusClass = "reprovado";
+                    statusTxt = "REPROVADO";
+                }
+                else if (gruposStatus.cursando.some(sigla => situacaoApi.includes(sigla))) {
+                    statusClass = "cursando";
+                    statusTxt = "MATRICULADO";
+                }
+                // PLANO B: Se a situação veio vazia, tenta deduzir pela nota numérica
+                else if (mediaStr !== "-" && mediaStr !== "" && mediaStr.toUpperCase() !== "N/A") {
+                    const notaDeducao = parseFloat(mediaStr.replace(',', '.'));
+                    if (!isNaN(notaDeducao)) {
+                        if (notaDeducao >= 7.0) {
+                            statusClass = "aprovado";
+                            statusTxt = "APROVADO";
+                        } else if (notaDeducao < 5.0) {
+                            statusClass = "reprovado";
+                            statusTxt = "REPROVADO";
+                        }
                     }
                 }
-            }
 
-            // 2. MONTA A RENDERIZAÇÃO VISUAL BASEADA NO STATUS FILTRADO
-            if (statusTxt === "MATRICULADO") {
-                notaHtml = `<span class="text-secondary">—</span>`;
-                acoesHtml = `
+                // 2. MONTA A RENDERIZAÇÃO VISUAL BASEADA NO STATUS FILTRADO
+                if (statusTxt === "MATRICULADO") {
+                    notaHtml = `<span class="text-secondary">—</span>`;
+                    acoesHtml = `
                     <div class="actions">
                         <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
                         <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
                     </div>`;
-            } 
-            // Se a nota for um traço/vazia
-            else if (mediaStr === "-" || mediaStr === "" || mediaStr.toUpperCase() === "N/A") {
-                if (statusTxt === "APROVADO") {
-                    notaHtml = `<span class="text-secondary">—</span>`; // Aprovado sem nota (Equivalência/Dispensa)
-                    acoesHtml = `
+                }
+                // Se a nota for um traço/vazia
+                else if (mediaStr === "-" || mediaStr === "" || mediaStr.toUpperCase() === "N/A") {
+                    if (statusTxt === "APROVADO") {
+                        notaHtml = `<span class="text-secondary">—</span>`; // Aprovado sem nota (Equivalência/Dispensa)
+                        acoesHtml = `
                         <div class="actions">
                             <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
                             <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
                         </div>`;
-                } else {
-                    // Erro real de leitura: Sem nota e sem situação válida
-                    row.className = 'row revisao-grid row-error';
-                    row.dataset.errorType = "nota";
-                    statusClass = "indefinido";
-                    statusTxt = "INDEFINIDO";
-                    notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
-                    acoesHtml = `<button class="btn-fix">Corrigir</button>`;
+                    } else {
+                        // Erro real de leitura: Sem nota e sem situação válida
+                        row.className = 'row revisao-grid row-error';
+                        row.dataset.errorType = "nota";
+                        statusClass = "indefinido";
+                        statusTxt = "INDEFINIDO";
+                        notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
+                        acoesHtml = `<button class="btn-fix">Corrigir</button>`;
+                    }
                 }
-            } 
-            // Se possuir nota numérica normal
-            else {
-                const notaNum = parseFloat(mediaStr.replace(',', '.'));
-                
-                if (isNaN(notaNum)) {
-                    row.className = 'row revisao-grid row-error';
-                    row.dataset.errorType = "nota";
-                    statusClass = "indefinido";
-                    statusTxt = "INDEFINIDO";
-                    notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
-                    acoesHtml = `<button class="btn-fix">Corrigir</button>`;
-                } else {
-                    notaHtml = `<span class="bold blue-text">${notaNum.toFixed(1)}</span>`;
-                    acoesHtml = `
+                // Se possuir nota numérica normal
+                else {
+                    const notaNum = parseFloat(mediaStr.replace(',', '.'));
+
+                    if (isNaN(notaNum)) {
+                        row.className = 'row revisao-grid row-error';
+                        row.dataset.errorType = "nota";
+                        statusClass = "indefinido";
+                        statusTxt = "INDEFINIDO";
+                        notaHtml = `<span class="bold error-text"><span class="dot"></span> N/A</span>`;
+                        acoesHtml = `<button class="btn-fix">Corrigir</button>`;
+                    } else {
+                        notaHtml = `<span class="bold blue-text">${notaNum.toFixed(1)}</span>`;
+                        acoesHtml = `
                         <div class="actions">
                             <button class="btn-icon"><i class="fa-regular fa-pen-to-square"></i></button>
                             <button class="btn-icon"><i class="fa-regular fa-trash-can"></i></button>
                         </div>`;
+                    }
                 }
-            }
 
-            // Define classe padrão de linha se não for uma linha de erro
-            if (!row.className) {
-                row.className = 'row revisao-grid';
-            }
+                // Define classe padrão de linha se não for uma linha de erro
+                if (!row.className) {
+                    row.className = 'row revisao-grid';
+                }
 
-            // Injeta a estrutura respeitando as classes do CSS
-            row.innerHTML = `
+                // Injeta a estrutura respeitando as classes do CSS
+                row.innerHTML = `
                 <span class="text-secondary">${codigo}</span>
                 <span class="bold">${nomeExibicao}</span>
                 <span class="text-secondary">${periodo}</span>
@@ -354,16 +355,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${acoesHtml}
             `;
 
-            rowsContainer.appendChild(row);
-        });
+                rowsContainer.appendChild(row);
+            });
 
-    } catch (e) {
-        console.error("Erro crítico ao renderizar o histórico:", e);
+        } catch (e) {
+            console.error("Erro crítico ao renderizar o histórico:", e);
+        }
+
+        // Atualiza contadores e médias do cabeçalho
+        updateInterface();
     }
-
-    // Atualiza contadores e médias do cabeçalho
-    updateInterface();
-}
 
     // ==========================================
     // FUNÇÕES DO SEU SCRIPT ORIGINAL (PRESERVADAS)
@@ -375,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('custom-modal');
             const btnYes = document.getElementById('modal-btn-yes');
             const btnNo = document.getElementById('modal-btn-no');
-            
+
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-text').textContent = text;
             modal.style.display = 'flex';
@@ -390,8 +391,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const newRow = document.createElement('div');
         newRow.className = 'row revisao-grid row-error';
         newRow.dataset.errorType = "pendente";
-        newRow.dataset.isNew = "true"; 
-        
+        newRow.dataset.isNew = "true";
+
         newRow.innerHTML = `
             <span><input type="text" class="edit-codigo" placeholder="CÓDIGO" list="disciplinas-list"></span>
             <span><input type="text" class="edit-nome" placeholder="Nome da Disciplina" readonly tabindex="-1" style="opacity: 0.6; border: 1px dashed #334155;"></span>
@@ -405,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         rowsContainer.appendChild(newRow);
         setupAutocompleteInternal(newRow);
+        setupStatusPreview(newRow);
         updateInterface();
     });
 
@@ -417,13 +419,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn.querySelector('.fa-trash-can')) {
             const confirmacao = await showModal("Excluir", "Deseja excluir esta disciplina permanentemente?");
             if (confirmacao) { row.remove(); updateInterface(); }
-        } 
+        }
         else if (btn.classList.contains('btn-fix') || btn.querySelector('.fa-pen-to-square')) {
             enterEditMode(row);
-        } 
+        }
         else if (btn.classList.contains('btn-save')) {
             saveRow(row);
-        } 
+        }
         else if (btn.classList.contains('btn-cancel')) {
             cancelEdit(row);
         }
@@ -432,17 +434,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupAutocompleteInternal(row) {
         const inputCod = row.querySelector('.edit-codigo');
         const inputNom = row.querySelector('.edit-nome');
-        inputCod.addEventListener('input', (e) => {
-            const val = e.target.value.toUpperCase();
-            if (nomesCatalogo.has(val)) {
-                inputNom.value = nomesCatalogo.get(val) || val;
+
+        if (!inputCod || !inputNom) return;
+
+        const atualizarDisciplina = () => {
+            const codigo = inputCod.value.trim().toUpperCase();
+
+            if (nomesCatalogo.has(codigo)) {
+                inputNom.value = nomesCatalogo.get(codigo);
+
                 inputCod.classList.remove('input-error');
+
                 if (row.dataset.errorType === 'codigo_catalogo') {
                     row.classList.remove('row-error');
                     delete row.dataset.errorType;
                 }
+            } else {
+                inputNom.value = '';
             }
-        });
+        };
+
+        inputCod.addEventListener('input', atualizarDisciplina);
+        inputCod.addEventListener('change', atualizarDisciplina);
+        inputCod.addEventListener('blur', atualizarDisciplina);
     }
 
     function enterEditMode(row) {
@@ -452,20 +466,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const spans = row.querySelectorAll('span');
         const notaCell = row.querySelector('.blue-text') || row.querySelector('.error-text') || spans[3];
-        
+
         const codigo = spans[0].textContent.trim();
         const nome = spans[1].textContent.trim();
         const periodo = spans[2].textContent.trim();
         let notaVal = notaCell.textContent.replace('N/A', '').replace('—', '').trim().replace(',', '.');
 
         row.classList.add('row-editing');
-        spans[0].innerHTML = `<input type="text" class="edit-codigo" value="${codigo}" list="disciplinas-list">`;
+        spans[0].innerHTML = `<input type="text" class="edit-codigo" value="" placeholder="${codigo}" list="disciplinas-list">`;
         spans[1].innerHTML = `<input type="text" class="edit-nome" value="${nome}" readonly tabindex="-1" style="opacity: 0.6; border: 1px dashed #334155;">`;
         spans[2].innerHTML = `<input type="text" class="edit-periodo" value="${periodo}">`;
         notaCell.innerHTML = `<input type="number" step="0.1" class="edit-nota" value="${notaVal}">`;
 
         setupAutocompleteInternal(row);
-        
+        setupStatusPreview(row);
+
         const actionArea = row.querySelector('.actions') || row.querySelector('.btn-fix');
         actionArea.outerHTML = `
             <div class="edit-actions">
@@ -482,6 +497,42 @@ document.addEventListener('DOMContentLoaded', () => {
             row.classList.remove('row-editing');
         }
         updateInterface();
+    }
+
+    function setupStatusPreview(row) {
+        const inputNota = row.querySelector('.edit-nota');
+        const statusPill = row.querySelector('.status-pill');
+
+        if (!inputNota || !statusPill) return;
+
+        const atualizarStatus = () => {
+            const valor = parseFloat(
+                inputNota.value.replace(',', '.')
+            );
+
+            statusPill.className = 'status-pill';
+
+            if (inputNota.value.trim() === '' || isNaN(valor)) {
+                statusPill.classList.add('indefinido');
+                statusPill.textContent = 'INDEFINIDO';
+                return;
+            }
+
+            if (valor >= 7) {
+                statusPill.classList.add('aprovado');
+                statusPill.textContent = 'APROVADO';
+            } else if (valor < 5) {
+                statusPill.classList.add('reprovado');
+                statusPill.textContent = 'REPROVADO';
+            } else {
+                statusPill.classList.add('cursando');
+                statusPill.textContent = 'CONFIRMAR';
+            }
+        };
+
+        inputNota.addEventListener('input', atualizarStatus);
+
+        atualizarStatus();
     }
 
     async function saveRow(row) {
@@ -525,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
         delete row.dataset.errorType;
         delete row.dataset.isNew;
         delete row.dataset.originalHtml;
-        
+
         row.innerHTML = `
             <span class="text-secondary">${vCodigo}</span>
             <span class="bold">${row.querySelector('.edit-nome').value || nomesCatalogo.get(vCodigo) || 'Disciplina sem nome'}</span>
@@ -566,8 +617,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     alertBox.querySelector('span').innerHTML = "Detectamos registros com informações incompletas.";
                 }
-            } else { 
-                alertBox.style.display = 'none'; 
+            } else {
+                alertBox.style.display = 'none';
             }
         }
 
@@ -642,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const proximaPagina = tipoFluxo === 'rematricula'
                 ? 'tela_materias_conflitos.html'
                 : 'tela_enfases.html';
-            
+
             sessionStorage.setItem('currentStep', 3);
             window.location.href = proximaPagina;
         });

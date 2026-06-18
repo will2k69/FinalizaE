@@ -61,12 +61,12 @@ if (steps.length && progress_Fill) {
     if (currentPage === "tela_historico_manual.html") {
       return stepPages.HISTORICO;
     }
-    
+
     // Caso 2: Se estou na tela de revisão e vim da manual, a anterior deve ser a manual
     if (currentPage === "tela_revisao_historico.html" && sessionStorage.getItem("origemRevisao") === "manual") {
       return stepPages.HISTORICO_MANUAL;
     }
-    
+
     const stepOrder = getStepOrder();
     const previousIndex = Math.max(0, currentStep - 1);
     return stepOrder[previousIndex] || stepPages.INICIAL;
@@ -88,7 +88,17 @@ if (steps.length && progress_Fill) {
     });
 
     if (currentStep === 0) {
-      progress_Fill.style.width = "0%";
+      const firstCircle = steps[0].querySelector(".circle");
+      const container = document.querySelector(".progress-container");
+
+      const firstRect = firstCircle.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      const startX =
+        (firstRect.left + firstRect.width / 2) - containerRect.left;
+
+      progress_Fill.style.left = "0px";
+      progress_Fill.style.width = `${startX}px`;
     } else {
       const firstCircle = steps[0].querySelector(".circle");
       const currentCircle = steps[currentStep].querySelector(".circle");
@@ -102,10 +112,8 @@ if (steps.length && progress_Fill) {
         const startX = (firstRect.left + firstRect.width / 2) - containerRect.left;
         const endX = (currentRect.left + currentRect.width / 2) - containerRect.left;
 
-        const fillWidth = endX - startX;
-        
-        progress_Fill.style.left = `${startX}px`;
-        progress_Fill.style.width = `${fillWidth}px`;
+        progress_Fill.style.left = "0px";
+        progress_Fill.style.width = `${endX}px`;
       }
     }
 
@@ -145,14 +153,14 @@ if (steps.length && progress_Fill) {
     backHeaderButton.addEventListener("click", (e) => {
       e.preventDefault();
       const previousPage = getPreviousPageFromCurrentStep();
-      
+
       // Só diminui o passo do progresso geral se não estiver mudando entre sub-telas do mesmo Step
       if (currentPage !== "tela_historico_manual.html" && previousPage !== stepPages.HISTORICO_MANUAL) {
         currentStep = Math.max(0, currentStep - 1);
         saveStep();
         updateUI();
       }
-      
+
       window.location.href = getPagePath(previousPage);
     });
   }
@@ -168,7 +176,7 @@ if (steps.length && progress_Fill) {
         saveStep();
         updateUI();
         const stepOrder = getStepOrder();
-        
+
         // Se clicar na bolinha "Enviar Histórico" vindo da Revisão, decide para onde vai com base na origem
         if (index === 1 && sessionStorage.getItem("origemRevisao") === "manual") {
           window.location.href = getPagePath(stepPages.HISTORICO_MANUAL);
