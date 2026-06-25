@@ -4,118 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="img/logo-visual.png">
-    <link rel="stylesheet" type="text/css" href="css/global/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../view/css/pages/index.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <title>Finalizaê</title>
 </head>
-<body id="Home">
-
-    <nav>
+<body>
+ 
+    <!-- NAV -->
+    <nav id="nav">
         <div class="navbar">
-            <div class="top-bar">
-                <div class="logo">
-                    <img src="img/logo-visual.png" alt="logo visual">
-                </div>
-                <div class="logo-text">
-                    <img src="img/logo.svg" alt="logo tipografico escrito Finalizaê">
-                </div>
-                <!-- <a href="pages/tela_inicial.html" class="botao-entrar">Entrar</a> -->
+            <div class="nav-logo">
+                <img src="img/logo-visual.png" alt="logo visual" class="logo-visual" id="logo-easter">
+                <img src="img/logo.svg" alt="Finalizaê" class="logo-texto">
             </div>
-
+            <a href="pages/tela_inicial.html" class="botao-entrar">Entrar</a>
         </div>
     </nav>
-
-    <section> <!-- Sessão 1 -->
-
-        <div class="sessao-1">
-            <div>
-            <h1>Reorganize sua Grade </br>
-                Acadêmica com Facilidade.</h1>
-
-            <p>Sistema completo dedicado à estudantes desperiodizados, que mudaram de curso ou que
-                </br> desejam realizar mobilidade estudantil. Planeje suas disciplinas,acompanhe seu progresso 
-                    </br> e receba orientação personalizada.</p>
-            </div>
-            <div>
-             <a href="pages/tela_inicial.html" >Comece já <img src="img/icons/arrow.svg"></a>
-            </div>
-            <div class="scroll-down">
-            <span></span>
-            </div>
-        </div> 
-
-    </section>
-
-    <section> <!-- Sessão 2 -->
-
-        <div class="sessao-2">
-            <h1>Como o Site </br>Funciona?</h1>
-            <img src="img/home/foto-sessao-2.png">
+ 
+    <!-- HERO -->
+    <section class="hero" aria-label="Apresentação">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Para estudantes universitários
         </div>
-
-    </section> 
-
-    <section> <!-- Sessão 3-->
-
-        <div class="sessao-3">
-        
-            <h1>Recursos Principais</h1>
-            <div class="cards">
-
-                <div>
-                    <img src="img/home/sessao-3-icon-1.svg">
+        <h1>Reorganize sua Grade<br><em>Acadêmica com Facilidade.</em></h1>
+        <p>Planeje suas disciplinas, acompanhe seu progresso e receba orientação personalizada — ideal para quem mudou de curso, está desperiodizado ou planeja mobilidade estudantil.</p>
+        <a href="pages/tela_inicial.html" class="hero-cta">
+            Comece já
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <div class="scroll-down"><span></span></div>
+    </section>
+ 
+    <!-- COMO FUNCIONA -->
+    <section aria-label="Como funciona">
+        <div class="como-funciona">
+            <p class="section-label">Passo a passo</p>
+            <h2 class="section-title">Como o Finalizaê Funciona?</h2>
+            <p class="section-sub">Em três etapas simples, você sai do caos acadêmico para um plano claro e realista.</p>
+ 
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-num">01 — Cadastro</div>
+                    <h3>Informe seu histórico</h3>
+                    <p>Adicione as disciplinas já cursadas, seu curso atual e quaisquer restrições de horário ou preferências pessoais.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-num">02 — Análise</div>
+                    <h3>Sistema mapeia sua situação</h3>
+                    <p>O Finalizaê cruza pré-requisitos, períodos e cargas horárias para montar um panorama completo da sua grade.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-num">03 — Planejamento</div>
+                    <h3>Receba seu plano personalizado</h3>
+                    <p>Visualize as melhores combinações de disciplinas por semestre e acompanhe seu avanço em tempo real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- RECURSOS -->
+    <section aria-label="Recursos principais">
+        <div class="recursos">
+            <p class="section-label">Funcionalidades</p>
+            <h2 class="section-title">Recursos Principais</h2>
+            <p class="section-sub">Tudo que você precisa para retomar o controle da sua vida acadêmica em um só lugar.</p>
+ 
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-icon">
+                        <!-- Ícone calendário -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a0aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
                     <h3>Planejamento Inteligente</h3>
-                    <p>Organize sua grade curricular </br> respeitando pré-requisitos e períodos.</p>
+                    <p>Organize sua grade curricular respeitando pré-requisitos e períodos automaticamente, sem conflitos de horário.</p>
                 </div>
-
-                <div>
-                    <img src="img/home/sessao-3-icon-2.svg">
+                <div class="card fade-in">
+                    <div class="card-icon">
+                        <!-- Ícone estrela/recomendação -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a0aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
                     <h3>Recomendações Personalizadas</h3>
-                    <p>Receba orientações personalizadas </br> baseadas no seu histórico</p>
+                    <p>Receba sugestões baseadas no seu histórico acadêmico, carga horária desejada e objetivos de conclusão.</p>
                 </div>
-
-                <div>
-                    <img src="img/home/sessao-3-icon-3.svg">
+                <div class="card fade-in">
+                    <div class="card-icon">
+                        <!-- Ícone livro/disciplinas -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a0aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
                     <h3>Gestão de Disciplinas</h3>
-                    <p>Gerencie todas </br>as suas disciplinas com controle </br> de horas e ênfases.</p>
+                    <p>Gerencie todas as suas matérias com controle de horas, ênfases e situação — aprovado, cursando ou pendente.</p>
                 </div>
-
             </div>
-
         </div>
-
     </section>
-
-    <section> <!-- Sessão 4 -->
-        
-    <div class="sessao-4">
-        <h1> Pronto para começar? </h1>
-        <h3> Acesse agora e comece a planejar seu futuro acadêmico. </h3>
-         <a href="pages/tela_inicial.html" >Comece já <img src="img/icons/arrow.svg"></a>
-
-    </div>
-
+ 
+    <!-- CTA FINAL -->
+    <section aria-label="Chamada para ação">
+        <div class="cta-section fade-in">
+            <h2>Pronto para retomar o controle?</h2>
+            <p>Acesse agora, cadastre seu histórico e tenha seu plano acadêmico em minutos.</p>
+            <a href="pages/tela_inicial.html" class="hero-cta">
+                Comece já — é gratuito
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
     </section>
-
+ 
     <footer>
-        <p class="footer"> Todos os direitos reservados - 2026 </p>
+        <p>© 2026 Finalizaê — Todos os direitos reservados.</p>
     </footer>
-
-    <script src="javascript/features/scroll_to_top.js"></script>
+ 
     <script>
-        // Easter egg: 5 cliques na logo abre o painel admin
+        // Nav glassmorphism ao scroll
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+        });
+ 
+        // Fade-in ao scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.15 });
+ 
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+ 
+        // Easter egg: 5 cliques na logo → login admin
         (function () {
-            let count = 0;
-            let timer;
-            const logo = document.querySelector('.logo img');
+            let count = 0, timer;
+            const logo = document.getElementById('logo-easter');
             if (!logo) return;
             logo.style.cursor = 'pointer';
-            logo.addEventListener('click', function () {
+            logo.addEventListener('click', () => {
                 count++;
                 clearTimeout(timer);
-                timer = setTimeout(function () { count = 0; }, 3000);
+                timer = setTimeout(() => count = 0, 3000);
                 if (count >= 5) {
                     count = 0;
                     window.location.href = 'pages/login.html';
