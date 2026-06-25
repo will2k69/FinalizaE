@@ -63,44 +63,73 @@
 
 #tela_ExplorarPlanejamento .filters {
     display: grid;
+    height: 60px;
     grid-template-columns: 1.4fr 1fr 1fr;
     gap: 14px;
     margin-bottom: 20px;
-    background: #20274f;
+    background: #161c4a;
     border-radius: 14px;
-    padding: 12px;
+    padding: 12px 12px; 
 }
 
 #tela_ExplorarPlanejamento .input-wrap {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: #6f7593;
+
+    background: rgb(69, 78, 140);
+    color: #f8f9ff;
+
     border-radius: 10px;
-    padding: 0 12px;
+    padding: 0 14px;
+    height: 54px;
+    box-sizing: border-box;
 }
 
 #tela_ExplorarPlanejamento .input-wrap span {
-    font-size: 15px;
-    color: #e8ecff;
+    color: #d8ddff;
+    flex-shrink: 0;
+}
+
+#tela_ExplorarPlanejamento .input-wrap input {
+    background: transparent;
+    border: none;
+    outline: none;
+    height: 100%;
+    padding: 0;
+    min-height: unset;
 }
 
 #tela_ExplorarPlanejamento input,
 #tela_ExplorarPlanejamento select {
     width: 100%;
-    min-height: 44px;
-    border: 0;
-    outline: 0;
+    height: 54px;
+
+    border: 1px solid #5f6998;
     border-radius: 10px;
-    padding: 0 12px;
-    font-size: 15px;
+
+    background: rgb(69, 78, 140);
     color: #f8f9ff;
-    background: #6f7593;
+
+    font-size: 15px;
     font-family: inherit;
+
+    box-sizing: border-box;
 }
 
 #tela_ExplorarPlanejamento input::placeholder {
     color: #e4e7f8;
+}
+
+#tela_ExplorarPlanejamento select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8f9ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
 }
 
 #tela_ExplorarPlanejamento option {
@@ -157,7 +186,7 @@
 }
 
 #tela_ExplorarPlanejamento .period-card {
-    background: #343a62;
+    background: rgb(69, 78, 140);
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid transparent;
@@ -165,7 +194,7 @@
 }
 
 #tela_ExplorarPlanejamento .period-card:hover {
-    border-color: #5e6dd5;
+    border-color: #4c5cff;
 }
 
 #tela_ExplorarPlanejamento .period-header {
@@ -262,7 +291,7 @@
     background: #252c51;
     border-radius: 12px;
     padding: 26px 20px;
-    border: 1px dashed #5e6dd5;
+    border: 1px dashed #4c5cff;
 }
 
 #tela_ExplorarPlanejamento .empty-state h3 {
@@ -280,13 +309,13 @@
 }
 
 #tela_ExplorarPlanejamento .back-link {
-    color: #29a6ff;
+    color: #4c5cff;
     font-size: 18px;
     text-decoration: none;
 }
 
 #tela_ExplorarPlanejamento .back-link:hover {
-    color: #69c2ff;
+    color: #6674ff;
 }
 
 @media (max-width: 900px) {

@@ -5,7 +5,7 @@
     --input-readonly: #0f172a;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
-    --accent-blue: #3b82f6;
+    --accent-blue: #4c5cff;
     --success: #10b981;
     --danger: #ef4444;
     --border-color: #334155;
@@ -66,7 +66,7 @@
 
 #historicoManual input:focus {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 3px rgba(76, 92, 255, 0.2);
     background: #26334d;
 }
 
@@ -82,7 +82,7 @@
 /* Quando o código é reconhecido, o nome ganha destaque */
 #historicoManual input.filled-auto {
     color: var(--accent-blue);
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(76, 92, 255, 0.05);
 }
 
 .disciplinas-feedback {
@@ -147,8 +147,8 @@
 
 .search-option:hover,
 .search-option.is-active {
-    border-color: rgba(59, 130, 246, 0.8);
-    background: rgba(37, 99, 235, 0.18);
+    border-color: rgba(76, 92, 255, 0.8);
+    background: rgba(76, 92, 255, 0.18);
 }
 
 .search-option-code {
@@ -202,7 +202,7 @@
     transition: 0.3s;
 }
 
-.btn-add:hover { background: rgba(59, 130, 246, 0.1); }
+.btn-add:hover { background: rgba(76, 92, 255, 0.1); }
 
 .btn-delete { color: #475569; border: none; background: none; cursor: pointer; font-size: 1.1rem; }
 .btn-delete:hover { color: var(--danger); }
@@ -227,5 +227,5 @@
 .btn-modal-secondary { background: #334155; color: white; border: none; flex: 1; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700;}
 
 footer { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
-.btn-back { background: none; border: none; color: #60a5fa; cursor: pointer; font-size: 1rem; }
+.btn-back { background: none; border: none; color: #4c5cff; cursor: pointer; font-size: 1rem; }
 .btn-continue { background: var(--accent-blue); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px; }

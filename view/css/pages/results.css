@@ -2,13 +2,13 @@
     --bg-color: #030712;
     --card-bg: #0f172a;
     --card-inner: #1e293b;
-    --accent-blue: #1e40af;
+    --accent-blue: #4c5cff;
     --text-main: #f8fafc;
     --text-sec: #94a3b8;
     --yellow: #fbbf24;
     --red: #ef4444;
     --orange: #f97316;
-    --blue-light: #3b82f6;
+    --blue-light: #4c5cff;
 }
 
 #Results {
@@ -136,7 +136,7 @@
 
 .btn-primary-side { background: var(--accent-blue); color: white; }
 .btn-secondary-side { background: transparent; border: 1px solid #334155; color: white; }
-.btn-primary-side:hover { background: #2563eb; }
+.btn-primary-side:hover { background: #6674ff; }
 
 .side-label { font-size: 0.78rem; font-weight: 800; color: var(--text-sec); letter-spacing: 1px; }
 

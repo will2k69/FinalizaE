@@ -160,6 +160,68 @@
       background: #6674ff;
     }
 
+/* EFEITO VIDRO (GLASSMORPHISM) para tela rematricula */
+
+.card.locked {
+  position: relative;
+  overflow: hidden;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+/* Desabilita o efeito de subir o card no hover */
+.card.locked:hover {
+  transform: none;
+  background: #2b2f55; /* Mantém a cor original */
+}
+
+/* Camada de efeito Vidro (Glassmorphism) */
+.card.locked::after {
+  content: "🔒 \A Disponível em breve \A Rematricula"; /* O '\A' cria a quebra de linha */
+  white-space: pre-wrap;               /* Obriga o CSS a respeitar a quebra de linha */
+  text-align: center;                  /* Garante que as duas linhas fiquem centralizadas */  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Cores e desfoque do vidro */
+  background: rgba(5, 10, 44, 0.4); /* Mistura com o fundo escuro */
+  backdrop-filter: blur(8px);
+  
+  /* Alinhamento do texto interno */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Estilização do texto */
+  color: #cfd3ff;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  
+  /* Borda sutil de vidro */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-sizing: border-box;
+  
+  /* Transição suave caso queira animar futuramente */
+  transition: all 0.3s ease;
+}
+
+/* Modificações estéticas nos elementos internos do card trancado */
+.card.locked .btn {
+  background: #3a3f6d;
+  color: #8c93cc;
+  pointer-events: none; /* Bloqueia clique no botão */
+}
+
+.card.locked p, 
+.card.locked h3, 
+.card.locked .icon {
+  opacity: 0.4; /* Deixa o conteúdo do fundo levemente apagado */
+}
 
 /* Responsive Mobile */
 
@@ -188,3 +250,78 @@
         display: flex;
       }
     }
+
+    /*teste*/
+
+    /* CARD INFORMATIVO (GUIA) */
+.guide-card {
+  background: #090e3a; /* Um azul levemente mais claro que o fundo do nav */
+  border: 1px solid #2b2f55;
+  border-radius: 16px;
+  padding: 18px 24px;
+  max-width: 900px; /* Alinhado com a largura máxima da sua barra */
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  text-align: left; /* Garante leitura fluida do texto */
+}
+
+.guide-icon {
+  background: rgba(76, 92, 255, 0.15);
+  border: 1px solid #4c5cff;
+  font-size: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.guide-content {
+  flex: 1;
+}
+
+.guide-content h3 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.guide-content p {
+  margin: 0;
+  font-size: 13px;
+  color: #cfd3ff;
+  line-height: 1.5;
+}
+
+/* Animação simples para quando o texto mudar */
+.guide-card.updated {
+  transform: scale(1.01);
+}
+
+/* Adiciona a barrinha de digitação no final do parágrafo */
+#guide_description::after {
+  content: "|";
+  margin-left: 2px;
+  color: #4c5cff;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Ajuste Mobile */
+@media (max-width: 768px) {
+  .guide-card {
+    margin: 15px 20px;
+    padding: 14px 18px;
+  }
+}
