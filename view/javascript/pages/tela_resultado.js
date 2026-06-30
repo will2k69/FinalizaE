@@ -142,12 +142,17 @@ function renderizarDashboard(data) {
 // Configura as ações dos botões, incluindo o gerador de relatório limpo e customizado para impressão.
 function setupAcoes(dadosBrutos) {
     document.getElementById('btn-pdf').addEventListener('click', () => {
-        const data = montarViewModel(dadosBrutos);
+        try {
+            const data = montarViewModel(dadosBrutos);
 
-        // Cria uma janela em memória para renderização isolada do relatório A4 limpo
-        const janelaImpressao = window.open('', '_blank', 'width=900,height=700');
-        
-        const htmlRelatorio = `
+            // Cria uma janela em memória para renderização isolada do relatório A4 limpo
+            const janelaImpressao = window.open('', '_blank', 'width=900,height=700');
+            if (!janelaImpressao) {
+                window.alert('Não foi possível abrir a janela de impressão. Verifique o bloqueador de pop-up do navegador.');
+                return;
+            }
+
+            const htmlRelatorio = `
         <!DOCTYPE html>
         <html lang="pt-br">
         <head>
@@ -259,7 +264,7 @@ function setupAcoes(dadosBrutos) {
                             </tr>
                         </thead>
                         <tbody>
-                            ${sem.disciplines.map((disc) => {
+                            ${sem.disciplinas.map((disc) => {
                                 const partes = disc.nome.split(' - ');
                                 const codigo = partes[0] || '';
                                 const nomeReal = partes.slice(1).join(' - ') || disc.nome;
@@ -311,15 +316,19 @@ function setupAcoes(dadosBrutos) {
         </html>
         `;
 
-        janelaImpressao.document.write(htmlRelatorio);
-        janelaImpressao.document.close();
-        janelaImpressao.focus();
-        
-        // Timeout para carregar fontes externas antes do print
-        setTimeout(() => {
-            janelaImpressao.print();
-            janelaImpressao.close();
-        }, 500);
+            janelaImpressao.document.write(htmlRelatorio);
+            janelaImpressao.document.close();
+            janelaImpressao.focus();
+
+            // Timeout para carregar fontes externas antes do print
+            setTimeout(() => {
+                janelaImpressao.print();
+                janelaImpressao.close();
+            }, 500);
+        } catch (error) {
+            console.error('Erro ao gerar PDF:', error);
+            window.alert('Falha ao gerar o relatório PDF. Tente novamente.');
+        }
     });
 
     // Mantém a exportação de arquivo JSON intacta
