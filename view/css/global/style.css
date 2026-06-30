@@ -38,6 +38,7 @@ body {
 
 }
 
+
 h1,
 h2,
 h3,
@@ -89,7 +90,3 @@ a{
 ::-webkit-scrollbar-thumb:hover {
   background: #5465ffbd;
 }
-
-
-
-

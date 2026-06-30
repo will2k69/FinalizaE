@@ -322,3 +322,12 @@
         padding: 20px;
     }
 }
+
+
+/* Ajuste mobile para manter o alinhamento */
+@media (max-width: 768px) {
+  .step-back-bar {
+    min-width: 90px;
+    flex: none;
+  }
+}

@@ -25,14 +25,21 @@
       </div>
 
       <div class="flex-btn-back">
-         <a href="../pages/tela_anterior.html" class="btn-back-header">
-        <i class="fa-solid fa-arrow-left"></i> Voltar
-      </a>
+   
+      
       <!-- Progress Bar -->      
       <div class="progress-container">
         <div class="progress-line"></div>
         <div class="progress-fill" id="progress_Fill"></div>
 
+        <div id="step_back_container" class="step-back-bar">
+    <a id="btn_back_bar" href="#">
+      <div class="circle">
+        <span>←</span> 
+      </div>
+      <span>Voltar</span>
+    </a>
+  </div>
         <div class="step completed" data-step="0">
           <a href="#">
           <div class="circle"><i data-lucide="home"></i></div>
@@ -68,7 +75,7 @@
         </div>
     </nav>
 
-          <div id="guide_card" class="guide-card">
+  <div id="guide_card" class="guide-card">
     <div class="guide-icon">
       <span id="guide_icon_text">💡</span>
     </div>
