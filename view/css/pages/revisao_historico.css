@@ -76,6 +76,7 @@
   .revisao-grid {
     display: grid;
     grid-template-columns: 120px 1fr 100px 100px 140px 100px;
+    gap: 40px;
     padding: 18px 25px;
     align-items: center;
 }
@@ -278,3 +279,235 @@
     gap: 2px;
     justify-content: flex-end;
 }
+
+/*atualização*/
+
+/* Container de busca relativo para envelopar o input e o dropdown flutuante */
+.discipline-search-revisao {
+    position: relative;
+    width: 100%;
+}
+
+/* Dropdown flutuante adaptado para a tela de revisão */
+.search-dropdown-revisao {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 320px; /* Largura fixa para cobrir bem o espaço de busca */
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 250px;
+    padding: 8px;
+    overflow-y: auto;
+    background: rgba(10, 14, 41, 0.98); /* Combinando com o --card-bg da revisão */
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.search-dropdown-revisao[hidden] {
+    display: none;
+}
+
+/* Opções do Dropdown */
+.search-option-revisao {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    border: 1px solid transparent;
+    background: rgba(22, 27, 51, 0.9);
+    border-radius: 8px;
+    padding: 10px;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.search-option-revisao:hover,
+.search-option-revisao.is-active {
+    border-color: var(--accent-blue);
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.search-option-code-revisao {
+    font-weight: 700;
+    color: #bfdbfe;
+    font-size: 0.85rem;
+}
+
+.search-option-name-revisao {
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+.search-empty-revisao {
+    background: rgba(10, 14, 41, 0.8);
+    border: 1px dashed var(--border-color);
+    color: var(--text-sec);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    text-align: center;
+}
+
+/* ==========================================================================
+   MELHORIAS DE UX PARA O DROPDOWN DE BUSCA NA REVISÃO
+   ========================================================================== */
+
+/* Container que envelopa o input de código para dar base ao posicionamento do dropdown */
+.discipline-search-revisao {
+    position: relative;
+    width: 100%;
+}
+
+/* Dropdown flutuante modernizado (evita empurrar os elementos de baixo) */
+.search-dropdown-revisao {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 280px; /* Largura ideal para não cobrir a tela inteira, mas manter leitura */
+    z-index: 999; /* Garante que fique por cima de todas as outras linhas */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 240px;
+    padding: 8px;
+    overflow-y: auto;
+    background: #0a0e29; /* Cor idêntica ao seu --card-bg */
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Esconde o dropdown quando não houver busca ativa */
+.search-dropdown-revisao[hidden] {
+    display: none;
+}
+
+/* Estilização dos botões de opções dentro do dropdown */
+.search-option-revisao {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    border: 1px solid transparent;
+    background: rgba(22, 27, 51, 0.6);
+    border-radius: 8px;
+    padding: 10px;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Efeito de Hover e seleção por teclado */
+.search-option-revisao:hover,
+.search-option-revisao.is-active {
+    border-color: var(--accent-blue);
+    background: rgba(37, 99, 235, 0.15);
+    transform: translateX(2px);
+}
+
+/* Código em destaque no dropdown */
+.search-option-code-revisao {
+    font-weight: 700;
+    color: #3b82f6;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+/* Nome da disciplina no dropdown */
+.search-option-name-revisao {
+    color: #e2e8f0;
+    font-size: 0.88rem;
+}
+
+/* Estado de lista vazia */
+.search-empty-revisao {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px dashed rgba(239, 68, 68, 0.2);
+    color: var(--status-red);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Ajuste fino nos inputs dentro da tabela para melhor usabilidade */
+.row input {
+    background: #161b33;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: white;
+    width: 100%; /* Ocupa todo o espaço da sua respectiva coluna do grid */
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.row input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    background: #1e2548;
+}
+
+/* Mantém o input de nome (readonly) com aspecto de travado, mas limpo */
+.row input.edit-nome {
+    background: rgba(10, 14, 41, 0.5);
+    border: 1px dashed #272d4e;
+    color: var(--text-sec);
+    cursor: not-allowed;
+}
+
+/* Container de ações de edição (Sexta coluna do Grid) */
+.edit-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Botão Cancelar (Ícone de X) */
+.edit-actions .btn-cancel {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--status-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.edit-actions .btn-cancel:hover {
+    background: var(--status-red);
+    color: white;
+}
+
+/* Botão Salvar (Ícone de Check) */
+.edit-actions .btn-save {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--status-green);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.edit-actions .btn-save:hover {
+    background: var(--status-green);
+    color: white;
+}
+
+/* Garante que os inputs não estourem o tamanho das colunas do Grid */
+.row.row-editing input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
