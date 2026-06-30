@@ -46,6 +46,17 @@ WITH dados_disciplinas (codigo, nome, carga_horaria, tipo, turno, periodo_ideal)
         ('COMP388', 'ACE 4: CONTINUAÇÃO DO PROJETO 2', 75, 'obrigatoria'::tipo_disciplina, 'N', 7),
         ('COMP409', 'TÓPICOS EM MATEMÁTICA PARA COMPUTAÇÃO 1', 72, 'eletiva'::tipo_disciplina, 'M', 8),
         ('COMP412', 'TÓPICOS EM FÍSICA PARA COMPUTAÇÃO 1', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP413', 'TÓPICOS EM FÍSICA PARA COMPUTAÇÃO 2', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP414', 'TÓPICOS EM FÍSICA PARA COMPUTAÇÃO 3', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP419', 'CÁLCULO 2', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP420', 'EMPREENDEDORISMO', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP429', 'CÁLCULO 4', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP439', 'CÁLCULO 1', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP448', 'INGLÊS INSTRUMENTAL', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP449', 'METODOLOGIA E PROCESSOS', 40, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP450', 'CIRCUITOS DIGITAIS', 40, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP451', 'DESENHO', 72, 'eletiva'::tipo_disciplina, 'M', 8),
+        ('COMP453', 'TÓPICOS ESPECIAIS EM BANCO DE DADOS: DADOS ESTRUTURADOS, SEMIESTRUTURADOS E NÃO-ESTRUTURADOS', 72, 'eletiva'::tipo_disciplina, 'M', 8),
         ('TCC0296', 'TCC', 180, 'obrigatoria'::tipo_disciplina, 'T', 8)
 )
 INSERT INTO disciplinas (codigo, nome, carga_horaria, tipo, turno, periodo_ideal)
